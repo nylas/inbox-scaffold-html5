@@ -7,19 +7,20 @@ angular.module('baobab', [
 config(['$inboxProvider', function($inboxProvider) {
   $inboxProvider.
     baseUrl('https://gunks.inboxapp.com:2222').
-    appId('e7yqrisa0x09rahjzs85x5qmv');
+    appId('874wihqp9t7o29f5u2pd748hl');
 }]).
 service('$namespaces', ['$inbox', function($inbox) {
   var updateId = null, updateRate = null;
   var self = this;
   self.namespaces = null;
   Events(self);
-  function setNamespaces(value) {
+
+  setNamespaces = function(value) {
     self.namespaces = value;
     self.emit('update', value);
   }
 
-  function updateList() {
+  updateList = function() {
     $inbox.namespaces().then(function(namespaces) {
       setNamespaces(namespaces);
     }, function(error) {
@@ -27,14 +28,14 @@ service('$namespaces', ['$inbox', function($inbox) {
     });
   }
 
-  function clearScheduledUpdate() {
+  clearScheduledUpdate = function() {
     if (updateId !== null) {
       clearInterval(updateId);
       updateId = null;
     }
   }
 
-  function updateRate(ms) {
+  updateRate = function(ms) {
     clearScheduledUpdate();
     if (arguments.length > 0) {
       updateRate = ms;
@@ -42,8 +43,8 @@ service('$namespaces', ['$inbox', function($inbox) {
     updateId = setInterval(updateList, updateRate);
   }
 
+  self.updateList = updateList;
   self.scheduleUpdate = updateRate;
-  updateList();
 }]).
 filter('shorten', function() {
   return function(input) {

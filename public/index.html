@@ -27,9 +27,8 @@
       <div ng-switch-when="false">
         You need to sign in.
 
-        <input type="email" placeholder="Email Address" ng-model="email_address"/>
-        <a ng-href="https://gunks.inboxapp.com:2222/oauth/authorize?client_id={{client_id}}&login_hint={{email_address}}&response_type=token&redirect_uri=https://inbox-baobab.herokuapp.com/">Log In</a>
-
+        <input type="email" placeholder="Email Address" ng-model="login_hint"/>
+        <a ng-href="{{inbox_url}}/oauth/authorize?client_id={{inbox_client_id}}&response_type=token&login_hint={{login_hint}}&redirect_uri={{inbox_redirect_url}}">Log In</a>
       </div>
 
       <div ng-switch-when="true">

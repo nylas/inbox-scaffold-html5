@@ -2,14 +2,18 @@ angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
 controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', function($scope, $namespaces, $inbox, $cookieStore) {
 
-  $scope.client_id = 'e7yqrisa0x09rahjzs85x5qmv';
+  $scope.inbox_url = $inbox.baseUrl();
+  $scope.inbox_client_id = '874wihqp9t7o29f5u2pd748hl';
+  $scope.inbox_redirect_url = window.location.href;
   $scope.authorized = false;
+  $scope.login_hint = '';
 
   $scope.setToken = function(authToken) {
-    var authHeader = btoa('Basic '+authToken+':');
     $cookieStore.put('inbox_auth_token', authToken);
-    $inbox.setRequestHeader('Authorization', authHeader); 
+    $inbox.withCredentials(true);
+    $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':')); 
     $scope.authorized = true;
+    $namespaces.updateList();
   }
 
   $scope.clearToken = function() {
