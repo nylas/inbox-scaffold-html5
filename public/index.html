@@ -1,47 +1,65 @@
 <!doctype html>
-<html ng-app="inbox_list_namespaces">
+<html ng-app="baobab">
   <head>
     <base href="./">
-    <title>Inbox SDK Examples --- List Namespaces</title>
+    <title>Baobab</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <style>body { padding-top: 60px; } .clickable { cursor: pointer; }</style>
-    <script src="js/minievents.js"></script>
+    <script src="/js/minievents.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-sanitize.js"></script>
+    <script src="https://code.angularjs.org/1.2.18/angular-cookies.js"></script>
     <script src="/vendor/angular-inbox.js"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/controllers.js"></script>
   </head>
+
   <body>
     <div class="navbar navbar-default navbar-fixed-top">
-      <a href="/" target="_self" class="navbar-brand">Inbox.js examples</a>
+      <a href="/" target="_self" class="navbar-brand">Baobab</a>
       <ul class="nav navbar-nav">
         <li><a href="#">list-threads</a></li>
       </ul>
     </div>
-    <section class="container" ng-controller="threadsCtrl as Threads">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">Threads</div>
-            <table class="table table-hover">
-              <tbody ng-repeat="tlist in threads">
-                <tr class="clickable" ng-repeat="thread in tlist | filter:filters" ng-click="Threads.select(thread, $event)">
-                  <td>{{thread.subject | shorten}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="panel panel-default" ng-repeat="msg in Threads.selectedThreadMessages">
-            <div class="panel-heading">
-                <p>{{msg.subject}}</p>
-            </div>
-            <div class="panel-body" ng-bind-html="msg.body">
-            </div>
-          </div>
-        </div>
+
+    <div ng-controller="AppCtrl" ng-switch="authorized">
+
+      <div ng-switch-when="false">
+        You need to sign in.
+
+        <input type="email" placeholder="Email Address" ng-model="email_address"/>
+        <a ng-href="https://gunks.inboxapp.com:2222/oauth/authorize?client_id={{client_id}}&login_hint={{email_address}}&response_type=token&redirect_uri=https://inbox-baobab.herokuapp.com/">Log In</a>
+
       </div>
-    </section>
+
+      <div ng-switch-when="true">
+        <section class="container" ng-controller="threadsCtrl as Threads">
+          <a ng-click="clearToken()">Log Out</a>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">Threads</div>
+                <table class="table table-hover">
+                  <tbody ng-repeat="tlist in threads">
+                    <tr class="clickable" ng-repeat="thread in tlist | filter:filters" ng-click="Threads.select(thread, $event)">
+                      <td>{{thread.subject | shorten}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="panel panel-default" ng-repeat="msg in Threads.selectedThreadMessages">
+                <div class="panel-heading">
+                    <p>{{msg.subject}}</p>
+                </div>
+                <div class="panel-body" ng-bind-html="msg.body">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
   </body>
 </html>
