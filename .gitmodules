@@ -1,0 +1,3 @@
+[submodule "vendor/inbox.js"]
+	path = vendor/inbox.js
+	url = https://github.com/caitp/inbox.js.git
