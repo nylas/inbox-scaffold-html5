@@ -3,12 +3,15 @@ angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', function($scope, $namespaces, $inbox, $cookieStore) {
 
   $scope.inbox_url = $inbox.baseUrl();
-  $scope.inbox_client_id = '874wihqp9t7o29f5u2pd748hl';
+  $scope.inbox_client_id = $inbox.appId();
   $scope.inbox_redirect_url = window.location.href;
   $scope.authorized = false;
   $scope.login_hint = '';
 
   $scope.setToken = function(authToken) {
+    if ((authToken == null) || (authToken == ''))
+      return $scope.clearToken();
+
     $cookieStore.put('inbox_auth_token', authToken);
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':')); 
@@ -20,7 +23,6 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
     $cookieStore.remove('inbox_auth_token');
     $inbox.setRequestHeader('Authorization', ''); 
     $scope.authorized = false;
-
   }
 
   $scope.valueForQueryParam = function(param_name) {
@@ -38,10 +40,12 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
     }
   }
 
-  var authToken = $cookieStore.get('inbox_auth_token') || $scope.valueForQueryParam('access_token');
-  if (authToken) {
-    $scope.setToken(authToken);
-  }
+  var queryAuthToken = $scope.valueForQueryParam('access_token')
+  $scope.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
+
+  if (queryAuthToken)
+    // We've stored the token in a cookie - wipe it from the location bar
+    window.location.href = '/'
 
 }]).
 

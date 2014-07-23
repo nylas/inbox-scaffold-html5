@@ -5,9 +5,15 @@ angular.module('baobab', [
   'baobab.controllers'
 ]).
 config(['$inboxProvider', function($inboxProvider) {
-  $inboxProvider.
-    baseUrl('https://gunks.inboxapp.com:2222').
-    appId('874wihqp9t7o29f5u2pd748hl');
+  if (window.location.href.indexOf('localhost') > 0)
+    $inboxProvider.
+      baseUrl('http://localhost:5000').
+      appId('3rxk5nvnsaz03rcgmbvmkxt0v');
+  else
+    $inboxProvider.
+      baseUrl('https://gunks.inboxapp.com:2222').
+      appId('874wihqp9t7o29f5u2pd748hl');
+
 }]).
 service('$namespaces', ['$inbox', function($inbox) {
   var updateId = null, updateRate = null;
