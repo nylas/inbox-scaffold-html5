@@ -4,7 +4,7 @@ angular.module('baobab', [
   'ngCookies',
   'baobab.controllers'
 ]).
-config(['$inboxProvider', function($inboxProvider) {
+config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
   if (window.location.href.indexOf('localhost') > 0)
     $inboxProvider.
       baseUrl('http://localhost:5000').
@@ -13,6 +13,14 @@ config(['$inboxProvider', function($inboxProvider) {
     $inboxProvider.
       baseUrl('https://gunks.inboxapp.com:2222').
       appId('874wihqp9t7o29f5u2pd748hl');
+  if (window.location.href.indexOf('localhost') > 0)
+      $sceDelegateProvider.resourceUrlWhitelist([
+          'self',
+          "http://localhost:5000/**"]);
+  else
+      $sceDelegateProvider.resourceUrlWhitelist([
+          'self',
+          "https://gunks.inboxapp.com:2222/**"]);
 
 }]).
 service('$namespaces', ['$inbox', function($inbox) {
@@ -49,36 +57,6 @@ service('$namespaces', ['$inbox', function($inbox) {
     updateId = setInterval(updateList, updateRate);
   }
 
-  tagSort = function(tag) {
-      console.log(tag)
-      if (tag == "All") {
-          return 0;
-      } else if (tag == "Inbox") {
-          return 1;
-      } else if (tag == "Archive") {
-          return 2;
-      } else if (tag == "Drafts") {
-          return 3;
-      } else if (tag == "Spam") {
-          return 4;
-      } else if (tag == "Send") {
-          return 5;
-      } else if (tag == "Sent") {
-          return 6;
-      } else if (tag == "Trash") {
-          return 7;
-      } else if (tag == "Starred") {
-          return 8;
-      } else if (tag == "Unread") {
-          return 9;
-      } else if (tag == "Sending") {
-          return 10;
-      } else {
-          return 11;
-      }
-  }
-
-  self.tagSort = tagSort;
   self.updateList = updateList;
   self.scheduleUpdate = updateRate;
 }]).

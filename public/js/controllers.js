@@ -8,13 +8,15 @@ _handleAPIError = function(err) {
 
 angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
-controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', function($scope, $namespaces, $inbox, $cookieStore) {
+controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $cookieStore, $sce) {
 
   $scope.inbox_url = $inbox.baseUrl();
   $scope.inbox_client_id = $inbox.appId();
   $scope.inbox_redirect_url = window.location.href;
   $scope.login_hint = '';
   $scope.me = null;
+
+  $scope.actionUrl = $sce.trustAsResourceUrl($scope.inbox_url)
 
   $scope.setToken = function(authToken) {
     if ((authToken == null) || (authToken == ''))
