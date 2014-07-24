@@ -90,7 +90,7 @@ directive('summerNote', function() {
   return {
     require: '?ngModel',
     link: function(scope, element, attr, ngModel) {
-      element.summernote({
+      $(element).summernote({
         codemirror: {
           theme: 'monokai'
         },

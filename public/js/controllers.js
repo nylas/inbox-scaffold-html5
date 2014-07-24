@@ -1,6 +1,10 @@
 // Helpers
 
-_handleAPIError = function(err) {
+var _clone = function(obj) {
+    return JSON.parse(JSON.stringify(obj));
+};
+
+var _handleAPIError = function(err) {
   var msg = "An unexpected error occurred. (HTTP code " + error['status'] + "). Please try again.";
   if (error['message'])
       msg = error['message'];
@@ -99,13 +103,28 @@ controller('threadsCtrl', ['$scope', '$namespaces', function($scope, $namespaces
 }]).
 
 
+controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
+  if ($scope.draft_to_compose) { 
+    $scope.draft = _clone($scope.draft_to_compose);
+
+  } else if ($scope.thread_for_reply) {
+    $scope.draft = _clone($scope.draft);
+
+  } else {
+    $scope.draft = {};
+  }
+}]).
+
+
 controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   $scope.threads = [];
   $scope.filters = {};
   $scope.search = '';
 
   var self = this;
+  
   this.selectedThreadMessages = null;
+  this.selectedThread = null;
 
   function loadThreads(namespace) {
     var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
@@ -136,6 +155,9 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
       selectedNode = event.currentTarget;
       angular.element(selectedNode).addClass('active');
     }
+
+    self.selectedThread = thread;
+
     if (thread) {
       thread.messages().then(function(messages) {
         self.selectedThreadMessages = messages;
