@@ -59,4 +59,18 @@ filter('shorten', function() {
     }
     return input;
   }
+}).
+filter('tag_expand', function() {
+  return function(input) {
+      var tags="";
+      for (index = 0; index < input.length; ++index) {
+          tags += input[index].name + " ";
+      }
+      return tags;
+  }
+}).
+filter('pretty_date', function() {
+  return function(input) {
+      return prettyDate(input);
+  }
 });

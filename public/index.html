@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <style>body { padding-top: 60px; } .clickable { cursor: pointer; }</style>
     <script src="/js/minievents.js"></script>
+    <script src="/js/pretty.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-sanitize.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-cookies.js"></script>
@@ -19,6 +20,12 @@
       font-size:20px;
       border-bottom:1px solid #eee;
       margin-bottom:15px;
+    }
+    .message-body {
+      margin-top: 10px;
+    }
+    .unread {
+      font-weight:600;
     }
     </style>
   </head>
@@ -74,7 +81,8 @@
                 <table class="table table-hover">
                   <tbody>
                     <tr class="clickable" ng-repeat="thread in threads" ng-click="Mail.select(thread, $event)">
-                      <td>{{thread.subject | shorten}}</td>
+                        <!-- td ng-repeat="tag in thread.tagData">{{tag.name}}</td -->
+                        <td class="{{thread.tagData | tag_expand}}">{{thread.subject | shorten}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -85,6 +93,9 @@
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
                 <div class="panel-body" ng-repeat="msg in Mail.selectedThreadMessages">
                   <div class="message-heading">{{msg.subject}}</div>
+                  <div class="message-date">Sent: <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span></div>
+                  <div class="message-from">From: <span class="from" ng-repeat="from in msg.to">{{from.name}} &lt;{{from.email}}&gt;</span></div>
+                  <div class="message-to">To: <span class="to" ng-repeat="to in msg.to">{{to.name}} &lt;{{to.email}}&gt;</span></div>
                   <div class="message-body" ng-bind-html="msg.body"></div>
                 </div>
               </div>
