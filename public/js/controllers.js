@@ -66,6 +66,27 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
 controller('tagsCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   $scope.tags = [];
 
+  $scope.tagOrder = function(tag_obj) {
+      var tag = tag_obj.tagName;
+      ordered = ["all", "inbox", "archive", "drafts", "spam", "send", "sending", "sent",
+                 "trash", "starred", "unread", "file", "attachment", "important", "unseen",
+                 "starred", "replied"];
+      for(i = 0; i < ordered.length; i++) {
+          if(ordered[i] == tag) {
+              return i;
+          }
+      }
+      return ordered.length;
+  }
+
+  $scope.tagFilter = function(tag_obj) {
+      var tag = tag_obj.tagName;
+      if(tag.match("sending|send|unread|all|unseen|unstarred|replied")) {
+          return false;
+      }
+      return true;
+  }
+
   $scope.filterByTag = function(tag) {
     $scope.$root.$broadcast('append-filter', {'tag':tag.tagName});
   };
@@ -87,6 +108,29 @@ controller('tagsCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   $namespaces.on('update', update);
   update($namespaces.namespaces);
 
+}]).
+
+controller('threadsCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
+  $scope.tagOrder = function(tag_obj) {
+      var tag = tag_obj.name;
+      ordered = ["all", "inbox", "archive", "drafts", "spam", "send", "sending", "sent",
+                 "trash", "starred", "unread", "file", "attachment", "important", "unseen",
+                 "starred", "replied"];
+      for(i = 0; i < ordered.length; i++) {
+          if(ordered[i] == tag) {
+              return i;
+          }
+      }
+      return ordered.length;
+  }
+
+  $scope.tagFilter = function(tag_obj) {
+      var tag = tag_obj.name;
+      if(tag.match("sending|send|sent|unread|all|unseen|unstarred|replied")) {
+          return false;
+      }
+      return true;
+  }
 }]).
 
 

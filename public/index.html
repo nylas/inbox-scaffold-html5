@@ -15,14 +15,44 @@
     <script src="/js/controllers.js"></script>
 
     <style>
-    .message-heading {
+    .list-group-item:hover {
+      background: #eee;
+    }
+    ul.tags a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    ul.tags a:hover {
+      text-decoration: none;
+    }
+    .from-name {
+      font-weight:600;
+    }
+    .message-to, .message-from {
+      font-size:11px;
+    }
+    .message-date {
+      font-size:11px;
+    }
+    .message-subject {
       font-weight:600;
       font-size:20px;
+    }
+    .message-heading {
       border-bottom:1px solid #eee;
       margin-bottom:15px;
     }
     .message-body {
       margin-top: 10px;
+    }
+    .message-tag {
+      font-weight:600;
+      font-size:10px;
+      margin-right: 4px;
+      padding: 2px;
+      border: 1px solid #ddd;
+      background: #eee;
     }
     .unread {
       font-weight:600;
@@ -69,20 +99,22 @@
               <!-- Tags -->
               <div class="panel panel-default" ng-controller="tagsCtrl as Tags">
                 <div class="panel-heading">Tags</div>
-                <ul class="list-group">
-                  <li class="list-group-item" ng-repeat="tag in tags" style="text-transform:capitalize;"><a ng-click="filterByTag(tag)">{{tag.tagName}}</a></li>
+                <ul class="list-group tags">
+                  <li class="list-group-item clickable" ng-repeat="tag in tags | filter: tagFilter | orderBy:tagOrder" style="text-transform:capitalize;"><a ng-click="filterByTag(tag)">{{tag.tagName}}</a></li>
                 </ul>
               </div>
             </div> 
 
             <div class="col-md-3">
               <!-- Threads -->
-              <div class="panel panel-default" style="overflow:scroll; height:800px;">
+              <div class="panel panel-default" ng-controller="threadsCtrl as Threads" style="overflow:scroll; height:800px;">
                 <table class="table table-hover">
                   <tbody>
                     <tr class="clickable" ng-repeat="thread in threads" ng-click="Mail.select(thread, $event)">
-                        <!-- td ng-repeat="tag in thread.tagData">{{tag.name}}</td -->
-                        <td class="{{thread.tagData | tag_expand}}">{{thread.subject | shorten}}</td>
+                        <td class="{{thread.tagData | tag_expand}}">
+                            <span class="message-tag" ng-repeat="tag in thread.tagData | filter: tagFilter | orderBy:tagOrder">{{tag.name}}</span>
+                            {{thread.subject | shorten}}
+                        </td>
                     </tr>
                   </tbody>
                 </table>
@@ -92,10 +124,22 @@
             <div class="col-md-7">
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
                 <div class="panel-body" ng-repeat="msg in Mail.selectedThreadMessages">
-                  <div class="message-heading">{{msg.subject}}</div>
-                  <div class="message-date">Sent: <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span></div>
-                  <div class="message-from">From: <span class="from" ng-repeat="from in msg.to">{{from.name}} &lt;{{from.email}}&gt;</span></div>
-                  <div class="message-to">To: <span class="to" ng-repeat="to in msg.to">{{to.name}} &lt;{{to.email}}&gt;</span></div>
+                  <div class="message-heading">
+                      <div class="message-subject">{{msg.subject}}</div>
+                      <div class="message-date">sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span></div>
+                      <div class="message-from">
+                          <span class="from" ng-repeat="from in msg.from">
+                              <span class="from-name">{{from.name}}</span>
+                              &lt;{{from.email}}&gt;
+                          </span>
+                      </div>
+                      <div class="message-to">
+                          to 
+                          <span class="to" ng-repeat="to in msg.to">
+                              {{to.name}} &lt;{{to.email}}&gt;
+                          </span>
+                      </div>
+                  </div>
                   <div class="message-body" ng-bind-html="msg.body"></div>
                 </div>
               </div>
