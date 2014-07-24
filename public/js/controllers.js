@@ -1,3 +1,11 @@
+// Helpers
+
+_handleAPIError = function(err) {
+  alert(err);
+};
+
+// Controllers
+
 angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
 controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', function($scope, $namespaces, $inbox, $cookieStore) {
@@ -5,8 +13,8 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
   $scope.inbox_url = $inbox.baseUrl();
   $scope.inbox_client_id = $inbox.appId();
   $scope.inbox_redirect_url = window.location.href;
-  $scope.authorized = false;
   $scope.login_hint = '';
+  $scope.me = null;
 
   $scope.setToken = function(authToken) {
     if ((authToken == null) || (authToken == ''))
@@ -15,14 +23,13 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
     $cookieStore.put('inbox_auth_token', authToken);
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':')); 
-    $scope.authorized = true;
     $namespaces.updateList();
   }
 
   $scope.clearToken = function() {
     $cookieStore.remove('inbox_auth_token');
     $inbox.setRequestHeader('Authorization', ''); 
-    $scope.authorized = false;
+    $scope.me = null;
   }
 
   $scope.valueForQueryParam = function(param_name) {
@@ -40,6 +47,13 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
     }
   }
 
+  $namespaces.on('update', function(namespaces) {
+    if (namespaces.length > 0)
+      $scope.me = {email_address: namespaces[0].emailAddress};
+    else
+      $scope.me = null
+  });
+
   var queryAuthToken = $scope.valueForQueryParam('access_token')
   $scope.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
 
@@ -49,40 +63,61 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', functi
 
 }]).
 
-controller('threadsCtrl', ['$scope', '$namespaces', function(scope, $namespaces) {
-  var threads = scope.threads = {};
-  var filters = scope.filters = {};
+controller('tagsCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
+  $scope.tags = [];
+
+  $scope.filterByTag = function(tag) {
+    $scope.$root.$broadcast('append-filter', {'tag':tag.tagName});
+  };
+
+  function loadTags(namespace) {
+    namespace.tags().then(function(tags) {
+      $scope.tags = tags;
+    }, _handleAPIError);
+  }
+
+  function update(namespaces) {
+    if (namespaces && namespaces.length) {
+      loadTags(namespaces[0]);
+    } else {
+      $scope.tags = [];
+    }
+  };
+
+  $namespaces.on('update', update);
+  update($namespaces.namespaces);
+
+}]).
+
+
+controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
+  $scope.threads = [];
+  $scope.filters = {};
+  $scope.search = '';
+
   var self = this;
-  function loadThreads(namespace, idx) {
+  this.selectedThreadMessages = null;
+
+  function loadThreads(namespace) {
     var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
-    if (!threads[namespace.id]) threads[namespace.id] = [];
-    namespace.threads(threads[namespace.id], {
+    var params = {
+      order: 'date',
       lastMessageAfter: _2WeeksAgo,
       limit: 1000
-    }).then(function(threads) {
+    };
+
+    for (var key in $scope.filters) {
+      params[key] = $scope.filters[key];
+    }
+
+    namespace.threads($scope.threads, params).then(function(threads) {
       threads.sort(function(a, b) {
-        a = a.lastMessageDate.getTime();
-        b = b.lastMessageDate.getTime();
-        return b - a;
+        return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
       });
       return threads;
-    }, function(error) {
-      console.log(error);
-    });
+    }, _handleAPIError);
   }
-  function update(namespaces) {
-    if (namespaces) {
-      var seen = {};
-      var key;
-      for (var i=0; i<namespaces.length; ++i) {
-        seen[namespaces[i].id] = true;
-        loadThreads(namespaces[i], i);
-      }
-      for (key in threads) {
-        if (!seen[key]) delete threads[key];
-      }
-    }
-  }
+
   var selectedNode;
   this.select = function(thread, event) {
     if (event) {
@@ -94,13 +129,42 @@ controller('threadsCtrl', ['$scope', '$namespaces', function(scope, $namespaces)
     if (thread) {
       thread.messages().then(function(messages) {
         self.selectedThreadMessages = messages;
-      }, function() {
-        // show error message
-      });
+      }, _handleAPIError);
     }
   }
 
-  this.selectedThreadMessages = null;
+  function update(namespaces) {
+    if (namespaces && namespaces.length) {
+        loadThreads(namespaces[0]);
+    } else {
+      $scope.threads = [];
+    }
+  }
+
+  $scope.$root.$on('append-filter', function(event, filtersToAppend){
+    for (var key in filtersToAppend)
+        $scope.filters[key] = filtersToAppend[key];
+
+    loadThreads($namespaces.namespaces[0]);
+
+    var filterKeys = Object.keys($scope.filters)
+    var search = ''
+    for (var ii = 0; ii < filterKeys.length; ii++)
+      search += filterKeys[ii] + ':' + $scope.filters[filterKeys[ii]];
+    
+    $scope.search = search;
+  });
+
+  $scope.updateFiltersWithSearch = function() {
+    $scope.filters = {};
+    var search_filters = $scope.search.split(' '); 
+    for (var ii = 0; ii < search_filters.length; ii++) {
+      var filter_parts = search_filters[ii].split(':');
+      if (filter_parts.length == 2)
+        $scope.filters[filter_parts[0]] = filter_parts[1];
+    }
+    loadThreads($namespaces.namespaces[0]);
+  };
 
   $namespaces.on('update', update);
   update($namespaces.namespaces);
