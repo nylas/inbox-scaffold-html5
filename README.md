@@ -1,6 +1,14 @@
 Baobab
 ========
 
+## Requirements
+
+```
+sudo apt-get install node npm
+npm update
+npm run-script postinstall
+```
+
 ##Running Baobab
 
 To begin with, it's necessary to set up a development environment:

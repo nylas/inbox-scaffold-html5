@@ -1,0 +1,42 @@
+.list-group-item:hover {
+  background: #eee;
+}
+ul.tags a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+ul.tags a:hover {
+  text-decoration: none;
+}
+.from-name {
+  font-weight:600;
+}
+.message-to, .message-from {
+  font-size:11px;
+}
+.message-date {
+  font-size:11px;
+}
+.message-subject {
+  font-weight:600;
+  font-size:20px;
+}
+.message-heading {
+  border-bottom:1px solid #eee;
+  margin-bottom:15px;
+}
+.message-body {
+  margin-top: 10px;
+}
+.message-tag {
+  font-weight:600;
+  font-size:10px;
+  margin-right: 4px;
+  padding: 2px;
+  border: 1px solid #ddd;
+  background: #eee;
+}
+.unread {
+  font-weight:600;
+}

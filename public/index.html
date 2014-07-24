@@ -4,23 +4,16 @@
     <base href="./">
     <title>Baobab</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/baobab.css">
     <style>body { padding-top: 60px; } .clickable { cursor: pointer; }</style>
     <script src="/js/minievents.js"></script>
+    <script src="/js/pretty.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-sanitize.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-cookies.js"></script>
     <script src="/vendor/angular-inbox.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/controllers.js"></script>
-
-    <style>
-    .message-heading {
-      font-weight:600;
-      font-size:20px;
-      border-bottom:1px solid #eee;
-      margin-bottom:15px;
-    }
-    </style>
   </head>
 
   <body>
@@ -29,10 +22,15 @@
       <div ng-switch-when="false">
         <div style="margin:auto; width:400px; border:1px solid #ccc; margin-top:10%; text-align:center; padding:20px;">
           <h2>Please Sign In</h2>
-
-          <input class="form-control" type="email" placeholder="Email Address" ng-model="login_hint"/>
-          <br>
-          <a class="btn btn-default" ng-href="{{inbox_url}}/oauth/authorize?client_id={{inbox_client_id}}&response_type=token&login_hint={{login_hint}}&redirect_uri={{inbox_redirect_url}}">Log In</a>
+          <form action="{{actionUrl + '/oauth/authorize'}}" method="get">
+            <input  type="submit" value="" style="position: absolute; height: 0px; width: 0px; border: none; padding: 0px;" hidefocus="true" tabindex="-1"/>
+            <input class="form-control" type="email" name="login_hint" placeholder="Email Address" ng-model="login_hint"/>
+            <input type="hidden" name="client_id" ng-value="inbox_client_id"/>
+            <input type="hidden" name="response_type" value="token"/>
+            <input type="hidden" name="redirect_uri" ng-value="inbox_redirect_url"/>
+            <br>
+            <a class="btn btn-default" ng-href="{{inbox_url}}/oauth/authorize?client_id={{inbox_client_id}}&response_type=token&login_hint={{login_hint}}&redirect_uri={{inbox_redirect_url}}">Log In</a>
+          </form>
         </div>
       </div>
 
@@ -62,19 +60,22 @@
               <!-- Tags -->
               <div class="panel panel-default" ng-controller="tagsCtrl as Tags">
                 <div class="panel-heading">Tags</div>
-                <ul class="list-group">
-                  <li class="list-group-item" ng-repeat="tag in tags" style="text-transform:capitalize;"><a ng-click="filterByTag(tag)">{{tag.tagName}}</a></li>
+                <ul class="list-group tags">
+                  <li class="list-group-item clickable" ng-repeat="tag in tags | filter: tagFilter | orderBy:tagOrder" style="text-transform:capitalize;"><a ng-click="filterByTag(tag)">{{tag.tagName}}</a></li>
                 </ul>
               </div>
             </div> 
 
             <div class="col-md-3">
               <!-- Threads -->
-              <div class="panel panel-default" style="overflow:scroll; height:800px;">
+              <div class="panel panel-default" ng-controller="threadsCtrl as Threads" style="overflow:scroll; height:800px;">
                 <table class="table table-hover">
                   <tbody>
                     <tr class="clickable" ng-repeat="thread in threads" ng-click="Mail.select(thread, $event)">
-                      <td>{{thread.subject | shorten}}</td>
+                        <td class="{{thread.tagData | tag_expand}}">
+                            <span class="message-tag" ng-repeat="tag in thread.tagData | filter: tagFilter | orderBy:tagOrder">{{tag.name}}</span>
+                            {{thread.subject | shorten}}
+                        </td>
                     </tr>
                   </tbody>
                 </table>
@@ -84,7 +85,22 @@
             <div class="col-md-7">
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
                 <div class="panel-body" ng-repeat="msg in Mail.selectedThreadMessages">
-                  <div class="message-heading">{{msg.subject}}</div>
+                  <div class="message-heading">
+                      <div class="message-subject">{{msg.subject}}</div>
+                      <div class="message-date">sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span></div>
+                      <div class="message-from">
+                          <span class="from" ng-repeat="from in msg.from">
+                              <span class="from-name">{{from.name}}</span>
+                              &lt;{{from.email}}&gt;
+                          </span>
+                      </div>
+                      <div class="message-to">
+                          to 
+                          <span class="to" ng-repeat="to in msg.to">
+                              {{to.name}} &lt;{{to.email}}&gt;
+                          </span>
+                      </div>
+                  </div>
                   <div class="message-body" ng-bind-html="msg.body"></div>
                 </div>
               </div>
