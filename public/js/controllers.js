@@ -1,7 +1,10 @@
 // Helpers
 
 _handleAPIError = function(err) {
-  alert(err);
+  var msg = "An unexpected error occurred. (HTTP code " + error['status'] + "). Please try again.";
+  if (error['message'])
+      msg = error['message'];
+  alert(msg);
 };
 
 // Controllers

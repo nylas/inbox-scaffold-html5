@@ -6,7 +6,7 @@ Baobab
 To begin with, it's necessary to set up a development environment:
 
 ```bash
-git --recursive clone https://github.com/inboxapp/baobab.git
+git clone  --recursive git@heroku.com:inbox-baobab.git
 
 cd baobab
 
