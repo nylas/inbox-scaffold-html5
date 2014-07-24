@@ -2,6 +2,10 @@ angular.module('baobab', [
   'inbox',
   'ngSanitize',
   'ngCookies',
+  'ngAnimate',
+  'mgcrea.ngStrap.modal',
+  'mgcrea.ngStrap.tooltip',
+  'mgcrea.ngStrap.popover',
   'baobab.controllers'
 ]).
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
@@ -81,4 +85,42 @@ filter('pretty_date', function() {
   return function(input) {
       return prettyDate(input);
   }
+}).
+directive('summerNote', function() {
+  return {
+    require: '?ngModel',
+    link: function(scope, element, attr, ngModel) {
+      element.summernote({
+        codemirror: {
+          theme: 'monokai'
+        },
+        height: attr.height || 300,
+        onpaste: listener,
+        onChange: listener,
+        onToolbarClick: listener,
+        toolbar: [
+          ['style', ['bold', 'italic', 'underline']],
+          ['fontname', ['fontname']],
+          ['color', ['color']],
+          ['fontsize', ['fontsize']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['extra', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
+        ]
+      });
+
+      function listener() {
+        var contents = element.code();
+        if (ngModel && contents !== ngModel.$viewValue) {
+          ngModel.$setViewValue(contents);
+          scope.$apply();
+        }
+      }
+
+      function destroy() {
+        element.destroy();
+      }
+
+      scope.$on('$destroy', destroy);
+    }
+  };
 });
