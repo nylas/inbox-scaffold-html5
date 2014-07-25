@@ -174,8 +174,8 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   }
 
   function loadSelectedThread() {
-    self.selectedThreadMessages = [];
-    self.selectedThreadDrafts = [];
+    self.selectedThreadMessages = null;
+    self.selectedThreadDrafts = null;
 
     if (self.selectedThread) {
       self.selectedThread.messages().then(function(messages) {

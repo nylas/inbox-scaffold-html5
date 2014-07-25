@@ -145,6 +145,11 @@
                   <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
                 </div>
 
+                <!-- Loading Indicator -->
+                <div ng-show="Mail.selectedThread && !Mail.selectedThreadMessages" class="loading-indicator">
+                  <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
+                </div>
+
               </div>
             </div>
         </div>
