@@ -23,7 +23,8 @@ ul.tags a:hover {
   font-size:20px;
 }
 .message-heading {
-  border-bottom:1px solid #eee;
+  margin-top: 10px;
+  border-top:1px solid #eee;
   margin-bottom:15px;
 }
 .message-body {

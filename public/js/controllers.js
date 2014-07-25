@@ -169,7 +169,18 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
       }, _handleAPIError);
     }
   }
-  
+
+  this.downloadAttachment = function(msg, attachment_id) {
+    msg.fattachments().then(function(attachments) {
+      for(i = 0; i < attachments.length; i++)
+      {
+        if(attachments[i].id == attachment_id)
+          attachments[i].download();
+      }
+    }, _handleAPIError)
+  };
+
+
   function appendFiltersToSearch(filtersToAppend) {
     for (var key in filtersToAppend)
       self.filters[key] = filtersToAppend[key];
