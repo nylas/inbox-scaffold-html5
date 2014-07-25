@@ -85,7 +85,8 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
 
 controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   var self = this;
-
+  this.statusMessage = "";
+  
   this.disposeClicked = function() {
     $scope.draft.dispose().then(function() {
       $scope.$root.$broadcast('reload-selected-thread');
@@ -94,15 +95,22 @@ controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces
   };
 
   this.saveClicked = function() {
+    self.statusMessage = 'Saving...';
     $scope.draft.save().then(function() {
       $scope.$root.$broadcast('reload-selected-thread');
+      $scope.$hide();
     });
-    $scope.$hide();
   };
 
   this.sendClicked = function() {
-    $scope.draft.send();
-    $scope.$hide();
+    self.statusMessage = 'Saving...';
+    $scope.draft.save().then(function() {
+      self.statusMessage = 'Sending...';
+      $scope.draft.send().then(function() {
+        $scope.$root.$broadcast('reload-selected-thread');
+        $scope.$hide();
+      });
+    });
   };
 
 }]).
