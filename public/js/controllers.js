@@ -200,7 +200,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     var filterKeys = Object.keys(self.filters)
     var search = ''
     for (var ii = 0; ii < filterKeys.length; ii++)
-      search += filterKeys[ii] + ':' + self.filters[filterKeys[ii]];
+      search += filterKeys[ii] + ':' + self.filters[filterKeys[ii]] + ' ';
     self.search = search;
   }
 
@@ -210,7 +210,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     for (var ii = 0; ii < search_filters.length; ii++) {
       var filter_parts = search_filters[ii].split(':');
       if (filter_parts.length == 2)
-        self.filters[filter_parts[0]] = filter_parts[1];
+        self.filters[filter_parts[0]] = filter_parts[1].trim();
     }
     loadThreads($namespaces.namespaces[0]);
   }
@@ -236,6 +236,10 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     applyFilters({"tag": tag.tagName});
   };
 
+  this.participantClicked = function(participant) {
+    applyFilters({"email": participant.email})
+  }
+
   var selectedNode;
   this.threadClicked = function(thread, event) {
     if (event) {
@@ -259,6 +263,12 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
 
   this.searchClicked = function() {
     updateFiltersWithSearch();
+  }
+
+  this.searchCleared = function() {
+    self.search = "";
+    self.filters = {};
+    loadThreads($namespaces.namespaces[0]);
   }
 
   this.tagOrder = function(tag_obj) {

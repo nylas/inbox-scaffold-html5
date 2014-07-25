@@ -1,3 +1,7 @@
+a {
+  cursor: pointer;
+}
+
 .list-group-item:hover {
   background: #eee;
 }

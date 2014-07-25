@@ -64,8 +64,9 @@
               <li><a ng-click="Mail.composeClicked()"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a></li>
             </ul>
             <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" ng-model="Mail.search" placeholder="Search">
+              <div class="form-group" style="position:relative;">
+                <a ng-show="Mail.search" style="position:absolute; left:380px; top:2px; font-size:20px;" ng-click="Mail.searchCleared()">×</a>
+                <input type="text" class="form-control" ng-model="Mail.search" placeholder="Search" style="width:400px;">
               </div>
               <button type="submit" class="btn btn-default" ng-click="Mail.searchClicked()">Submit</button>
             </form>
@@ -93,7 +94,7 @@
               <div class="panel panel-default">
                 <div class="thread-list">
 
-                  <div class="thread {{thread.tagData | tag_expand}}" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)">
+                  <div class="thread {{thread.tagData | tag_expand}} clickable" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)">
                       <span class="message-tag" ng-repeat="tag in thread.tagData | filter: Mail.tagFilter | orderBy:Mail.tagOrder">{{tag.name}}</span>
                       <span class="subject">{{thread.subject}}</span>
                       <span class="subject" ng-show="!thread.subject.length">No Subject</span>
@@ -118,15 +119,14 @@
                     <div class="message-heading">
                       <div class="message-from">
                         <span class="from" ng-repeat="from in msg.from">
-                          <span class="from-name">{{from.name}}</span>
-                          &lt;{{from.email}}&gt;
+                          <span class="from-name">{{from.name}}</span> &lt;<a ng-click="Mail.participantClicked(from)">{{from.email}}</a>&gt;
                         </span>
                         <span class="message-date"> (sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>)</span>
                       </div>
                       <div class="message-to">
                         to 
                         <span class="to" ng-repeat="to in msg.to">
-                          {{to.name}} &lt;{{to.email}}&gt;
+                          {{to.name}} &lt;<a ng-click="Mail.participantClicked(to)">{{to.email}}</a>&gt;
                         </span>
                       </div>
                     </div>
@@ -144,7 +144,14 @@
                   <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
                 </div>
 
-                <!-- Loading Indicator -->
+                <!-- Empty State -->
+                <div class="panel-body" ng-show="Mail.selectedThreadDrafts && Mail.selectedThreadMessages && Mail.selectedThreadDrafts.length + Mail.selectedThreadMessages.length == 0">
+                  <p>
+                    This thread does not contain any messages.
+                  </p>
+                </div>
+
+                <!-- Loading State -->
                 <div ng-show="Mail.selectedThread && !Mail.selectedThreadMessages" class="loading-indicator">
                   <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
                 </div>
