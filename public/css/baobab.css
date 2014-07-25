@@ -6,7 +6,7 @@
   top:0;
   left:0;right:0;
   bottom:0;
-  background:url(/img/background.jpg);
+  background:url(/img/background.jpg) center;
   background-size:cover;
 }
 
@@ -65,4 +65,80 @@ ul.tags a:hover {
 }
 .unread {
   font-weight:600;
+}
+
+
+/* Loading Indicator */
+
+
+.loading-indicator {
+  margin: 100px auto;
+  width: 60px;
+  height: 30px;
+  position:relative;
+  z-index:100;
+  text-align: center;
+  font-size: 10px;
+  -webkit-animation: fadein 1.2s ease-in-out;
+  animation: fadein 1.2s ease-in-out;
+}
+
+.loading-indicator.ng-hide {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.loading-indicator > div {
+  background-color: rgba(0,0,0,0.2);
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  margin-left:4px;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.loading-indicator .r2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.loading-indicator .r3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.loading-indicator .r4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.loading-indicator .r5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+@-webkit-keyframes fadein {
+  0% { opacity: 0; }
+  100% { opacity: 100%; }
+}
+
+@keyframes fadein {
+  0% { opacity: 0; }
+  100% { opacity: 100%; }
 }

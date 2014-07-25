@@ -33,7 +33,7 @@ angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $cookieStore, $sce) {
   var self = this;
 
-  this.inboxURL = $sce.trustAsResourceUrl($inbox.baseUrl());
+  this.inboxAuthURL = $sce.trustAsResourceUrl($inbox.baseUrl() + '/oauth/authorize');
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.href;
   this.loginHint = '';
@@ -45,7 +45,7 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
 
     $cookieStore.put('inbox_auth_token', authToken);
     $inbox.withCredentials(true);
-    $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':')); 
+    $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':'));
     $namespaces.updateList();
   }
 
@@ -59,19 +59,26 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
     return !!$cookieStore.get('inbox_auth_token');
   }
 
+  var queryAuthToken = _valueForQueryParam('access_token')
+  this.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
+
+  if (queryAuthToken) {
+    // We've stored the token in a cookie - wipe it from the location bar
+    window.location.href = '/';
+    return;
+  }
+
   $namespaces.on('update', function(namespaces) {
     if (namespaces && (namespaces.length > 0))
       self.me = {email_address: namespaces[0].emailAddress};
     else
       self.me = null
+
+    if (self.hasToken() && !namespaces) {
+      if (confirm("/n/ returned no namespaces for your API token. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
+          self.clearToken();
+    }
   });
-
-  var queryAuthToken = _valueForQueryParam('access_token')
-  this.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
-
-  if (queryAuthToken)
-    // We've stored the token in a cookie - wipe it from the location bar
-    window.location.href = '/'
 
 }]).
 
@@ -101,13 +108,23 @@ controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces
 }]).
 
 
-controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
+controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $namespaces, $modal) {
   var self = this;
   
   this.threads = [];
   this.tags = [];
   this.filters = {};
   this.search = '';
+
+  this.draftModal = $modal({
+    scope: $scope,
+    animation:'am-fade',
+    placement:'center',
+    container: '#mail-ctrl',
+    template: '/partials/compose.html',
+    backdrop: 'static',
+    show: false
+  });
 
   this.selectedThread = null;
   this.selectedThreadMessages = null;
@@ -142,14 +159,15 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
       params[key] = self.filters[key];
     }
 
+    self.selectedThread = null;
+    self.selectedThreadMessages = null;
+    self.selectedThreadDrafts = null;
+    self.threads = null;
+
     namespace.threads({}, params).then(function(threads) {
       threads.sort(function(a, b) {
         return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
       });
-
-      self.selectedThread = null;
-      self.selectedThreadMessages = null;
-      self.selectedThreadDrafts = null;
       self.threads = threads;
       return threads;
     }, _handleAPIError);
@@ -169,17 +187,6 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
       }, _handleAPIError);
     }
   }
-
-  this.downloadAttachment = function(msg, attachment_id) {
-    msg.attachments().then(function(attachments) {
-      for(i = 0; i < attachments.length; i++)
-      {
-        if(attachments[i].id == attachment_id)
-          attachments[i].download();
-      }
-    }, _handleAPIError)
-  };
-
 
   function appendFiltersToSearch(filtersToAppend) {
     for (var key in filtersToAppend)
@@ -208,6 +215,21 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   
   // exposed methods
 
+  this.downloadAttachment = function(msg, attachment_id) {
+    msg.attachments().then(function(attachments) {
+      for(i = 0; i < attachments.length; i++)
+      {
+        if(attachments[i].id == attachment_id)
+          attachments[i].download();
+      }
+    }, _handleAPIError)
+  };
+
+  this.launchDraftModal = function(draft) {
+    $scope.draft = draft;
+    self.draftModal.$promise.then(self.draftModal.show);
+  };
+
   this.tagClicked = function(tag) {
     appendFiltersToSearch({"tag": tag.tagName});
   };
@@ -225,8 +247,12 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
     loadSelectedThread();
   }
 
+  this.composeClicked = function() {
+    self.launchDraftModal($namespaces.namespaces[0].draft());
+  }
+
   this.replyClicked = function(thread) {
-    $scope.draft = thread.reply();
+    self.launchDraftModal(thread.reply());
   }
 
   this.searchClicked = function() {
