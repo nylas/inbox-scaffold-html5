@@ -41,12 +41,12 @@
   <body>
     <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()">
 
-      <div ng-switch-when="false">
-        <div style="margin:auto; width:400px; border:1px solid #ccc; margin-top:10%; text-align:center; padding:20px;">
+      <div ng-switch-when="false" class="login-background">
+        <div class="login-panel">
           <h2>Please Sign In</h2>
           <form action="{{App.inboxURL + '/oauth/authorize'}}" method="get">
-            <input  type="submit" value="" style="position: absolute; height: 0px; width: 0px; border: none; padding: 0px;" hidefocus="true" tabindex="-1"/>
-            <input class="form-control" type="email" name="login_hint" placeholder="Email Address" ng-model="App.loginHint"/>
+            <input type="submit" value="" style="display:none;" hidefocus="true" tabindex="-1"/>
+            <input class="form-control" style="text-align:center;" type="email" name="login_hint" placeholder="Email Address" ng-model="App.loginHint"/>
             <input type="hidden" name="client_id" ng-value="App.inboxClientID"/>
             <input type="hidden" name="redirect_uri" ng-value="App.inboxRedirectURL"/>
             <input type="hidden" name="response_type" value="token"/>
