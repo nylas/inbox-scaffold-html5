@@ -178,6 +178,11 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     self.selectedThreadDrafts = null;
 
     if (self.selectedThread) {
+      if(angular.element(selectedNode).hasClass('unread'))
+      {
+        self.selectedThread.removeTags(['unread']).then(function(response) {
+        }, _handleAPIError);
+      }
       self.selectedThread.messages().then(function(messages) {
         self.selectedThreadMessages = messages;
       }, _handleAPIError);
