@@ -171,7 +171,7 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   }
 
   this.downloadAttachment = function(msg, attachment_id) {
-    msg.fattachments().then(function(attachments) {
+    msg.attachments().then(function(attachments) {
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment_id)
