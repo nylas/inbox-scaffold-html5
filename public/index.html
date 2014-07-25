@@ -111,11 +111,12 @@
             <div class="col-md-7" ng-show="Mail.selectedThread">
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
 
-              <a ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-reply"></i>&nbsp; Reply</a>
+              &nbsp; <a ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-reply"></i>Reply</a>
+              &nbsp; <a ng-click="Mail.archiveClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-archive"></i>Archive</a>
 
                 <!-- Display messages -->
-                <div class="panel-body" ng-repeat="msg in Mail.selectedThreadMessages">
-                  <div class="message-subject">{{msg.subject}}</div>
+                <div class="panel-body">
+                  <div class="message-subject">{{Mail.selectedThread.subject}}</div>
                   <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
                     <div class="message-heading">
                       <div class="message-from">
@@ -133,7 +134,7 @@
                     </div>
                     <div class="message-body" ng-bind-html="msg.body"></div>
                     <div class="attachments">
-                      <div class="attachment" ng-repeat="attachment in msg.attachmentIDs">Attachment: <a href="#" ng-click="Mail.downloadAttachment(msg,attachment)">{{attachment}}</a></div>
+                      <div class="attachment" ng-repeat="attachment in msg.attachmentIDs">Attachment: <a href="#" ng-click="Mail.downloadAttachment(msg, attachment)">{{attachment}}</a></div>
                     </div>
                   </div>
                 </div>
