@@ -178,7 +178,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     self.selectedThreadDrafts = null;
 
     if (self.selectedThread) {
-      if(angular.element(selectedNode).hasClass('unread'))
+      if(self.selectedThread.hasTag('unread'))
       {
         self.selectedThread.removeTags(['unread']).then(function(response) {
         }, _handleAPIError);
@@ -264,6 +264,19 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
 
   this.replyClicked = function(thread) {
     self.launchDraftModal(thread.reply());
+
+  }
+
+  this.archiveClicked = function(thread) {
+    self.selectedThread.removeTags(['inbox']).then(function(response) {
+    for(i = 0; i < self.threads; i++) {
+      if(self.threads[i] == thread) {
+        self.threads.splice(1,i);
+        break;
+      }
+    }
+    self.selectedThread = null;
+    }, _handleAPIError);
   }
 
   this.searchClicked = function() {
