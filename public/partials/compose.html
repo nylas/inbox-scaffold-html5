@@ -4,14 +4,15 @@
 			<div class="modal-body" style="height:440px;">
 
 			  <div class="input-group" style="margin-bottom:10px;">
+			    <span class="input-group-addon">To:</span>
+			    <input type="text" make-participants class="form-control" name="to" ng-model="draft.to" />
+			  </div>
+
+			  <div class="input-group" style="margin-bottom:10px;">
 			    <span class="input-group-addon">Subject</span>
 			    <input type="text" ng-readonly="draft.threadID" class="form-control" name="subject" value="{{draft.subject}}" />
 			  </div>
 
-			  <div class="input-group" style="margin-bottom:10px;">
-			    <span class="input-group-addon">To:</span>
-			    <input type="text" make-participants class="form-control" name="to" ng-model="draft.to" />
-			  </div>
 			  <div class="input-group" style="margin-bottom:10px;">
 			    <span class="input-group-addon">From:</span>
 			    <input type="text" readonly class="form-control" ng-value="App.me.email_address" />

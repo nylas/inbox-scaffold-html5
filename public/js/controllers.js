@@ -113,7 +113,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   
   this.threads = [];
   this.tags = [];
-  this.filters = {};
+  this.filters = {tag: 'inbox'};
   this.search = '';
 
   this.draftModal = $modal({
@@ -188,17 +188,19 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     }
   }
 
-  function appendFiltersToSearch(filtersToAppend) {
+  function applyFilters(filtersToAppend) {
     for (var key in filtersToAppend)
       self.filters[key] = filtersToAppend[key];
 
     loadThreads($namespaces.namespaces[0]);
+    updateSearchWithFilters();
+  }
 
+  function updateSearchWithFilters() {
     var filterKeys = Object.keys(self.filters)
     var search = ''
     for (var ii = 0; ii < filterKeys.length; ii++)
       search += filterKeys[ii] + ':' + self.filters[filterKeys[ii]];
-    
     self.search = search;
   }
 
@@ -231,7 +233,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   };
 
   this.tagClicked = function(tag) {
-    appendFiltersToSearch({"tag": tag.tagName});
+    applyFilters({"tag": tag.tagName});
   };
 
   var selectedNode;
@@ -284,4 +286,5 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   $scope.$on('reload-selected-thread', loadSelectedThread);
 
   update($namespaces.namespaces);
+  updateSearchWithFilters();
 }]);

@@ -68,6 +68,30 @@ ul.tags a:hover {
 }
 
 
+.thread-list {
+  overflow-x:hidden;
+  overflow-y:scroll;
+  height:800px;
+  width:100%;
+}
+
+.thread-list .thread {
+  display:block;
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  padding:4px;
+  border-bottom:1px solid #eee;
+}
+
+.thread-list .thread:hover {
+  background-color: #eee;
+}
+
+.thread-list .thread.active {
+  background-color: #ddd;
+}
 /* Loading Indicator */
 
 
