@@ -277,9 +277,9 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
 
   this.archiveClicked = function(thread) {
     self.selectedThread.removeTags(['inbox']).then(function(response) {
-    for(i = 0; i < self.threads; i++) {
+    for(i = 0; i < self.threads.length; i++) {
       if(self.threads[i] == thread) {
-        self.threads.splice(1,i);
+        self.threads.splice(i, 1);
         break;
       }
     }
