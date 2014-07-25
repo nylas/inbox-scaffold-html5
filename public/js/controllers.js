@@ -4,7 +4,7 @@ var _clone = function(obj) {
     return JSON.parse(JSON.stringify(obj));
 };
 
-var _handleAPIError = function(err) {
+var _handleAPIError = function(error) {
   var msg = "An unexpected error occurred. (HTTP code " + error['status'] + "). Please try again.";
   if (error['message'])
       msg = error['message'];
@@ -60,7 +60,7 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
   }
 
   $namespaces.on('update', function(namespaces) {
-    if (namespaces.length > 0)
+    if (namespaces && (namespaces.length > 0))
       self.me = {email_address: namespaces[0].emailAddress};
     else
       self.me = null

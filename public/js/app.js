@@ -129,8 +129,6 @@ directive('summerNote', function() {
   return {
     require: '?ngModel',
     link: function(scope, element, attr, ngModel) {
-      debugger;
-
       element = $(element);
       element.summernote({
         codemirror: {
