@@ -12,7 +12,7 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
   if (window.location.href.indexOf('localhost') > 0)
     $inboxProvider.
       baseUrl('http://localhost:5000').
-      appId('5shrj3xn5r3abzial4jrkaidb');
+      appId('3rxk5nvnsaz03rcgmbvmkxt0v');
   else
     $inboxProvider.
       baseUrl('https://gunks.inboxapp.com:2222').
@@ -86,11 +86,53 @@ filter('pretty_date', function() {
       return prettyDate(input);
   }
 }).
+
+directive('makeParticipants', function() {
+  function format(value) {
+    if (value && Object.prototype.toString.call(value) === '[object Array]') {
+      var str = '';
+      var p;
+      for (var i=0; i<value.length; ++i) {
+        p = value[i];
+        if (p && typeof p === 'object' && p.email) {
+          str += str ? ', ' + p.email : p.email;
+        }
+      }
+      return str;
+    }
+  }
+
+  function parse(value) {
+    if (typeof value === 'string') {
+      value = value.split(/\s*,\s*/);
+      for (var i=value.length; --i >= 0;) {
+        if (!value[i]) value.splice(i, 1);
+        else {
+          value[i] = {
+            name: '',
+            email: value[i]
+          };
+        }
+      }
+    }
+    return value;
+  }
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$formatters.push(format);
+      ngModel.$parsers.push(parse);
+    }
+  };
+}).
 directive('summerNote', function() {
   return {
     require: '?ngModel',
     link: function(scope, element, attr, ngModel) {
-      $(element).summernote({
+      debugger;
+
+      element = $(element);
+      element.summernote({
         codemirror: {
           theme: 'monokai'
         },
@@ -107,6 +149,10 @@ directive('summerNote', function() {
           ['extra', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
         ]
       });
+
+      setTimeout(function() {
+        element.code(ngModel.$viewValue);
+      }, 0);
 
       function listener() {
         var contents = element.code();

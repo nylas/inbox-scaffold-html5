@@ -77,15 +77,27 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
 
 
 controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
-  if ($scope.draft_to_compose) { 
-    $scope.draft = _clone($scope.draft_to_compose);
+  var self = this;
 
-  } else if ($scope.thread_for_reply) {
-    $scope.draft = _clone($scope.draft);
+  this.disposeClicked = function() {
+    $scope.draft.dispose().then(function() {
+      $scope.$root.$broadcast('reload-selected-thread');
+    });
+    $scope.$hide();
+  };
 
-  } else {
-    $scope.draft = {};
-  }
+  this.saveClicked = function() {
+    $scope.draft.save().then(function() {
+      $scope.$root.$broadcast('reload-selected-thread');
+    });
+    $scope.$hide();
+  };
+
+  this.sendClicked = function() {
+    $scope.draft.send();
+    $scope.$hide();
+  };
+
 }]).
 
 
@@ -99,6 +111,7 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
 
   this.selectedThread = null;
   this.selectedThreadMessages = null;
+  this.selectedThreadDrafts = null;
 
   // internal methods 
 
@@ -136,11 +149,27 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
 
       self.selectedThread = null;
       self.selectedThreadMessages = null;
+      self.selectedThreadDrafts = null;
       self.threads = threads;
       return threads;
     }, _handleAPIError);
   }
 
+  function loadSelectedThread() {
+    self.selectedThreadMessages = [];
+    self.selectedThreadDrafts = [];
+
+    if (self.selectedThread) {
+      self.selectedThread.messages().then(function(messages) {
+        self.selectedThreadMessages = messages;
+      }, _handleAPIError);
+
+      self.selectedThread.drafts().then(function(drafts) {
+        self.selectedThreadDrafts = drafts;
+      }, _handleAPIError);
+    }
+  }
+  
   function appendFiltersToSearch(filtersToAppend) {
     for (var key in filtersToAppend)
       self.filters[key] = filtersToAppend[key];
@@ -182,12 +211,11 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
     }
 
     self.selectedThread = thread;
+    loadSelectedThread();
+  }
 
-    if (thread) {
-      thread.messages().then(function(messages) {
-        self.selectedThreadMessages = messages;
-      }, _handleAPIError);
-    }
+  this.replyClicked = function(thread) {
+    $scope.draft = thread.reply();
   }
 
   this.searchClicked = function() {
@@ -216,5 +244,7 @@ controller('MailCtrl', ['$scope', '$namespaces', function($scope, $namespaces) {
   }
 
   $namespaces.on('update', update);
+  $scope.$on('reload-selected-thread', loadSelectedThread);
+
   update($namespaces.namespaces);
 }]);

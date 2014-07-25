@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div ng-switch-when="true" ng-controller="MailCtrl as Mail">
+      <div id="mail-ctrl" ng-switch-when="true" ng-controller="MailCtrl as Mail">
         <div class="navbar navbar-default navbar-fixed-top">
           <div class="container-fluid">
             <a href="/" target="_self" class="navbar-brand">Inbox Webmail (Baobab)</a>
@@ -106,9 +106,9 @@
             <div class="col-md-7">
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
 
-              <a data-animation="am-fade" data-placement="center" data-template="/partials/compose.html" data-container="body" bs-modal="modal" ng-click="thread_for_reply = Mail.selectedThread"><i class="glyphicon glyphicon-reply"></i>&nbsp; Reply</a>
+              <a data-animation="am-fade" data-placement="center" data-template="/partials/compose.html" data-container="#mail-ctrl" bs-modal="modal" ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-reply"></i>&nbsp; Reply</a>
 
-
+                <!-- Display messages -->
                 <div class="panel-body" ng-repeat="msg in Mail.selectedThreadMessages">
                   <div class="message-heading">
                       <div class="message-subject">{{msg.subject}}</div>
@@ -128,6 +128,13 @@
                   </div>
                   <div class="message-body" ng-bind-html="msg.body"></div>
                 </div>
+
+                <!-- Display drafts -->
+                <div class="panel-body" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
+                  <div class="message-body" ng-bind-html="draft.body"></div>
+                  <a class="btn btn-default" data-animation="am-fade" data-placement="center" data-template="/partials/compose.html" data-container="#mail-ctrl" bs-modal="modal" ng-click="Mail.selectedDraft = draft">Edit Draft</a>
+                </div>
+
               </div>
             </div>
           </div>

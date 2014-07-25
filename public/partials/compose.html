@@ -1,0 +1,33 @@
+<div class="modal" ng-controller="ComposeCtrl as Compose" tabindex="-1" role="dialog" style="display: block;">
+	<div class="modal-dialog" style="width:500px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Compose</h4>
+			</div>
+			
+			<div class="modal-body" style="height:350px;">
+
+			  <div class="input-group">
+			    <span class="input-group-addon">Subject</span>
+			    <input type="text" readonly class="form-control" name="subject" value="{{draft.subject}}" />
+			  </div>
+
+			  <div class="input-group">
+			    <span class="input-group-addon">To:</span>
+			    <input type="text" make-participants class="form-control" name="to" ng-model="draft.to" />
+			  </div>
+
+			  <div summer-note ng-model="draft.body"></div>
+
+			</div>
+
+			<div class="modal-footer">
+			  <div class="btn-group">
+			    <button type="button" class="btn btn-default glyphicon glyphicon-trash" ng-click="Compose.disposeClicked()"></button>
+			    <button type="button" class="btn btn-default glyphicon glyphicon-floppy-disk" ng-click="Compose.saveClicked()"></button>
+			    <button type="button" class="btn btn-default glyphicon glyphicon-send" ng-click="Compose.sendClicked()">&nbsp;Send</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+</div>
