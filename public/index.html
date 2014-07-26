@@ -16,6 +16,7 @@
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.tpl.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/modules/dimensions.min.js"></script>
+    <script src="/js/keys.js"></script>
     <script src="/js/minievents.js"></script>
     <script src="/js/pretty.js"></script>
     <script src="/js/FileSaver.js"></script>
@@ -93,12 +94,11 @@
               </div>
             </div> 
 
-            <div ng-class="{'col-md-3': Mail.selectedThread, 'col-md-10': !Mail.selectedThread}">
+            <div ng-class="{'col-md-3': Mail.selectedThread, 'col-md-10': !Mail.selectedThread}" tabindex="1" ng-keydown="Mail.keypressCallback($event)">
               <!-- Threads -->
               <div class="panel panel-default">
                 <div class="thread-list">
-
-                  <div class="thread {{thread.tagData | tag_expand}} clickable" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)">
+                  <div class="thread {{thread.tagData | tag_expand}} clickable" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)" id="{{thread.id}}">
                       <span class="message-tag" ng-repeat="tag in thread.tagData | filter: Mail.threadTagFilter | orderBy:Mail.tagOrder">{{tag.name}}</span>
                       <span class="subject">{{thread.subject}}</span>
                       <span class="subject" ng-show="!thread.subject.length">No Subject</span>
