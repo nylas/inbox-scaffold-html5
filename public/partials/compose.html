@@ -55,14 +55,18 @@
       </div>
 
       <div class="modal-footer">
+        <div class="attachments">
+          <div class="attachment" ng-repeat="attachment in draft.attachmentIDs"> <a class="btn btn-default" href="#" ng-click="Compose.removeAttachment(attachment)"><i class="glyphicon glyphicon-remove-circle"></i> {{attachment.filename}}</a> ({{attachment.size}} bytes)</div>
+        </div>
         <div class="btn-group pull-left">
           <button type="button" class="btn btn-default" ng-click="Compose.disposeClicked()"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete</button>
         </div>
         <span style="padding-right:10px;">{{Compose.statusMessage}}</span>
-
         <div class="btn-group">
-          <input type="file" id="upload" name="upload" style="visibility: hidden; width: 1px; height: 1px" multiple />
+          <form id="attachment">
+          <input type="file" id="upload" name="upload" style="visibility: hidden; width: 1px; height: 1px" multiple ng-onchange="Compose.attach()" />
           <button type="button" class="btn btn-default" ng-click="Compose.attachClicked()"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Attach</button>
+          </form>
           <button type="button" class="btn btn-default" ng-click="Compose.saveClicked()"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;Save</button>
           <button type="button" class="btn btn-default" ng-click="Compose.sendClicked()"><i class="glyphicon glyphicon-send"></i>&nbsp;Send</button>
         </div>
