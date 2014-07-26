@@ -244,11 +244,11 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   
   // exposed methods
 
-  this.downloadAttachment = function(msg, attachment_id) {
+  this.downloadAttachment = function(msg, attachment) {
     msg.attachments().then(function(attachments) {
       for(i = 0; i < attachments.length; i++)
       {
-        if(attachments[i].id == attachment_id)
+        if(attachments[i].id == attachment.id)
           attachments[i].download();
       }
     }, _handleAPIError)

@@ -16,7 +16,6 @@
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.tpl.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/modules/dimensions.min.js"></script>
-    <script src="/js/keys.js"></script>
     <script src="/js/minievents.js"></script>
     <script src="/js/pretty.js"></script>
     <script src="/js/FileSaver.js"></script>
@@ -106,7 +105,6 @@
                   <div ng-show="!Mail.threads" class="loading-indicator">
                     <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -140,7 +138,7 @@
                     </div>
                     <div class="message-body" ng-bind-html="msg.body"></div>
                     <div class="attachments">
-                      <div class="attachment" ng-repeat="attachment in msg.attachmentIDs">Attachment: <a href="#" ng-click="Mail.downloadAttachment(msg, attachment)">{{attachment}}</a></div>
+                      <div class="attachment" ng-repeat="attachment in msg.attachmentIDs">Attachment: <a href="#" ng-click="Mail.downloadAttachment(msg, attachment)">{{attachment.filename}}</a> ({{attachment.size}} bytes)</div>
                     </div>
                   </div>
 
