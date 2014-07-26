@@ -118,7 +118,7 @@
                     <a class="btn btn-default" ng-click="Mail.archiveClicked(Mail.selectedThread)" ng-show="Mail.selectedThread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
                   </div>
 
-                  <div class="message-subject">{{Mail.selectedThread.subject}}</div>
+                  <div class="message-subject">{{Mail.selectedThread.subject || "No Subject"}}</div>
 
                   <!-- Display messages -->
                   <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
