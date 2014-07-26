@@ -276,14 +276,19 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   }
 
   this.archiveClicked = function(thread) {
+    if(!self.selectedThread.hasTag('inbox'))
+        return;
+
     self.selectedThread.removeTags(['inbox']).then(function(response) {
-    for(i = 0; i < self.threads.length; i++) {
-      if(self.threads[i] == thread) {
-        self.threads.splice(i, 1);
-        break;
+      if(self.filters['tag'] == 'inbox') {
+        for(i = 0; i < self.threads.length; i++) {
+          if(self.threads[i] == thread) {
+            self.threads.splice(i, 1);
+            break;
+          }
+        }
+        self.selectedThread = null;
       }
-    }
-    self.selectedThread = null;
     }, _handleAPIError);
   }
 
@@ -315,6 +320,14 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     if(tag.match("sending|send|sent|unread|all|unseen|unstarred|replied")) {
         return false;
     }
+    return true;
+  }
+
+  this.threadTagFilter = function(tag_obj) {
+    if(self.tagFilter(tag_obj) == false)
+      return false;
+    if(self.filters['tag'] == (tag_obj.tagName || tag_obj.name))
+      return false;
     return true;
   }
 

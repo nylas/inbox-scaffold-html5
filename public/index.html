@@ -96,7 +96,7 @@
                 <div class="thread-list">
 
                   <div class="thread {{thread.tagData | tag_expand}} clickable" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)">
-                      <span class="message-tag" ng-repeat="tag in thread.tagData | filter: Mail.tagFilter | orderBy:Mail.tagOrder">{{tag.name}}</span>
+                      <span class="message-tag" ng-repeat="tag in thread.tagData | filter: Mail.threadTagFilter | orderBy:Mail.tagOrder">{{tag.name}}</span>
                       <span class="subject">{{thread.subject}}</span>
                       <span class="subject" ng-show="!thread.subject.length">No Subject</span>
                   </div>
@@ -112,7 +112,7 @@
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
 
               &nbsp; <a ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-reply"></i>Reply</a>
-              &nbsp; <a ng-click="Mail.archiveClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-archive"></i>Archive</a>
+              &nbsp; <a ng-click="Mail.archiveClicked(Mail.selectedThread)" ng-show="Mail.selectedThread.hasTag('inbox')"><i class="glyphicon glyphicon-archive"></i>Archive</a>
 
                 <!-- Display messages -->
                 <div class="panel-body">
