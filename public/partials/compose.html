@@ -61,6 +61,8 @@
         <span style="padding-right:10px;">{{Compose.statusMessage}}</span>
 
         <div class="btn-group">
+          <input type="file" id="upload" name="upload" style="visibility: hidden; width: 1px; height: 1px" multiple />
+          <button type="button" class="btn btn-default" ng-click="Compose.attachClicked()"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Attach</button>
           <button type="button" class="btn btn-default" ng-click="Compose.saveClicked()"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;Save</button>
           <button type="button" class="btn btn-default" ng-click="Compose.sendClicked()"><i class="glyphicon glyphicon-send"></i>&nbsp;Send</button>
         </div>

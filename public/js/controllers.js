@@ -116,6 +116,11 @@ controller('ComposeCtrl', ['$scope', '$namespaces', function($scope, $namespaces
     });
   };
 
+  this.attachClicked = function() {
+    self.statusMessage = 'Uploading... (except not really...)';
+    document.getElementById('upload').click();
+  };
+
   this.sendClicked = function() {
     self.statusMessage = 'Saving...';
     $scope.draft.save().then(function() {
