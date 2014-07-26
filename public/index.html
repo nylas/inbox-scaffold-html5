@@ -42,7 +42,6 @@
 
       <link rel="stylesheet" ng-href="/css/bootstrap-{{App.theme}}.css">
       <link rel="stylesheet" ng-href="/css/baobab.css">
-      <link rel="stylesheet" ng-href="/css/baobab-{{App.theme}}.css">
 
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
@@ -115,12 +114,15 @@
             <div class="col-md-7" ng-show="Mail.selectedThread">
               <div class="panel panel-default" style="overflow:scroll; height:800px;">
 
-              &nbsp; <a ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-reply"></i>Reply</a>
-              &nbsp; <a ng-click="Mail.archiveClicked(Mail.selectedThread)" ng-show="Mail.selectedThread.hasTag('inbox')"><i class="glyphicon glyphicon-archive"></i>Archive</a>
-
-                <!-- Display messages -->
                 <div class="panel-body">
+                  <div class="pull-right" style="margin-left:15px;">
+                    <a class="btn btn-default" ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+                    <a class="btn btn-default" ng-click="Mail.archiveClicked(Mail.selectedThread)" ng-show="Mail.selectedThread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
+                  </div>
+
                   <div class="message-subject">{{Mail.selectedThread.subject}}</div>
+
+                  <!-- Display messages -->
                   <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
                     <div class="message-heading">
                       <div class="message-from">
@@ -141,14 +143,16 @@
                       <div class="attachment" ng-repeat="attachment in msg.attachmentIDs">Attachment: <a href="#" ng-click="Mail.downloadAttachment(msg, attachment)">{{attachment}}</a></div>
                     </div>
                   </div>
+
+                  <!-- Display drafts -->
+                  <div class="draft" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
+                    <div class="message-state">{{draft.state}}</div>
+                    <div class="message-body" ng-bind-html="draft.body"></div>
+                    <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
+                  </div>
+
                 </div>
 
-                <!-- Display drafts -->
-                <div class="panel-body" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
-                  <div class="message-state">{{draft.state}}</div>
-                  <div class="message-body" ng-bind-html="draft.body"></div>
-                  <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
-                </div>
 
                 <!-- Empty State -->
                 <div class="panel-body" ng-show="Mail.selectedThreadDrafts && Mail.selectedThreadMessages && Mail.selectedThreadDrafts.length + Mail.selectedThreadMessages.length == 0">
