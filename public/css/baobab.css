@@ -3,7 +3,7 @@ a {
 }
 
 .list-group-item:hover {
-  background: #eee;
+  background: rgba(0,0,0,0.1);
 }
 .login-background {
   position:fixed;
@@ -53,7 +53,7 @@ ul.tags a:hover {
 }
 .message-heading {
   margin-top: 10px;
-  border-top:1px solid #eee;
+  border-top:1px solid rgba(150,150,150,0.2);
   margin-bottom:15px;
 }
 .message-body {
@@ -64,8 +64,8 @@ ul.tags a:hover {
   font-size:10px;
   margin-right: 4px;
   padding: 2px;
-  border: 1px solid #ddd;
-  background: #eee;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.1);
 }
 .unread {
   font-weight:600;
@@ -86,18 +86,57 @@ ul.tags a:hover {
   text-overflow:ellipsis;
   white-space: nowrap;
   padding:4px;
-  border-bottom:1px solid #eee;
+  border-bottom:1px solid rgba(0,0,0,0.2);
 }
 
 .thread-list .thread:hover {
-  background-color: #eee;
+  background-color: rgba(0,0,0,0.1);
 }
 
 .thread-list .thread.active {
-  background-color: #ddd;
+  background-color: rgba(0,0,0,0.2);
 }
-/* Loading Indicator */
 
+.composer .note-editor .note-toolbar {
+  margin-left:0 !important;
+}
+
+.composer .input-group-add-cc {
+  position: absolute;
+  right: 1px;
+  background-color: white;
+  z-index: 10;
+  padding: 6px;
+  box-shadow: -1px 0 1px rgba(0,0,0,0.2);
+  top: 1px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  color: gray;
+}
+.composer .input-group-add-cc:hover {
+  background-color: #eee;
+  text-decoration: none;
+}
+
+.theme-dark .input-group-add-cc {
+  background-color: #111;
+}
+
+.theme-dark .composer .input-group-add-cc:hover {
+  background-color: #000;
+  text-decoration: none;
+}
+
+.theme-dark .note-editor,
+.theme-dark .note-resizebar,
+.theme-dark .note-editor .note-toolbar,
+.theme-dark input[type="text"] {
+  background-color:black;
+  border-color:#333;
+  color:white;
+}
+
+/* Loading Indicator */
 
 .loading-indicator {
   margin: 100px auto;

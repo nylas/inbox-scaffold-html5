@@ -3,9 +3,7 @@
   <head>
     <base href="./">
     <title>Baobab</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/baobab.css">
     <link rel="stylesheet" href="/css/angular-animation.css"/>
     <style>body { padding-top: 60px; } .clickable { cursor: pointer; }</style>
 
@@ -40,7 +38,11 @@
   </head>
 
   <body>
-    <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()">
+    <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()" class="theme-{{App.theme}}">
+
+      <link rel="stylesheet" ng-href="/css/bootstrap-{{App.theme}}.css">
+      <link rel="stylesheet" ng-href="/css/baobab.css">
+      <link rel="stylesheet" ng-href="/css/baobab-{{App.theme}}.css">
 
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
@@ -72,6 +74,8 @@
               <button type="submit" class="btn btn-default" ng-click="Mail.searchClicked()">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+              <li><a ng-show="App.theme == 'light'" ng-click="App.setTheme('dark')">Go Dark</a></li>
+              <li><a ng-show="App.theme == 'dark'" ng-click="App.setTheme('light')">Go Light</a></li>
               <li><a href="#">{{App.me.email_address}}</a></li>
               <li><a ng-click="App.clearToken()">Log Out</a></li>
             </ul>

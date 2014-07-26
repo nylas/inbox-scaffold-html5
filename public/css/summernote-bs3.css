@@ -1913,20 +1913,6 @@ fieldset[disabled] .note-editor .btn {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.note-editor .btn-default {
-  color: #333333;
-  background-color: #ffffff;
-  border-color: #cccccc;
-}
-.note-editor .btn-default:hover,
-.note-editor .btn-default:focus,
-.note-editor .btn-default:active,
-.note-editor .btn-default.active,
-.open .dropdown-toggle.note-editor .btn-default {
-  color: #333333;
-  background-color: #ebebeb;
-  border-color: #adadad;
-}
 .note-editor .btn-default:active,
 .note-editor .btn-default.active,
 .open .dropdown-toggle.note-editor .btn-default {

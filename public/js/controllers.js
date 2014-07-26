@@ -33,11 +33,18 @@ angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $cookieStore, $sce) {
   var self = this;
 
+  this.theme = $cookieStore.get('baobab_theme') || 'light';
+
   this.inboxAuthURL = $sce.trustAsResourceUrl($inbox.baseUrl() + '/oauth/authorize');
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.href;
   this.loginHint = '';
   this.me = null;
+
+  this.setTheme = function(theme) {
+    self.theme = theme;
+    $cookieStore.put('baobab_theme', theme);
+  }
 
   this.setToken = function(authToken) {
     if ((authToken == null) || (authToken == ''))
