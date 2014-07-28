@@ -123,13 +123,8 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
   this.attached = function() {
       var file_node = document.getElementById('upload');
       self.file = file_node.files[0];
-      $scope.draft.uploadAttachment(self.file.name, self.file).then(function(in_file){
-          in_file.filename = self.file.name;
-          in_file.size = self.file.size;
-          in_file.id = self.file.size;
-          in_file.content_type = self.file.type;
+      $scope.draft.uploadAttachment(self.file).then(function(in_file){
           self.statusMessage = '';
-          return in_file;
       }, function(err){
           console.log('error:' + err);
       }, function(){
