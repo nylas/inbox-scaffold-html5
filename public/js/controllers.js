@@ -127,6 +127,7 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
           in_file.filename = self.file.name;
           in_file.size = self.file.size;
           in_file.id = self.file.size;
+          in_file.content_type = self.file.type;
           self.statusMessage = '';
           return in_file;
       }, function(err){
@@ -140,7 +141,11 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
   this.attachClicked = function(file_node) {
     var self = this;
     var file_node = document.getElementById('upload');
-    $(file_node).on("change", this.attached);
+    if(self.change_attached != true)
+    {
+      self.change_attached = true;
+      $(file_node).on("change", this.attached);
+    }
     file_node.click();
     return false;
   };

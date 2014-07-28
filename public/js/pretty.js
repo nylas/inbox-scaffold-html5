@@ -33,3 +33,12 @@ if ( typeof jQuery != "undefined" )
 				jQuery(this).text( date );
 		});
 	};
+
+function prettySize(filesize){
+  if(filesize < 1000)
+    return filesize + " B";
+  if(filesize < 1000000)
+    return Math.floor(filesize/1000) + " KB";
+  else
+    return Math.floor(filesize/1000000) + " MB";
+}

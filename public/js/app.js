@@ -86,6 +86,31 @@ filter('pretty_date', function() {
       return prettyDate(input);
   }
 }).
+filter('pretty_size', function() {
+  return function(input) {
+      return prettySize(input);
+  }
+}).
+filter('type_to_glyph', function() {
+  return function(input) {
+    console.log(input)
+    if(input == "application/pdf") {
+      return "book"
+    } else if(input.match(/image/)) {
+      return "picture"
+    } else if(input.match(/audio/)) {
+      return "music"
+    } else if(input.match(/video/)) {
+      return "video"
+    } else if(input.match(/text/)) {
+      return "list-alt"
+    } else if(input == "application/gzip") {
+      return "compressed";
+    } else {
+      return "file";
+    }
+  }
+}).
 
 directive('makeParticipants', function() {
   function format(value) {
