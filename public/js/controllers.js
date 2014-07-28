@@ -274,7 +274,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   // exposed methods
 
   this.downloadAttachment = function(msg, attachment) {
-    msg.attachments().then(function(attachments) {
+    msg.attachmentsPromise().then(function(attachments) {
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
