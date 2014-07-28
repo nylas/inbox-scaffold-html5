@@ -17,14 +17,10 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
     $inboxProvider.
       baseUrl('https://gunks.inboxapp.com:2222').
       appId('874wihqp9t7o29f5u2pd748hl');
-  if (window.location.href.indexOf('localhost') > 0)
-      $sceDelegateProvider.resourceUrlWhitelist([
-          'self',
-          "http://localhost:5000/**"]);
-  else
-      $sceDelegateProvider.resourceUrlWhitelist([
-          'self',
-          "https://gunks.inboxapp.com:2222/**"]);
+
+  $sceDelegateProvider.resourceUrlWhitelist([
+      'self',
+      $inboxProvider.baseUrl() + "/**"]);
 
 }]).
 service('$namespaces', ['$inbox', function($inbox) {
@@ -93,7 +89,6 @@ filter('pretty_size', function() {
 }).
 filter('type_to_glyph', function() {
   return function(input) {
-    console.log(input)
     if(input == "application/pdf") {
       return "book"
     } else if(input.match(/image/)) {
