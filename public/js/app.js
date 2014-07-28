@@ -88,18 +88,42 @@ filter('pretty_size', function() {
   }
 }).
 filter('type_to_glyph', function() {
-  return function(input) {
-    if(input == "application/pdf") {
+  return function(type) {
+    if(type == "application/pdf") {
       return "book"
-    } else if(input.match(/image/)) {
+    } else if(type.match(/image/)) {
       return "picture"
-    } else if(input.match(/audio/)) {
+    } else if(type.match(/audio/)) {
       return "music"
-    } else if(input.match(/video/)) {
+    } else if(type.match(/video/)) {
       return "video"
-    } else if(input.match(/text/)) {
+    } else if(type.match(/text/)) {
       return "list-alt"
-    } else if(input == "application/gzip") {
+    } else if(type == "application/gzip") {
+      return "compressed";
+    } else {
+      return "file";
+    }
+  }
+}).
+filter('attachment_type_to_glyph', function() {
+  return function(input) {
+    type = input.content_type;
+    if(typeof type === "undefined") {
+      return "file";
+    }
+
+    if(type == "application/pdf") {
+      return "book"
+    } else if(type.match(/image/)) {
+      return "picture"
+    } else if(type.match(/audio/)) {
+      return "music"
+    } else if(type.match(/video/)) {
+      return "video"
+    } else if(type.match(/text/)) {
+      return "list-alt"
+    } else if(type == "application/gzip") {
       return "compressed";
     } else {
       return "file";
