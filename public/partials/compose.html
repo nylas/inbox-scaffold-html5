@@ -56,10 +56,10 @@
 
       <div class="modal-footer">
         <div class="attachments">
-          <div class="attachment" ng-repeat="attachment in draft.attachmentIDs">
+          <div class="attachment" ng-repeat="attachment in draft.attachments">
             <i class="glyphicon glyphicon-{{attachment.content_type | type_to_glyph }}"></i>
             {{attachment.filename}} ({{attachment.size | pretty_size}})
-            <a class="btn btn-default" href="#" ng-click="Compose.removeAttachment(attachment)"><i class="glyphicon glyphicon-remove-circle"></i>remove</a> 
+            <a class="btn btn-default" href="#" ng-click="Compose.removeAttachment(attachment)"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;Remove</a> 
           </div>
         </div>
         <span style="padding-right:10px;">{{Compose.statusMessage}}</span>

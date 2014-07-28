@@ -138,7 +138,7 @@
                     </div>
                     <div class="message-body" ng-bind-html="msg.body"></div>
                     <div class="attachments">
-                      <div class="attachment" ng-repeat="attachment in msg.attachmentIDs"> <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, attachment)"><i class="glyphicon glyphicon-paperclip"></i> {{attachment.filename}}</a> ({{attachment.size}} bytes)</div>
+                      <div class="attachment" ng-repeat="attachment in msg.attachments"> <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, attachment)"><i class="glyphicon glyphicon-paperclip"></i> {{attachment.filename}}</a> ({{attachment.size}} bytes)</div>
                     </div>
                   </div>
 
