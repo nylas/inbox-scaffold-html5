@@ -116,6 +116,16 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
     });
   };
 
+  this.downloadAttachment = function(attachment) {
+    $scope.draft.attachmentsPromise().then(function(attachments) {
+      for(i = 0; i < attachments.length; i++)
+      {
+        if(attachments[i].id == attachment.id)
+          attachments[i].download();
+      }
+    }, _handleAPIError)
+  };
+
   this.removeAttachment = function(attachment) {
     $scope.draft.removeAttachment(attachment);
   }
@@ -270,7 +280,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
     }
     loadThreads($namespaces.namespaces[0]);
   }
-  
+
   // exposed methods
 
   this.downloadAttachment = function(msg, attachment) {
