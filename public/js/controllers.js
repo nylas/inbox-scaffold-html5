@@ -121,7 +121,7 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
-          attachments[i].download();
+          attachments[i].download(saveAs);
       }
     }, _handleAPIError)
   };
