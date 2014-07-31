@@ -212,7 +212,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   function loadThreads(namespace) {
     var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
     var params = {
-      order: 'date',
+      order_by: 'date',
       lastMessageAfter: _2WeeksAgo,
       limit: 1000
     };
