@@ -15,7 +15,7 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
   //     appId('3rxk5nvnsaz03rcgmbvmkxt0v');
   // else
     $inboxProvider.
-      baseUrl('https://gunks.inboxapp.com:2222').
+      baseUrl('https://beta.inboxapp.com').
       appId('874wihqp9t7o29f5u2pd748hl');
 
   $sceDelegateProvider.resourceUrlWhitelist([
