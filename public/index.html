@@ -88,7 +88,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">Tags</div>
                 <ul class="list-group tags">
-                  <li class="list-group-item clickable" ng-class="{active: Mail.filters['tag'] == tag.tagName}" ng-repeat="tag in Mail.tags | filter: Mail.tagFilter | orderBy:Mail.tagOrder" style="text-transform:capitalize;" ng-click="Mail.tagClicked(tag)">{{tag.tagName}}</li>
+                  <li class="list-group-item clickable" ng-class="{active: Mail.filters['tag'] == tag.tagName}" ng-repeat="tag in Mail.tags | filter: Mail.tagFilter | orderBy:Mail.tagOrder" style="text-transform:capitalize;" ng-click="Mail.tagClicked(tag)">{{tag.name()}}</li>
                 </ul>
               </div>
             </div> 
@@ -110,7 +110,7 @@
             </div>
 
             <div class="col-md-7" ng-show="Mail.selectedThread">
-              <div class="panel panel-default" style="overflow:scroll; height:800px;">
+              <div class="panel panel-default">
 
                 <div class="panel-body">
                   <div class="pull-right" style="margin-left:15px;">
@@ -120,35 +120,36 @@
 
                   <div class="message-subject">{{Mail.selectedThread.subject || "No Subject"}}</div>
 
-                  <!-- Display messages -->
-                  <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
-                    <div class="message-heading">
-                      <div class="message-from">
-                        <span class="from" ng-repeat="from in msg.from">
-                          <span class="from-name">{{from.name}}</span> &lt;<a ng-click="Mail.participantClicked(from)">{{from.email}}</a>&gt;
-                        </span>
-                        <span class="message-date"> (sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>)</span>
+                  <div class="thread-message-list">
+                    <!-- Display messages -->
+                    <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
+                      <div class="message-heading">
+                        <div class="message-from">
+                          <span class="from" ng-repeat="from in msg.from">
+                            <span class="from-name">{{from.name}}</span> &lt;<a ng-click="Mail.participantClicked(from)">{{from.email}}</a>&gt;
+                          </span>
+                          <span class="message-date"> (sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>)</span>
+                        </div>
+                        <div class="message-to">
+                          to 
+                          <span class="to" ng-repeat="to in msg.to">
+                            {{to.name}} &lt;<a ng-click="Mail.participantClicked(to)">{{to.email}}</a>&gt;
+                          </span>
+                        </div>
                       </div>
-                      <div class="message-to">
-                        to 
-                        <span class="to" ng-repeat="to in msg.to">
-                          {{to.name}} &lt;<a ng-click="Mail.participantClicked(to)">{{to.email}}</a>&gt;
-                        </span>
+                      <div class="message-body" ng-bind-html="msg.body"></div>
+                      <div class="attachments">
+                        <div class="attachment" ng-repeat="data in msg.attachmentData">{{aID}} <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, msg.attachment(data.id))"><i class="glyphicon glyphicon-paperclip"></i> {{msg.attachment(data.id).filename}}</a> ({{msg.attachment(data.id).size}} bytes)</div>
                       </div>
                     </div>
-                    <div class="message-body" ng-bind-html="msg.body"></div>
-                    <div class="attachments">
-                      <div class="attachment" ng-repeat="attachment in msg.attachments"> <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, attachment)"><i class="glyphicon glyphicon-paperclip"></i> {{attachment.filename}}</a> ({{attachment.size}} bytes)</div>
+
+                    <!-- Display drafts -->
+                    <div class="draft" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
+                      <div class="message-state">{{draft.state}}</div>
+                      <div class="message-body" ng-bind-html="draft.body"></div>
+                      <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
                     </div>
                   </div>
-
-                  <!-- Display drafts -->
-                  <div class="draft" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
-                    <div class="message-state">{{draft.state}}</div>
-                    <div class="message-body" ng-bind-html="draft.body"></div>
-                    <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
-                  </div>
-
                 </div>
 
 

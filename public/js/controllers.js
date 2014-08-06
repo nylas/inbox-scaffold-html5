@@ -292,7 +292,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
-          attachments[i].download();
+          attachments[i].download(saveAs);
       }
     }, _handleAPIError)
   };
@@ -373,8 +373,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   }
 
   this.tagFilter = function(tag_obj) {
-    var tag = tag_obj.tagName || tag_obj.name;
-    if(tag.match("sending|send|sent|unread|all|unseen|unstarred|replied")) {
+    if(tag_obj.id.match("sending|send|sent|unread|all|unseen|unstarred|replied")) {
         return false;
     }
     return true;

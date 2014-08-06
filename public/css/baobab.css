@@ -97,6 +97,11 @@ ul.tags a:hover {
   background-color: rgba(0,0,0,0.2);
 }
 
+.thread-message-list {
+  overflow:scroll;
+  height:700px;
+}
+
 .composer .note-editor .note-toolbar {
   margin-left:0 !important;
 }
