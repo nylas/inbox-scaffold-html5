@@ -117,7 +117,7 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
   };
 
   this.downloadAttachment = function(attachment) {
-    $scope.draft.attachmentsPromise().then(function(attachments) {
+    $scope.draft.getAttachments().then(function(attachments) {
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
@@ -288,7 +288,7 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
   // exposed methods
 
   this.downloadAttachment = function(msg, attachment) {
-    msg.attachmentsPromise().then(function(attachments) {
+    msg.getAttachments().then(function(attachments) {
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
