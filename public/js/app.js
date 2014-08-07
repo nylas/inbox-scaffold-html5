@@ -108,7 +108,7 @@ filter('type_to_glyph', function() {
 }).
 filter('attachment_type_to_glyph', function() {
   return function(input) {
-    type = input.content_type;
+    type = input.contentType;
     if(typeof type === "undefined") {
       return "file";
     }
