@@ -125,7 +125,7 @@ controller('ComposeCtrl', ['$scope', '$namespaces', '$inbox', function($scope, $
             saveAs(response.blob, response.filename);
           }, function(err) {
             console.log('error:' + err);
-          };
+          });
       }
     }, _handleAPIError)
   };
