@@ -42,7 +42,7 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$cookieStore', '$sce'
 
   this.theme = $cookieStore.get('baobab_theme') || 'light';
 
-  this.inboxAuthURL = $sce.trustAsResourceUrl($inbox.baseUrl() + '/oauth/authorize');
+  this.inboxAuthURL = $sce.trustAsResourceUrl('https://beta.inboxapp.com/oauth/authorize');
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.href;
   this.loginHint = '';
