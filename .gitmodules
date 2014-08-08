@@ -1,3 +1,3 @@
 [submodule "vendor/inbox.js"]
 	path = vendor/inbox.js
-	url = https://github.com/bengotow/inbox.js.git
+	url = https://github.com/inboxapp/inbox.js.git
