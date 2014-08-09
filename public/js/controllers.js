@@ -292,7 +292,9 @@ controller('MailCtrl', ['$scope', '$namespaces', '$modal', function($scope, $nam
       for(i = 0; i < attachments.length; i++)
       {
         if(attachments[i].id == attachment.id)
-          attachments[i].download(saveAs);
+          attachments[i].download().then(function(response) {
+            saveAs(response.blob, response.filename);
+          }, _handleAPIError);
       }
     }, _handleAPIError)
   };
