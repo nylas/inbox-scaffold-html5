@@ -11,7 +11,7 @@ angular.module('baobab', [
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
   $inboxProvider.
     baseUrl('https://api.inboxapp.com').
-    appId('874wihqp9t7o29f5u2pd748hl');
+    appId('xdfim6g4mbduytzjhn8ud490');
 
   $sceDelegateProvider.resourceUrlWhitelist([
       'self',
