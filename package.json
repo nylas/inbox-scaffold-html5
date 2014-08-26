@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "echo postinstall time; cd ./vendor/inbox.js; npm install --not-production; ./node_modules/gulp/bin/gulp.js build; mv ./build/angular-inbox.js ./../../public/js/angular-inbox.js; cd ./../../;"
+    "postinstall": "echo postinstall time; cd ./vendor/inbox.js; npm install; ./node_modules/gulp/bin/gulp.js build; mv ./build/angular-inbox.js ./../../public/js/angular-inbox.js; cd ./../../;"
   },
   "repository": {
     "type": "git",

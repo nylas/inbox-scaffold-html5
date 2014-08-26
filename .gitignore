@@ -1,5 +1,5 @@
 *.DS_Store
 *.swp
 *.swo
-
 /node_modules/
+public/js/angular-inbox.js
