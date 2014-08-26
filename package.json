@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "echo postinstall time; cd ./vendor/inbox.js; ./../../node_modules/gulp/bin/gulp.js build; cd ./../../;"
+    "postinstall": "echo postinstall time; cd ./vendor/inbox.js; npm install; ./node_modules/gulp/bin/gulp.js build; cd ./../../;"
   },
   "repository": {
     "type": "git",
@@ -21,15 +21,6 @@
   },
   "dependencies": {
     "express": "^4.6.1",
-    "logfmt": "^1.1.2",
-    "gulp": "^3.7.0",
-    "gulp-concat": "^2.2.0",
-    "karma": "^0.12.16",
-    "karma-jasmine": "^0.1.5",
-    "gulp-jscs": "^0.5.0",
-    "gulp-jshint": "^1.6.2",
-    "jshint-stylish": "^0.2.0",
-    "gulp-connect": "^2.0.5",
-    "yargs": "^1.2.6"
+    "logfmt": "^1.1.2"
   }
 }
