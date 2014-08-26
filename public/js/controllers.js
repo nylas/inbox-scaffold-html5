@@ -357,6 +357,27 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
       threads.sort(function(a, b) {
         return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
       });
+
+      // Perform some pre-processing of participants to localize them
+      // for display. Most efficient to do this once when data is received.
+      _.each(threads, function(thread) {
+        _.each(thread.participants, function(participant) {
+          // If we are the participant, show "Me" instead of our name
+          if (participant.email == $scope.me.email_address)
+            participant.name = 'Me';
+
+          // If the participant is an automated responder, show the email domain
+          if (participant.name == false) {
+            var name = participant.email;
+            var parts = name.split('@');
+            if (_.contains(['support', 'no-reply', 'info'], parts[0]))
+              name = parts[1];
+            participant.name = name;
+          }
+
+        });
+      });
+
       self.threads = threads;
       return threads;
     }, _handleAPIError);
@@ -427,12 +448,7 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
 
     self.selectedThread.removeTags(['inbox']).then(function(response) {
       if(self.filters['tag'] == 'inbox') {
-        for(i = 0; i < self.threads.length; i++) {
-          if(self.threads[i] == thread) {
-            self.threads.splice(i, 1);
-            break;
-          }
-        }
+        self.threads = _.without(self.threads, thread);
         self.selectedThread = null;
       }
     }, _handleAPIError);
