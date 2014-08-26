@@ -5,11 +5,13 @@
     <title>Baobab</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/angular-animation.css"/>
-    <style>body { padding-top: 60px; } .clickable { cursor: pointer; }</style>
+    <style>.clickable { cursor: pointer; }</style>
 
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-sanitize.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-cookies.js"></script>
+    <script src="https://code.angularjs.org/1.2.18/angular-route.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-animate.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -40,7 +42,6 @@
   <body>
     <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()" class="theme-{{App.theme}}">
 
-      <link rel="stylesheet" ng-href="/css/bootstrap-{{App.theme}}.css">
       <link rel="stylesheet" ng-href="/css/baobab.css">
 
       <div ng-switch-when="false" class="login-background">
@@ -58,119 +59,23 @@
         </div>
       </div>
 
-      <div id="mail-ctrl" ng-switch-when="true" ng-controller="MailCtrl as Mail">
-        <div class="navbar navbar-default navbar-fixed-top">
-          <div class="container-fluid">
-            <a href="/" target="_self" class="navbar-brand">Inbox Webmail (Baobab)</a>
-            <ul class="nav navbar-nav">
-              <li><a ng-click="Mail.composeClicked()"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a></li>
-            </ul>
-            <form class="navbar-form navbar-left" role="search">
-              <div class="form-group" style="position:relative;">
-                <a ng-show="Mail.search" style="position:absolute; left:380px; top:2px; font-size:20px;" ng-click="Mail.searchCleared()">×</a>
-                <input type="text" class="form-control" ng-model="Mail.search" placeholder="Search" style="width:400px;">
-              </div>
-              <button type="submit" class="btn btn-default" ng-click="Mail.searchClicked()">Submit</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a ng-show="App.theme == 'light'" ng-click="App.setTheme('dark')">Go Dark</a></li>
-              <li><a ng-show="App.theme == 'dark'" ng-click="App.setTheme('light')">Go Light</a></li>
-              <li><a href="#">{{App.me.email_address}}</a></li>
-              <li><a ng-click="App.clearToken()">Log Out</a></li>
-            </ul>
-          </div>
+      <div ng-switch-when="true" ng-controller="MailCtrl">
+        <div id="content-sidebar">
+          <ul>
+            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox"><img src="/img/tab_inbox@2x.png" /> Inbox</a></li>
+            <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts"><img src="/img/tab_drafts@2x.png" /> Drafts</a></li>
+            <li class="{{App.cssForTab('sent')}}"><a href="#/sent"><img src="/img/tab_sent@2x.png" /> Sent</a></li>
+            <li class="{{App.cssForTab('archive')}}"><a href="#/archive"><img src="/img/tab_archive@2x.png" /> Archive</a></li>
+          </ul>
+
+          <ul class="pull-bottom">
+            <li class="{{App.cssForTab('settings')}}"><a href="#/settings">Settings</a></li>
+          </ul>
         </div>
 
-        <section class="container-fluid">
-          <div class="row">
-            <div class="col-md-2">
-              <!-- Tags -->
-              <div class="panel panel-default">
-                <div class="panel-heading">Tags</div>
-                <ul class="list-group tags">
-                  <li class="list-group-item clickable" ng-class="{active: Mail.filters['tag'] == tag.tagName}" ng-repeat="tag in Mail.tags | filter: Mail.tagFilter | orderBy:Mail.tagOrder" style="text-transform:capitalize;" ng-click="Mail.tagClicked(tag)">{{tag.name()}}</li>
-                </ul>
-              </div>
-            </div> 
+        <div id="content" ng-view></div>
 
-            <div ng-class="{'col-md-3': Mail.selectedThread, 'col-md-10': !Mail.selectedThread}" tabindex="1" ng-keydown="Mail.keypressCallback($event)">
-              <!-- Threads -->
-              <div class="panel panel-default">
-                <div class="thread-list">
-                  <div class="thread {{thread.tagData | tag_expand}} clickable" ng-repeat="thread in Mail.threads" ng-click="Mail.threadClicked(thread, $event)" id="{{thread.id}}">
-                      <span class="message-tag" ng-repeat="tag in thread.tagData | filter: Mail.threadTagFilter | orderBy:Mail.tagOrder">{{tag.name}}</span>
-                      <span class="subject">{{thread.subject}}</span>
-                      <span class="subject" ng-show="!thread.subject.length">No Subject</span>
-                  </div>
-                  <div ng-show="!Mail.threads" class="loading-indicator">
-                    <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-7" ng-show="Mail.selectedThread">
-              <div class="panel panel-default">
-
-                <div class="panel-body">
-                  <div class="pull-right" style="margin-left:15px;">
-                    <a class="btn btn-default" ng-click="Mail.replyClicked(Mail.selectedThread)"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
-                    <a class="btn btn-default" ng-click="Mail.archiveClicked(Mail.selectedThread)" ng-show="Mail.selectedThread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
-                  </div>
-
-                  <div class="message-subject">{{Mail.selectedThread.subject || "No Subject"}}</div>
-
-                  <div class="thread-message-list">
-                    <!-- Display messages -->
-                    <div class="message" ng-repeat="msg in Mail.selectedThreadMessages">
-                      <div class="message-heading">
-                        <div class="message-from">
-                          <span class="from" ng-repeat="from in msg.from">
-                            <span class="from-name">{{from.name}}</span> &lt;<a ng-click="Mail.participantClicked(from)">{{from.email}}</a>&gt;
-                          </span>
-                          <span class="message-date"> (sent <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>)</span>
-                        </div>
-                        <div class="message-to">
-                          to 
-                          <span class="to" ng-repeat="to in msg.to">
-                            {{to.name}} &lt;<a ng-click="Mail.participantClicked(to)">{{to.email}}</a>&gt;
-                          </span>
-                        </div>
-                      </div>
-                      <div class="message-body" ng-bind-html="msg.body"></div>
-                      <div class="attachments">
-                        <div class="attachment" ng-repeat="data in msg.attachmentData">{{aID}} <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, msg.attachment(data.id))"><i class="glyphicon glyphicon-paperclip"></i> {{msg.attachment(data.id).filename}}</a> ({{msg.attachment(data.id).size}} bytes)</div>
-                      </div>
-                    </div>
-
-                    <!-- Display drafts -->
-                    <div class="draft" ng-repeat="draft in Mail.selectedThreadDrafts" style="background-color:yellow;">
-                      <div class="message-state">{{draft.state}}</div>
-                      <div class="message-body" ng-bind-html="draft.body"></div>
-                      <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
-                    </div>
-                  </div>
-                </div>
-
-
-                <!-- Empty State -->
-                <div class="panel-body" ng-show="Mail.selectedThreadDrafts && Mail.selectedThreadMessages && Mail.selectedThreadDrafts.length + Mail.selectedThreadMessages.length == 0">
-                  <p>
-                    This thread does not contain any messages.
-                  </p>
-                </div>
-
-                <!-- Loading State -->
-                <div ng-show="Mail.selectedThread && !Mail.selectedThreadMessages" class="loading-indicator">
-                  <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
-                </div>
-
-              </div>
-            </div>
-        </div>
-        </section>
       </div>
     </div>
-
   </body>
 </html>

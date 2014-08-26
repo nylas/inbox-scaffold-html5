@@ -2,12 +2,20 @@ angular.module('baobab', [
   'inbox',
   'ngSanitize',
   'ngCookies',
+  'ngRoute',
   'ngAnimate',
   'mgcrea.ngStrap.modal',
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.popover',
   'baobab.controllers'
 ]).
+
+config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  $routeProvider.when('/thread/:id', { templateUrl: '/partials/thread.html', controller: 'ThreadCtrl as ThreadCtrl' });
+  $routeProvider.when('/:tag', { templateUrl: '/partials/mailbox.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
+  $routeProvider.otherwise({redirectTo: '/inbox'});
+}]).
+
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
   $inboxProvider.
     baseUrl('https://api.inboxapp.com').
@@ -18,6 +26,7 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
       $inboxProvider.baseUrl() + "/**"]);
 
 }]).
+
 service('$namespaces', ['$inbox', function($inbox) {
   var updateId = null, updateRate = null;
   var self = this;
@@ -74,12 +83,27 @@ filter('tag_expand', function() {
 }).
 filter('pretty_date', function() {
   return function(input) {
-      return prettyDate(input);
+    return prettyDate(input);
   }
 }).
 filter('pretty_size', function() {
   return function(input) {
-      return prettySize(input);
+    return prettySize(input);
+  }
+}).
+
+filter('pretty_participants', function() {
+  return function(input) {
+    var str = '';
+    var p;
+    for (var i=0; i<input.length; ++i) {
+      p = input[i];
+      if (p && typeof p === 'object') {
+        var n = p.name ? p.name : p.email;
+        str += str ? ', ' + n : n;
+      }
+    }
+    return str;
   }
 }).
 filter('type_to_glyph', function() {
@@ -125,6 +149,26 @@ filter('attachment_type_to_glyph', function() {
     }
   }
 }).
+
+directive('participantBubble', [function() {
+  return {
+      restrict: "E",
+      template: '<div class="participant-bubble"></div>',
+      link: function(scope, element, attrs, ctrl) {
+        var email = attrs['email'].toLowerCase().trim();
+        var hash = CryptoJS.MD5(email);
+        var url = "http://www.gravatar.com/avatar/" + hash + '?d=404';
+        var hue = 0;
+        for (var ii = 0; ii < email.length; ii++)
+          hue += email.charCodeAt(ii);
+
+        var el = $(element).find('.participant-bubble');
+        el.css('background-color', 'hsl('+hue+',70%,60%)');
+        el.css('background-image', 'url('+url+')');
+        el.css('background-size','cover');
+      }
+  };
+}]).
 
 directive('makeParticipants', function() {
   function format(value) {

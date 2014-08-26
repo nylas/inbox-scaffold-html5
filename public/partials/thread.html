@@ -1,0 +1,49 @@
+
+<div class="pull-right" style="margin-right:15px; margin-top:15px;">
+  <a class="btn btn-default" ng-click="Mail.replyClicked(ThreadCtrl.thread)"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+  <a class="btn btn-default" ng-click="Mail.archiveClicked(ThreadCtrl.thread)" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
+</div>
+
+<div class="centered">
+
+  <div class="message-subject">{{ThreadCtrl.thread.subject || "No Subject"}}</div>
+
+  <div class="message-list">
+    <!-- Display messages -->
+    <div class="message" ng-repeat="msg in ThreadCtrl.messages"><div class="inset">
+
+      <div class="heading">
+        <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>
+
+        <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
+        <span class="to"> to </span>
+        <span class="to" ng-repeat="to in msg.to" bs-tooltip data-trigger="hover" data-title="{{to.email}}">{{to.name}}</span>
+      </div>
+
+      <div class="body" ng-bind-html="msg.body"></div>
+      <div class="attachments">
+        <div class="attachment" ng-repeat="data in msg.attachmentData">{{aID}} <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, msg.attachment(data.id))"><i class="glyphicon glyphicon-paperclip"></i> {{msg.attachment(data.id).filename}}</a> ({{msg.attachment(data.id).size}} bytes)</div>
+      </div>
+    </div></div>
+
+    <!-- Display drafts -->
+    <div class="draft" ng-repeat="draft in ThreadCtrl.drafts" style="background-color:yellow;">
+      <div class="state">{{draft.state}}</div>
+      <div class="body" ng-bind-html="draft.body"></div>
+      <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="panel-body" ng-show="ThreadCtrl.drafts && ThreadCtrl.messages && ThreadCtrl.drafts.length + ThreadCtrl.messages.length == 0">
+    <p>
+      This thread does not contain any messages.
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div ng-show="!ThreadCtrl.messages" class="loading-indicator">
+    <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
+  </div>
+
+</div>
