@@ -1,19 +1,22 @@
 var express = require("express");
 var fs = require('fs');
 var logfmt = require("logfmt");
-var less = require("less");
 var app = express();
+
+var less = new(require("less").Parser)({
+  paths: [ __dirname + '/public/css']
+});
 
 
 // For development: render less to css with no caching
 app.get("*.less", function(req, res) {
   var path = __dirname + '/public' + req.url;
   fs.readFile(path, "utf8", function(err, data) {
-    if (err) throw err;
-    less.render(data, function(err, css) {
-      if (err) throw err;
+    if (err) return res.send(404, err);
+    less.parse(data, function(err, tree) {
+      if (err) return res.send(400, err);
       res.type("text/css");
-      res.send(css);
+      res.send(tree.toCSS());
     });
   });
 });
