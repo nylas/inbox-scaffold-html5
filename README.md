@@ -4,7 +4,7 @@ Baobab
 ## Requirements
 
 ```
-sudo apt-get install node npm
+sudo apt-get install node npm gulp
 npm update
 npm run-script postinstall
 ```
@@ -17,6 +17,9 @@ To begin with, it's necessary to set up a development environment:
 git clone  --recursive git@heroku.com:inbox-baobab.git
 
 cd baobab
+
+git submodule init
+git submodule update
 
 foreman start --port 6000
 
