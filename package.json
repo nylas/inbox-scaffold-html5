@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "express": "^4.6.1",
+    "less": "^1.7.4",
     "logfmt": "^1.1.2"
   }
 }

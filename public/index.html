@@ -26,11 +26,12 @@
     <script src="/js/controllers.js"></script>
 
     <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/css/baobab.less">
+    <link rel="stylesheet" href="/css/tokenfield-typeahead.css">
 
     <!-- For Composer -->
     <link rel="stylesheet" href="/css/summernote.css">
     <link rel="stylesheet" href="/css/summernote-bs3.css">
-    <link rel="stylesheet" href="/css/tokenfield-typeahead.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.min.css">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.js"></script>
@@ -43,8 +44,6 @@
 
   <body>
     <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()" class="theme-{{App.theme}}">
-
-      <link rel="stylesheet" ng-href="/css/baobab.css">
 
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
