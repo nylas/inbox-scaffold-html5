@@ -14,7 +14,7 @@ npm run-script postinstall
 To begin with, it's necessary to set up a development environment:
 
 ```bash
-git clone  --recursive git@heroku.com:inbox-baobab.git
+git clone  --recursive git@github.com:inboxapp/baobab.git
 
 cd baobab
 
