@@ -6,6 +6,13 @@ body, html {
   font-family:sans-serif;
 }
 
+iframe[seamless]{
+  background-color: transparent;
+  border: 0px none transparent;
+  padding: 0px;
+  overflow: hidden;
+}
+
 a {
   cursor: pointer;
 }
@@ -130,7 +137,7 @@ a {
   margin-bottom:20px;
 
   .inset {
-    width:564px;
+    width:640px;
     margin: auto;
   }
 
@@ -153,10 +160,11 @@ a {
   }
 
   .body {
+    width:100%;
+    height:auto;
+    overflow-y: hidden;
+    overflow-x: scroll;
     padding-top: 20px;
-    line-height: 22px;
-    font-size:15px;
-    color:#333;
   }
 }
 

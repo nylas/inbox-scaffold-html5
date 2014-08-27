@@ -20,7 +20,7 @@
         <span class="to" ng-repeat="to in msg.to" bs-tooltip data-trigger="hover" data-title="{{to.email}}">{{to.name}}</span>
       </div>
 
-      <div class="body" ng-bind-html="msg.body"></div>
+      <iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
       <div class="attachments">
         <div class="attachment" ng-repeat="data in msg.attachmentData">{{aID}} <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, msg.attachment(data.id))"><i class="glyphicon glyphicon-paperclip"></i> {{msg.attachment(data.id).filename}}</a> ({{msg.attachment(data.id).size}} bytes)</div>
       </div>

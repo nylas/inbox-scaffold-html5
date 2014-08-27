@@ -170,6 +170,28 @@ directive('participantBubble', [function() {
   };
 }]).
 
+directive('inBindIframeContents', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      // Specify how UI should be updated
+      ngModel.$render = function() {
+        var doc = element[0].contentWindow.document;
+        element[0].onload = function() {
+          var height = doc.body.scrollHeight + 'px';
+          doc.body.className += ' ' + 'heightDetermined';
+          $(element).height(height);
+        }
+        var style = '<link rel="stylesheet" type="text/css" href="/css/baobab-message.css">';
+        doc.open();
+        doc.write(style);
+        doc.write(ngModel.$viewValue);
+        doc.close();
+      };
+    }
+  };
+}).
+
 directive('makeParticipants', function() {
   function format(value) {
     if (value && Object.prototype.toString.call(value) === '[object Array]') {
