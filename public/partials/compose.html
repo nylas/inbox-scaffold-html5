@@ -21,7 +21,7 @@
             <!-- Draft In Reply To Thread -->
             <div class="input-group">
               <span class="input-group-addon">Recipients:</span>
-              <input type="text" readonly make-participants class="form-control" name="to" ng-model="draft.to" />
+              <input type="text" readonly in-participants class="form-control" name="to" ng-model="draft.to" />
             </div>
           </div>
 
@@ -30,16 +30,16 @@
             <div class="input-group">
               <span class="input-group-addon">To:</span>
               <a ng-hide="expanded" ng-click="expanded = true" class="input-group-add-cc">Show CC/BCC</a>
-              <input type="text" make-participants class="form-control" name="to" ng-model="draft.to" />
+              <input type="text" in-participants class="form-control" name="to" ng-model="draft.to" />
             </div>
             <div ng-show="expanded || draft.cc.length > 0 || draft.bcc.length > 0">
               <div class="input-group">
                 <span class="input-group-addon">CC:</span>
-                <input type="text" make-participants class="form-control" name="cc" ng-model="draft.cc" />
+                <input type="text" in-participants class="form-control" name="cc" ng-model="draft.cc" />
               </div>
               <div class="input-group">
                 <span class="input-group-addon">BCC:</span>
-                <input type="text" make-participants class="form-control" name="bcc" ng-model="draft.bcc" />
+                <input type="text" in-participants class="form-control" name="bcc" ng-model="draft.bcc" />
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
           <input type="text" ng-readonly="draft.threadID" class="form-control" placeholder="Subject" name="subject" ng-model="draft.subject" />
         </div>
 
-        <div summer-note ng-model="draft.body" height="200"></div>
+        <div in-summer-note ng-model="draft.body" height="200"></div>
 
       </div>
 

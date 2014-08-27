@@ -22,9 +22,7 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
     appId('xdfim6g4mbduytzjhn8ud490');
 
   $sceDelegateProvider.resourceUrlWhitelist([
-      'self',
-      $inboxProvider.baseUrl() + "/**"]);
-
+      'self', $inboxProvider.baseUrl() + "/**"]);
 }]).
 
 service('$namespaces', ['$inbox', function($inbox) {
@@ -64,6 +62,7 @@ service('$namespaces', ['$inbox', function($inbox) {
   self.updateList = updateList;
   self.scheduleUpdate = updateRate;
 }]).
+
 filter('shorten', function() {
   return function(input) {
     if (typeof input === 'string' && input.length > 64) {
@@ -72,6 +71,7 @@ filter('shorten', function() {
     return input;
   }
 }).
+
 filter('tag_expand', function() {
   return function(input) {
       var tags="";
@@ -81,11 +81,13 @@ filter('tag_expand', function() {
       return tags;
   }
 }).
+
 filter('pretty_date', function() {
   return function(input) {
     return prettyDate(input);
   }
 }).
+
 filter('pretty_size', function() {
   return function(input) {
     return prettySize(input);
@@ -106,6 +108,7 @@ filter('pretty_participants', function() {
     return str;
   }
 }).
+
 filter('type_to_glyph', function() {
   return function(type) {
     if(type == "application/pdf") {
@@ -125,6 +128,7 @@ filter('type_to_glyph', function() {
     }
   }
 }).
+
 filter('attachment_type_to_glyph', function() {
   return function(input) {
     type = input.contentType;
@@ -150,7 +154,7 @@ filter('attachment_type_to_glyph', function() {
   }
 }).
 
-directive('participantBubble', [function() {
+directive('inParticipantBubble', [function() {
   return {
       restrict: "E",
       template: '<div class="participant-bubble"></div>',
@@ -192,7 +196,7 @@ directive('inBindIframeContents', function() {
   };
 }).
 
-directive('makeParticipants', function() {
+directive('inParticipants', function() {
   function format(value) {
     if (value && Object.prototype.toString.call(value) === '[object Array]') {
       var str = '';
@@ -230,7 +234,8 @@ directive('makeParticipants', function() {
     }
   };
 }).
-directive('summerNote', function() {
+
+directive('inSummerNote', function() {
   return {
     require: '?ngModel',
     link: function(scope, element, attr, ngModel) {

@@ -14,7 +14,7 @@
 
     <div class="thread-list autocomplete">
       <a class="thread" ng-class="{active: contact == ThreadListCtrl.autocompleteSelection}" ng-repeat="contact in ThreadListCtrl.autocomplete"><div><div>
-        <participant-bubble email="{{contact.email}}"></participant-bubble>
+        <in-participant-bubble email="{{contact.email}}"></in-participant-bubble>
         <div class="participants">{{contact.name}}</div>
         <div class="snippet">{{contact.email}}</div>
       </div></div></a>
@@ -28,7 +28,7 @@
     <a class="thread clickable" ng-repeat="thread in ThreadListCtrl.threads" ng-href="#/thread/{{thread.id}}" id="{{thread.id}}">
         <div class="{{thread.tagData | tag_expand}}"><div>
         <div class="date">5:41pm</div>
-        <participant-bubble email="{{thread.participants[0].email}}"></participant-bubble>
+        <in-participant-bubble email="{{thread.participants[0].email}}"></in-participant-bubble>
         <div class="participants">{{thread.participants | pretty_participants}}</div>
         <div class="snippet"><span class="subject">{{thread.subject}}</span> {{thread.snippet}}</div>
     </div></div></a>
