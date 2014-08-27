@@ -1,0 +1,17 @@
+<div class="inset heading">
+  <span class="sent" ng-show="msg.object != 'draft'" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>
+  <span class="sent" ng-show="msg.object == 'draft'">DRAFT</span>
+
+  <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
+  <span class="to"> to </span>
+  <span class="to" ng-repeat="to in msg.to" bs-tooltip data-trigger="hover" data-title="{{to.email}}">{{to.name}}</span>
+</div>
+
+<iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
+<div class="inset attachments">
+  <a class="attachment" ng-repeat="data in msg.attachmentData" ng-click="ThreadCtrl.downloadAttachment(msg, data.id)">{{aID}}
+    <div class="pull-left file-type-icon"><span class="corner"></span><span class="type">{{data.filename | extension}}</span></div>
+    <div class="pull-left file-name">{{data.filename}}</div>
+  </a>
+  <div style="clear:both;"></div>
+</div>

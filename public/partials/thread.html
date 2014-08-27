@@ -49,35 +49,10 @@ img {
 
   <div class="message-list">
     <!-- Display messages -->
-    <div class="message" ng-repeat="msg in ThreadCtrl.messages">
-
-      <div class="inset heading">
-        <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>
-
-        <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
-        <span class="to"> to </span>
-        <span class="to" ng-repeat="to in msg.to" bs-tooltip data-trigger="hover" data-title="{{to.email}}">{{to.name}}</span>
-      </div>
-
-      <iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
-      <div class="inset attachments">
-        <a class="attachment" ng-repeat="data in msg.attachmentData" ng-click="ThreadCtrl.downloadAttachment(msg, data.id)">{{aID}}
-          <div class="pull-left file-type-icon">
-            <span class="corner"></span>
-            <span class="type">html</span>
-          </div>
-          <div class="pull-left file-name">{{data.filename}}</div>
-        </a>
-        <div style="clear:both;"></div>
-      </div>
-    </div>
+    <div class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
 
     <!-- Display drafts -->
-    <div class="draft" ng-repeat="draft in ThreadCtrl.drafts" style="background-color:yellow;">
-      <div class="state">{{draft.state}}</div>
-      <div class="body" ng-bind-html="draft.body"></div>
-      <a ng-click="Mail.launchDraftModal(draft)">Edit Draft</a>
-    </div>
+    <div class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts"></div>
   </div>
 
   <!-- Empty State -->
