@@ -102,11 +102,22 @@ filter('pretty_participants', function() {
       p = input[i];
       if (p && typeof p === 'object') {
         var n = p.name ? p.name : p.email;
-        str += str ? ', ' + n : n;
+        if (n != 'Me')
+          str += str ? ', ' + n : n;
       }
     }
     return str;
   }
+}).
+
+filter('extension', function() {
+  return function(filename) {
+    var parts = filename.split('.');
+    if (parts.length > 1)
+      return parts[parts.length-1];
+    else
+      return "";
+  };
 }).
 
 filter('type_to_glyph', function() {

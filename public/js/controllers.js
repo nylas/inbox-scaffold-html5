@@ -20,19 +20,32 @@ var _handleAPIError = function(error) {
 
 
 var _localizeParticipants = function(thread) {
+  var meDomain = '@'+window.me.email_address.split('@')[1];
+
   _.each(thread.participants, function(participant) {
     // If we are the participant, show "Me" instead of our name
+    name = participant.name;
     if (participant.email == window.me.email_address)
-      participant.name = 'Me';
+      name = 'Me';
 
     // If the participant is an automated responder, show the email domain
-    if (participant.name == false) {
-      var name = participant.email;
+    if ((name == false) || (name.length == 0)) {
+      name = participant.email;
       var parts = name.split('@');
       if (_.contains(['support', 'no-reply', 'info'], parts[0]))
         name = parts[1];
-      participant.name = name;
+      else
+        // If the name contains the user's domain name, strip it out
+        name = name.replace(meDomain, '');
     }
+
+    // If the name is like Inbox Support (Ben Gotow), trim it to Ben Gotow
+    if (name.indexOf('(') > 0) {
+      var start = name.indexOf('(') + 1;
+      var end = name.indexOf(')');
+      name = name.substr(start, end-start);
+    }
+    participant.name = name;
   });
 };
 
