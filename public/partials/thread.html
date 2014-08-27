@@ -1,8 +1,47 @@
 
 <div class="pull-right" style="margin-right:15px; margin-top:15px;">
-  <a class="btn btn-default" ng-click="Mail.replyClicked(ThreadCtrl.thread)"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
-  <a class="btn btn-default" ng-click="Mail.archiveClicked(ThreadCtrl.thread)" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
+  <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked()"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+  <a class="btn btn-default" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
 </div>
+
+<script type="text/css" id="iframe-css">
+<style>
+/* Clean Message Display */
+html, body {
+  font-family: sans-serif;
+  border:0;
+  -webkit-text-size-adjust: auto;
+  word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;
+  line-height: 22px;
+  font-size:15px;
+  color:#333;
+  margin:0;
+  padding:0;
+}
+body {
+  width:640px;
+  margin: auto;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+body.heightDetermined {
+  overflow-y:hidden;
+}
+div,pre {
+  max-width:100%;
+}
+.gmail_extra {
+  display:none;
+}
+blockquote, .gmail_quote {
+  display:none;
+}
+img {
+  max-width: 100%;
+  height:auto;
+}
+</style>
+</script>
 
 <div class="centered">
 
@@ -10,9 +49,9 @@
 
   <div class="message-list">
     <!-- Display messages -->
-    <div class="message" ng-repeat="msg in ThreadCtrl.messages"><div class="inset">
+    <div class="message" ng-repeat="msg in ThreadCtrl.messages">
 
-      <div class="heading">
+      <div class="inset heading">
         <span class="sent" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>
 
         <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
@@ -21,10 +60,17 @@
       </div>
 
       <iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
-      <div class="attachments">
-        <div class="attachment" ng-repeat="data in msg.attachmentData">{{aID}} <a class="btn btn-default" href="#" ng-click="Mail.downloadAttachment(msg, msg.attachment(data.id))"><i class="glyphicon glyphicon-paperclip"></i> {{msg.attachment(data.id).filename}}</a> ({{msg.attachment(data.id).size}} bytes)</div>
+      <div class="inset attachments">
+        <a class="attachment" ng-repeat="data in msg.attachmentData" ng-click="ThreadCtrl.downloadAttachment(msg, data.id)">{{aID}}
+          <div class="pull-left file-type-icon">
+            <span class="corner"></span>
+            <span class="type">html</span>
+          </div>
+          <div class="pull-left file-name">{{data.filename}}</div>
+        </a>
+        <div style="clear:both;"></div>
       </div>
-    </div></div>
+    </div>
 
     <!-- Display drafts -->
     <div class="draft" ng-repeat="draft in ThreadCtrl.drafts" style="background-color:yellow;">

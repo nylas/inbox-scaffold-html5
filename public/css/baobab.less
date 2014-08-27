@@ -161,10 +161,18 @@ a {
 
   .body {
     width:100%;
-    height:auto;
+    height:1px; /* Changed once height of iframe is computed */
     overflow-y: hidden;
     overflow-x: scroll;
-    padding-top: 20px;
+  }
+
+  .attachments {
+    padding-bottom:12px;
+  }
+  .attachment .file-name {
+    padding-top:8px;
+    padding-left:10px;
+    color:#979797;
   }
 }
 
@@ -471,3 +479,9 @@ a {
   0% { opacity: 0; }
   100% { opacity: 100%; }
 }
+
+/* Icons */
+
+.file-type-icon{display:block; width:24px; height:30px; background:#F9F9F9; position:relative; border:1px solid #ccc; border-radius:2px; box-shadow:inset 1px 1px 0 0 #ffffff, inset -1px -1px 0 0 #ffffff, inset 0 10px 20px -10px rgba(0,0,0,.05);}
+.file-type-icon .corner{display:block; position:absolute; top:-1px; right:-1px; width: 0; height: 0; border-left: 7px solid #ddd; border-top: 7px solid #ffffff; /*change this color if you want to use it on custom background*/ box-shadow:-1px 1px 0px 0 #E6E6E6;}
+.file-type-icon .type{background:transparent; text-align:center; display:block; position:absolute; bottom:6px; left:-2px; height:15px; line-height:15px; font-size:10px; color:#ccc; border-radius:1px; width:28px;}

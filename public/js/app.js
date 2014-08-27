@@ -186,7 +186,7 @@ directive('inBindIframeContents', function() {
           doc.body.className += ' ' + 'heightDetermined';
           $(element).height(height);
         }
-        var style = '<link rel="stylesheet" type="text/css" href="/css/baobab-message.css">';
+        var style = $('#iframe-css').html()
         doc.open();
         doc.write(style);
         doc.write(ngModel.$viewValue);

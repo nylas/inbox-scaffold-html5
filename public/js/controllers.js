@@ -18,6 +18,24 @@ var _handleAPIError = function(error) {
   alert(msg);
 };
 
+
+var _localizeParticipants = function(thread) {
+  _.each(thread.participants, function(participant) {
+    // If we are the participant, show "Me" instead of our name
+    if (participant.email == window.me.email_address)
+      participant.name = 'Me';
+
+    // If the participant is an automated responder, show the email domain
+    if (participant.name == false) {
+      var name = participant.email;
+      var parts = name.split('@');
+      if (_.contains(['support', 'no-reply', 'info'], parts[0]))
+        name = parts[1];
+      participant.name = name;
+    }
+  });
+};
+
 var _valueForQueryParam = function(param_name) {
   var search = window.location.search;
   var tokenStart = search.indexOf(param_name+'=');
@@ -54,7 +72,7 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$location', '$cookieS
   }
 
   this.setMe = function(me) {
-    $scope.me = this.me = me;
+    $scope.me = window.me = this.me = me;
     $scope.$broadcast('me-changed');
   }
 
@@ -235,7 +253,7 @@ controller('MailCtrl', ['$scope', '$modal', '$routeParams', function($scope, $mo
 }]).
 
 
-controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', function($scope, $modal, $routeParams) {
+controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', function($scope, $modal, $routeParams, $location) {
   var self = this;
   
   this.thread = null;
@@ -249,6 +267,7 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', function($scope, $
     var namespace = $scope.me.namespace;
 
     namespace.thread($routeParams['id']).then(function(thread) {
+      _localizeParticipants(thread);
       loadWithThread(thread);
     }, _handleAPIError);
   }
@@ -272,40 +291,23 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', function($scope, $
 
   // exposed methods
 
-  this.downloadAttachment = function(msg, attachment) {
-    msg.getAttachments().then(function(attachments) {
-      for(i = 0; i < attachments.length; i++)
-      {
-        if(attachments[i].id == attachment.id)
-          attachments[i].download().then(function(response) {
-            saveAs(response.blob, response.filename);
-          }, _handleAPIError);
-      }
-    }, _handleAPIError)
+  this.downloadAttachment = function(msg, id) {
+    msg.attachment(id).download().then(function(response) {
+      saveAs(response.blob, response.filename);
+    }, _handleAPIError);
   };
 
   this.composeClicked = function() {
     self.launchDraftModal($scope.me.namespace.draft());
   }
 
-  this.replyClicked = function(thread) {
+  this.replyClicked = function() {
     self.launchDraftModal(thread.reply());
   }
 
-  this.archiveClicked = function(thread) {
-    if(!self.selectedThread.hasTag('inbox'))
-        return;
-
-    self.selectedThread.removeTags(['inbox']).then(function(response) {
-      if(self.filters['tag'] == 'inbox') {
-        for(i = 0; i < self.threads.length; i++) {
-          if(self.threads[i] == thread) {
-            self.threads.splice(i, 1);
-            break;
-          }
-        }
-        self.selectedThread = null;
-      }
+  this.archiveClicked = function() {
+    self.thread.removeTags(['inbox']).then(function(response) {
+      $location.path('/inbox');
     }, _handleAPIError);
   }
 
@@ -360,23 +362,7 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
 
       // Perform some pre-processing of participants to localize them
       // for display. Most efficient to do this once when data is received.
-      _.each(threads, function(thread) {
-        _.each(thread.participants, function(participant) {
-          // If we are the participant, show "Me" instead of our name
-          if (participant.email == $scope.me.email_address)
-            participant.name = 'Me';
-
-          // If the participant is an automated responder, show the email domain
-          if (participant.name == false) {
-            var name = participant.email;
-            var parts = name.split('@');
-            if (_.contains(['support', 'no-reply', 'info'], parts[0]))
-              name = parts[1];
-            participant.name = name;
-          }
-
-        });
-      });
+      _.each(threads, _localizeParticipants);
 
       self.threads = threads;
       return threads;
@@ -443,13 +429,9 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
   }
 
   this.archiveClicked = function(thread) {
-    if(!self.selectedThread.hasTag('inbox'))
-        return;
-
-    self.selectedThread.removeTags(['inbox']).then(function(response) {
+    thread.removeTags(['inbox']).then(function(response) {
       if(self.filters['tag'] == 'inbox') {
         self.threads = _.without(self.threads, thread);
-        self.selectedThread = null;
       }
     }, _handleAPIError);
   }
@@ -492,8 +474,7 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
     return true;
   }
 
-  this.selectThreadRelative = function(direction)
-  {
+  this.selectThreadRelative = function(direction) {
     for(i = 0; i < self.threads.length; i++) {
       if(self.threads[i] == self.selectedThread) {
         if(i + direction < self.threads.length - 1 && i + direction > 0) {
@@ -521,14 +502,17 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
       }
       e.preventDefault();
     }
+
     if(e.keyCode == 38) {
       if (index > 0) {
         self.autocompleteSelection = self.autocomplete[index-1];
       }
       e.preventDefault();
     }
+
     if (e.keyCode == 13) {
-      $scope.search = "email:"+self.autocompleteSelection.email
+      if (self.autocompleteSelection)
+        $scope.search = "email:"+self.autocompleteSelection.email
       self.searchClicked();
     }
 
