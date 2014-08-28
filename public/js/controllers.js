@@ -42,13 +42,12 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$location', '$cookieStore', '
   var self = this;
   window.AppCtrl = this;
 
-  this.theme = $cookieStore.get('baobab_theme') || 'light';
-
   this.inboxAuthURL = $sce.trustAsResourceUrl('https://beta.inboxapp.com/oauth/authorize');
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.href;
   this.loginHint = '';
 
+  this.theme = $cookieStore.get('baobab_theme') || 'light';
   this.setTheme = function(theme) {
     self.theme = theme;
     $cookieStore.put('baobab_theme', theme);
@@ -165,45 +164,36 @@ controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
 controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
   var self = this;
   
-  this.thread = null;
+  this.thread = $threads.item($routeParams['id']);;
   this.messages = null;
   this.drafts = null;
 
   // internal methods 
 
-  function load() {
-    // load the thread from the $threads provider if it's available
-    var cached = $threads.item($routeParams['id']);
-    if (cached) {
-      loadWithThread(cached);
-    } else {
-      // load the thread from the API
-      if (!$me.namespace()) {
-        $me.on('update', load);
-        return;
-      }
-      $me.namespace().thread($routeParams['id']).then(function(thread) {
-        loadWithThread(thread);
+  if (this.thread) {
+    threadReady();
+  } else {
+    $me.ensureNamespace().then(function(namespace) {
+      namespace.thread($routeParams['id']).then(function(thread) {
+        self.thread = thread;
+        threadReady();
       }, _handleAPIError);
-    }
+    });
   }
-  load();
 
-  function loadWithThread(thread) {
-    self.thread = thread;
-    if (thread) {
-      if (thread.hasTag('unread')) {
-        thread.removeTags(['unread']).then(function(response) {
-        }, _handleAPIError);
-      }
-      thread.messages().then(function(messages) {
-        self.messages = messages;
-      }, _handleAPIError);
 
-      thread.drafts().then(function(drafts) {
-        self.drafts = drafts;
+  function threadReady() {
+    if (self.thread.hasTag('unread')) {
+      self.thread.removeTags(['unread']).then(function(response) {
       }, _handleAPIError);
     }
+    self.thread.messages().then(function(messages) {
+      self.messages = messages;
+    }, _handleAPIError);
+
+    self.thread.drafts().then(function(drafts) {
+      self.drafts = drafts;
+    }, _handleAPIError);
   }
 
   // exposed methods
@@ -224,6 +214,7 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
 
   this.archiveClicked = function() {
     self.thread.removeTags(['inbox']).then(function(response) {
+      $threads.itemArchived(self.thread.id);
       $location.path('/inbox');
     }, _handleAPIError);
   }
@@ -294,9 +285,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
 
   this.archiveClicked = function(thread) {
     thread.removeTags(['inbox']).then(function(response) {
-      if(self.filters['tag'] == 'inbox') {
-        self.threads = _.without(self.threads, thread);
-      }
+      $threads.itemArchived(thread.id);
     }, _handleAPIError);
   }
 

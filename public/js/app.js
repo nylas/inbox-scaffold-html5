@@ -50,14 +50,30 @@ service('$me', [function() {
 
     namespace.tags().then(function(tags) {
       self._tags = tags;
-      self.emit('update', self);
+      self.emit('update-tags', self);
     }, _handleAPIError);
 
     namespace.contacts().then(function(contacts) {
       self._contacts = contacts;
-      self.emit('update', self);
+      self.emit('update-contacts', self);
     }, _handleAPIError);
   }
+
+  self.ensureNamespace = function() {
+    return new Promise(function(resolve, reject) {
+      var tryCallback = function() {
+        if (self._namespace) {
+          self.off('update', tryCallback);
+          resolve(self._namespace);
+        }
+      };
+      if (self._namespace) {
+        resolve(self._namespace);
+      } else {
+        self.on('update', tryCallback);
+      }
+    });
+  };
 
   self.emailAddress = function() {
     return (self._namespace) ? self._namespace.emailAddress : null;
@@ -69,7 +85,7 @@ service('$threads', ['$me', function($me) {
   var self = this;
   Events(self);
 
-  self._list = [];
+  self._list = null;
   self._filters = {};
 
   function reload() {
@@ -87,8 +103,7 @@ service('$threads', ['$me', function($me) {
       threads.sort(function(a, b) {
         return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
       });
-      self._list = threads;
-      self.emit('update', self);
+      self.setList(threads);
     }, _handleAPIError);
   }
 
@@ -96,8 +111,20 @@ service('$threads', ['$me', function($me) {
     return self._list;
   }
 
+  self.setList = function(list) {
+    self._list = list;
+    self.emit('update', self);
+  }
+
   self.item = function(id) {
-    return _.find(self._list, function(thread) { return thread.id == id; });
+    return _.find(self._list, function(t) { return t.id == id; });
+  }
+
+  self.itemArchived = function(id) {
+    if (self._filters['tag'] == 'archive')
+      return;
+    debugger;
+    self.setList(_.filter(self._list, function(t) {return t.id != id; }));
   }
 
   self.filters = function() {
@@ -108,15 +135,13 @@ service('$threads', ['$me', function($me) {
     if (_.isEqual(filters, self._filters))
       return;
 
-    self._list = [];
-    self.emit('update', self);
+    self.setList(null);
     self._filters = filters;
     reload();
   }
 
   self.appendFilters = function(filtersToAppend) {
-    self._list = [];
-    self.emit('update', self);
+    self.setList(null);
     self._filters = _.extend(self._filters, filtersToAppend);
     reload();
   }
