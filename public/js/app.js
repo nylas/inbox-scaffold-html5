@@ -13,7 +13,6 @@ angular.module('baobab', [
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider.when('/thread/:id', { templateUrl: '/partials/thread.html', controller: 'ThreadCtrl as ThreadCtrl' });
   $routeProvider.when('/:tag', { templateUrl: '/partials/mailbox.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
-  $routeProvider.otherwise({redirectTo: '/inbox'});
 }]).
 
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
@@ -23,44 +22,6 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
 
   $sceDelegateProvider.resourceUrlWhitelist([
       'self', $inboxProvider.baseUrl() + "/**"]);
-}]).
-
-service('$namespaces', ['$inbox', function($inbox) {
-  var updateId = null, updateRate = null;
-  var self = this;
-  self.namespaces = null;
-  Events(self);
-
-  setNamespaces = function(value) {
-    self.namespaces = value;
-    self.emit('update', value);
-  }
-
-  updateList = function() {
-    $inbox.namespaces().then(function(namespaces) {
-      setNamespaces(namespaces);
-    }, function(error) {
-      setNamespaces(null);
-    });
-  }
-
-  clearScheduledUpdate = function() {
-    if (updateId !== null) {
-      clearInterval(updateId);
-      updateId = null;
-    }
-  }
-
-  updateRate = function(ms) {
-    clearScheduledUpdate();
-    if (arguments.length > 0) {
-      updateRate = ms;
-    }
-    updateId = setInterval(updateList, updateRate);
-  }
-
-  self.updateList = updateList;
-  self.scheduleUpdate = updateRate;
 }]).
 
 filter('shorten', function() {

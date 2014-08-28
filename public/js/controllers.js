@@ -68,8 +68,9 @@ var _valueForQueryParam = function(param_name) {
 
 angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
-controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$location', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $location, $cookieStore, $sce) {
+controller('AppCtrl', ['$scope', '$inbox', '$location', '$cookieStore', '$sce', function($scope, $inbox, $location, $cookieStore, $sce) {
   var self = this;
+  window.AppCtrl = this;
 
   this.theme = $cookieStore.get('baobab_theme') || 'light';
 
@@ -96,7 +97,13 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$location', '$cookieS
     $cookieStore.put('inbox_auth_token', authToken);
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':'));
-    $namespaces.updateList();
+    $inbox.namespaces().then(function(namespaces) {
+      self.setMe({namespace: namespaces[0], email_address: namespaces[0].emailAddress});
+    }, function(error) {
+      self.setMe(null);
+      if (confirm("/n/ returned no namespaces for your API token. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
+          self.clearToken();
+    });
   }
 
   this.clearToken = function() {
@@ -115,24 +122,6 @@ controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$location', '$cookieS
 
   var queryAuthToken = _valueForQueryParam('access_token')
   this.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
-
-  if (queryAuthToken) {
-    // We've stored the token in a cookie - wipe it from the location bar
-    window.location.href = '/';
-    return;
-  }
-
-  $namespaces.on('update', function(namespaces) {
-    if (namespaces && (namespaces.length > 0))
-      self.setMe({namespace: namespaces[0], email_address: namespaces[0].emailAddress});
-    else
-      self.setMe(null);
-
-    if (self.hasToken() && !namespaces) {
-      if (confirm("/n/ returned no namespaces for your API token. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
-          self.clearToken();
-    }
-  });
 
 }]).
 
