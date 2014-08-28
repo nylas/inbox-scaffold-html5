@@ -38,7 +38,7 @@ var _valueForQueryParam = function(param_name) {
 
 angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
-controller('AppCtrl', ['$scope', '$inbox', '$location', '$cookieStore', '$sce', function($scope, $inbox, $location, $cookieStore, $sce) {
+controller('AppCtrl', ['$scope', '$me', '$inbox', '$location', '$cookieStore', '$sce', function($scope, $me, $inbox, $location, $cookieStore, $sce) {
   var self = this;
   window.AppCtrl = this;
 
@@ -48,16 +48,10 @@ controller('AppCtrl', ['$scope', '$inbox', '$location', '$cookieStore', '$sce', 
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.href;
   this.loginHint = '';
-  this.me = null;
 
   this.setTheme = function(theme) {
     self.theme = theme;
     $cookieStore.put('baobab_theme', theme);
-  }
-
-  this.setMe = function(me) {
-    $scope.me = window.me = this.me = me;
-    $scope.$broadcast('me-changed');
   }
 
   this.setToken = function(authToken) {
@@ -68,9 +62,10 @@ controller('AppCtrl', ['$scope', '$inbox', '$location', '$cookieStore', '$sce', 
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':'));
     $inbox.namespaces().then(function(namespaces) {
-      self.setMe({namespace: namespaces[0], email_address: namespaces[0].emailAddress});
-    }, function(error) {
-      self.setMe(null);
+      $me.setNamespace(namespaces[0]);
+
+    }, function(err) {
+      $me.setNamespace(null);
       if (confirm("/n/ returned no namespaces for your API token. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
           self.clearToken();
     });
@@ -92,7 +87,6 @@ controller('AppCtrl', ['$scope', '$inbox', '$location', '$cookieStore', '$sce', 
 
   var queryAuthToken = _valueForQueryParam('access_token')
   this.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
-
 }]).
 
 
@@ -169,63 +163,15 @@ controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
 }]).
 
 
-controller('MailCtrl', ['$scope', '$modal', '$routeParams', function($scope, $modal, $routeParams) {
-  var self = this;
+controller('MailCtrl', ['$scope', '$me', '$modal', '$routeParams', function($scope, $me, $modal, $routeParams) {
   $scope.MailCtrl = self;
 
-  this.tags = [];
-  this.contacts = [];
+  // sidebar, etc. logic here
 
-  this.draftModal = $modal({
-    scope: $scope,
-    animation:'am-fade',
-    placement:'center',
-    container: '#mail-ctrl',
-    template: '/partials/compose.html',
-    backdrop: 'static',
-    show: false
-  });
-
-  // internal methods 
-
-  function load() {
-    if (!$scope.me) return;
-    if ($scope.me.namespace) {
-        loadTags();
-        loadContacts();
-    } else {
-      self.tags = [];
-      self.contacts = [];
-    }
-  }
-
-  function loadTags() {
-    var namespace = $scope.me.namespace;
-    namespace.tags().then(function(tags) {
-      self.tags = tags;
-    }, _handleAPIError);
-  }
-
-  function loadContacts() {
-    var namespace = $scope.me.namespace;
-    namespace.contacts().then(function(contacts) {
-      self.contacts = contacts;
-    }, _handleAPIError);
-  }
-
-  // public methods
-
-  this.launchDraftModal = function(draft) {
-    $scope.draft = draft;
-    self.draftModal.$promise.then(self.draftModal.show);
-  };
-
-  $scope.$on('me-changed', load);
-  load();
 }]).
 
 
-controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', function($scope, $modal, $routeParams, $location) {
+controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
   var self = this;
   
   this.thread = null;
@@ -235,13 +181,21 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', funct
   // internal methods 
 
   function load() {
-    if (!$scope.me) return;
-    var namespace = $scope.me.namespace;
-
-    namespace.thread($routeParams['id']).then(function(thread) {
-      loadWithThread(thread);
-    }, _handleAPIError);
+    // load the thread from the $threads provider if it's available
+    var cached = $threads.item($routeParams['id']);
+    if (cached) {
+      loadWithThread(cached);
+    } else {
+      // load the thread from the API
+      if (!$me.namespace()) {
+        $me.on('update', load);
+      }
+      $me.namespace().thread($routeParams['id']).then(function(thread) {
+        loadWithThread(thread);
+      }, _handleAPIError);
+    }
   }
+  load();
 
   function loadWithThread(thread) {
     self.thread = thread;
@@ -269,7 +223,7 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', funct
   };
 
   this.composeClicked = function() {
-    self.launchDraftModal($scope.me.namespace.draft());
+    self.launchDraftModal($me.namespace().draft());
   }
 
   this.replyClicked = function() {
@@ -282,12 +236,10 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', funct
     }, _handleAPIError);
   }
 
-  $scope.$on('me-changed', load);
-  load();
 }]).
 
 
-controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scope, $modal, $routeParams) {
+controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', function($scope, $me, $threads, $modal, $routeParams) {
   var self = this;
 
   $scope.search = '';
@@ -295,75 +247,37 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
     updateAutocomplete();
   })
 
-  this.threads = [];
-  this.filters = {tag: $routeParams['tag'] || 'inbox'};
+  $threads.setFilters({tag: $routeParams['tag'] || 'inbox'});
+
+  this.threads = $threads.list();
   this.viewName = $routeParams['tag'];
   this.autocomplete = [];
   this.autocompleteSelection = null;
 
   // internal methods 
 
-  function load() {
-    if (!$scope.me) return;
-    if ($scope.me.namespace) {
-        loadThreads();
-    } else {
-      self.threads = [];
-    }
-  }
-
-  function loadThreads() {
-    var namespace = $scope.me.namespace;
-    var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
-    var params = {
-      order_by: 'date',
-      lastMessageAfter: _2WeeksAgo,
-      limit: 1000
-    };
-    for (var key in self.filters) {
-      params[key] = self.filters[key];
-    }
-
-    self.threads = null;
-
-    namespace.threads({}, params).then(function(threads) {
-      threads.sort(function(a, b) {
-        return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
-      });
-      self.threads = threads;
-      return threads;
-    }, _handleAPIError);
-  }
-
-  function applyFilters(filtersToAppend) {
-    for (var key in filtersToAppend)
-      self.filters[key] = filtersToAppend[key];
-
-    loadThreads();
-    updateSearchWithFilters();
-  }
-
   function updateSearchWithFilters() {
-    var filterKeys = Object.keys(self.filters)
+    var filters = $threads.filters();
+    var filterKeys = Object.keys(filters);
     var search = ''
     for (var ii = 0; ii < filterKeys.length; ii++)
-      search += filterKeys[ii] + ':' + self.filters[filterKeys[ii]] + ' ';
+      search += filterKeys[ii] + ':' + filters[filterKeys[ii]] + ' ';
     $scope.search = search;
   }
 
   function updateFiltersWithSearch() {
-    self.filters = {};
+    var filters = {};
     var search_filters = $scope.search.split(' '); 
     for (var ii = 0; ii < search_filters.length; ii++) {
       var filter_parts = search_filters[ii].split(':');
       if (filter_parts.length == 2)
-        self.filters[filter_parts[0]] = filter_parts[1].trim();
+        filters[filter_parts[0]] = filter_parts[1].trim();
     }
-    loadThreads();
+    $threads.setFilters(filters);
   }
 
   function updateAutocomplete() {
-    var contacts = $scope.MailCtrl.contacts;
+    var contacts = $me.contacts();
     var term = $scope.search.toLowerCase();
     var results = []
 
@@ -382,11 +296,12 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
   // exposed methods
 
   this.tagClicked = function(tag) {
-    applyFilters({"tag": tag.tagName});
+    $threads.appendFilters({"tag": tag.tagName});
+    updateSearchWithFilters();
   };
 
   this.composeClicked = function() {
-    var draft = $scope.me.namespace.draft()
+    var draft = $me.namespace.draft()
     self.launchDraftModal(draft);
   }
 
@@ -408,8 +323,7 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
 
   this.searchCleared = function() {
     $scope.search = "";
-    self.filters = {};
-    loadThreads();
+    $threads.setFilters({});
   }
 
   this.tagOrder = function(tag_obj) {
@@ -491,8 +405,9 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
       self.selectThreadRelative(-1);
   }
 
-  $scope.$on('me-changed', load);
-  load();
+  $threads.on('update', function() {
+    self.threads = $threads.list();
+  });
   updateSearchWithFilters();
 
 }]);

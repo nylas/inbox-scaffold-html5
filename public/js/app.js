@@ -24,6 +24,109 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
       'self', $inboxProvider.baseUrl() + "/**"]);
 }]).
 
+service('$me', [function() {
+  var self = this;
+  Events(self);
+
+  self._namespace = null;
+  self._tags = [];
+  self._contacts = [];
+
+  self.tags = function() {
+    return self._tags;
+  }
+
+  self.contacts = function() {
+    return self._contacts;
+  }
+
+  self.namespace = function() {
+    return self._namespace;
+  }
+
+  self.setNamespace = function(namespace) {
+    self._namespace = namespace;
+    self.emit('update', self);
+
+    namespace.tags().then(function(tags) {
+      self._tags = tags;
+      self.emit('update', self);
+    }, _handleAPIError);
+
+    namespace.contacts().then(function(contacts) {
+      self._contacts = contacts;
+      self.emit('update', self);
+    }, _handleAPIError);
+  }
+
+  self.emailAddress = function() {
+    return (self._namespace) ? self._namespace.emailAddress : null;
+  }
+  
+}]).
+
+service('$threads', ['$me', function($me) {
+  var self = this;
+  Events(self);
+
+  self._list = [];
+  self._filters = {};
+
+  function reload() {
+    var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
+    var namespace = $me.namespace();
+    var params = _.extend({}, self._filters, {
+      lastMessageAfter: _2WeeksAgo,
+      limit: 1000
+    });
+
+    if (!namespace)
+      return;
+    
+    namespace.threads({}, params).then(function(threads) {
+      threads.sort(function(a, b) {
+        return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
+      });
+      self._list = threads;
+      self.emit('update', self);
+    }, _handleAPIError);
+  }
+
+  self.list = function() {
+    return self._list;
+  }
+
+  self.item = function(id) {
+    return _.find(self._list, function(thread) { return thread.id == id; });
+  }
+
+  self.filters = function() {
+    return self._filters;
+  }
+
+  self.setFilters = function(filters) {
+    if (_.isEqual(filters, self._filters))
+      return;
+
+    self._list = [];
+    self.emit('update', self);
+    self._filters = filters;
+    reload();
+  }
+
+  self.appendFilters = function(filtersToAppend) {
+    self._list = [];
+    self.emit('update', self);
+    self._filters = _.extend(self._filters, filtersToAppend);
+    reload();
+  }
+
+  $me.on('update', function() {
+    reload();
+  });
+
+}]).
+
 filter('shorten', function() {
   return function(input) {
     if (typeof input === 'string' && input.length > 64) {
@@ -55,15 +158,15 @@ filter('pretty_size', function() {
   }
 }).
 
-filter('participants_relative_to', function() {
-  return function(participants, me) {
-    var meParts = me.email_address.split('@');
+filter('participants', ['$me', function($me) {
+  return function(participants) {
+    var meParts = $me.emailAddress().split('@');
     var str = '';
 
     _.each(participants, function(participant) {
       // If we are the participant, show "Me" instead of our name
       name = participant.name;
-      if (participant.email == me.email_address)
+      if (participant.email == $me.emailAddress())
         name = 'Me';
 
       // If there are only two participants, and we're one of them,
@@ -100,7 +203,7 @@ filter('participants_relative_to', function() {
 
     return str;
   }
-}).
+}]).
 
 filter('extension', function() {
   return function(filename) {
