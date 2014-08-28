@@ -162,15 +162,6 @@ controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
 
 }]).
 
-
-controller('MailCtrl', ['$scope', '$me', '$modal', '$routeParams', function($scope, $me, $modal, $routeParams) {
-  $scope.MailCtrl = self;
-
-  // sidebar, etc. logic here
-
-}]).
-
-
 controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
   var self = this;
   
