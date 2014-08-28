@@ -180,6 +180,7 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
       // load the thread from the API
       if (!$me.namespace()) {
         $me.on('update', load);
+        return;
       }
       $me.namespace().thread($routeParams['id']).then(function(thread) {
         loadWithThread(thread);
@@ -286,18 +287,9 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
 
   // exposed methods
 
-  this.tagClicked = function(tag) {
-    $threads.appendFilters({"tag": tag.tagName});
-    updateSearchWithFilters();
-  };
-
   this.composeClicked = function() {
     var draft = $me.namespace.draft()
     self.launchDraftModal(draft);
-  }
-
-  this.replyClicked = function(thread) {
-    self.launchDraftModal(thread.reply());
   }
 
   this.archiveClicked = function(thread) {
@@ -315,34 +307,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   this.searchCleared = function() {
     $scope.search = "";
     $threads.setFilters({});
-  }
-
-  this.tagOrder = function(tag_obj) {
-    var tag = tag_obj.tagName || tag_obj.name;
-    ordered = ["all", "inbox", "archive", "drafts", "spam", "send", "sending", "sent",
-               "trash", "starred", "unread", "file", "attachment", "important", "unseen",
-               "starred", "replied"];
-    for(i = 0; i < ordered.length; i++) {
-        if(ordered[i] == tag) {
-            return i;
-        }
-    }
-    return ordered.length;
-  }
-
-  this.tagFilter = function(tag_obj) {
-    if(tag_obj.id.match("sending|send|sent|unread|all|unseen|unstarred|replied")) {
-        return false;
-    }
-    return true;
-  }
-
-  this.threadTagFilter = function(tag_obj) {
-    if(self.tagFilter(tag_obj) == false)
-      return false;
-    if(self.filters['tag'] == (tag_obj.tagName || tag_obj.name))
-      return false;
-    return true;
   }
 
   this.selectThreadRelative = function(direction) {
