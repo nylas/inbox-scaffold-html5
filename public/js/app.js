@@ -163,8 +163,7 @@ directive('inParticipantBubble', [function() {
       template: '<div class="participant-bubble"></div>',
       link: function(scope, element, attrs, ctrl) {
         var email = attrs['email'].toLowerCase().trim();
-        var hash = CryptoJS.MD5(email);
-        var url = "http://www.gravatar.com/avatar/" + hash + '?d=404';
+        var url = "/avatar/"+email;
         var hue = 0;
         for (var ii = 0; ii < email.length; ii++)
           hue += email.charCodeAt(ii);
