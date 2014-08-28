@@ -12,7 +12,7 @@ angular.module('baobab', [
 
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider.when('/thread/:id', { templateUrl: '/partials/thread.html', controller: 'ThreadCtrl as ThreadCtrl' });
-  $routeProvider.when('/:tag', { templateUrl: '/partials/mailbox.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
+  $routeProvider.when('/:tag', { templateUrl: '/partials/thread_list.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
 }]).
 
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
