@@ -55,18 +55,49 @@ filter('pretty_size', function() {
   }
 }).
 
-filter('pretty_participants', function() {
-  return function(input) {
+filter('participants_relative_to', function() {
+  return function(participants, me) {
+    var meParts = me.email_address.split('@');
     var str = '';
-    var p;
-    for (var i=0; i<input.length; ++i) {
-      p = input[i];
-      if (p && typeof p === 'object') {
-        var n = p.name ? p.name : p.email;
-        if (n != 'Me')
-          str += str ? ', ' + n : n;
+
+    _.each(participants, function(participant) {
+      // If we are the participant, show "Me" instead of our name
+      name = participant.name;
+      if (participant.email == me.email_address)
+        name = 'Me';
+
+      // If there are only two participants, and we're one of them,
+      // just show the other participant's name.
+      if ((participants.length == 2) && (name == 'Me'))
+        return;
+
+      // If no name is provided, use the email address
+      if ((name == false) || (name.length == 0)) {
+        name = participant.email;
+        var parts = name.split('@');
+
+        // If the name contains the user's domain name, strip it out
+        // team@inboxapp.com => team
+        if (parts[1] == meParts[1])
+          name = parts[0];
+
+        // If the participant is an automated responder, show the email domain
+        else if (_.contains(['support', 'no-reply', 'info'], parts[0]))
+          name = parts[1];
       }
-    }
+
+      // If the name contains parenthesis "Inbox Support (Ben Gotow)", trim it
+      // to the contents of the parenthesis
+      if (name.indexOf('(') > 0) {
+        var start = name.indexOf('(') + 1;
+        var end = name.indexOf(')');
+        name = name.substr(start, end-start);
+      }
+      
+      // Append the name to the output string
+      str += str ? ', ' + name : name;
+    });
+
     return str;
   }
 }).

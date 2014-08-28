@@ -29,7 +29,7 @@
         <div class="{{thread.tagData | tag_expand}}"><div>
         <div class="date">5:41pm</div>
         <in-participant-bubble email="{{thread.participants[0].email}}"></in-participant-bubble>
-        <div class="participants">{{thread.participants | pretty_participants}}</div>
+        <div class="participants">{{thread.participants | participants_relative_to:me}}</div>
         <div class="snippet"><span class="subject">{{thread.subject}}</span> {{thread.snippet}}</div>
     </div></div></a>
 

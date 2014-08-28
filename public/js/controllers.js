@@ -19,36 +19,6 @@ var _handleAPIError = function(error) {
 };
 
 
-var _localizeParticipants = function(thread) {
-  var meDomain = '@'+window.me.email_address.split('@')[1];
-
-  _.each(thread.participants, function(participant) {
-    // If we are the participant, show "Me" instead of our name
-    name = participant.name;
-    if (participant.email == window.me.email_address)
-      name = 'Me';
-
-    // If the participant is an automated responder, show the email domain
-    if ((name == false) || (name.length == 0)) {
-      name = participant.email;
-      var parts = name.split('@');
-      if (_.contains(['support', 'no-reply', 'info'], parts[0]))
-        name = parts[1];
-      else
-        // If the name contains the user's domain name, strip it out
-        name = name.replace(meDomain, '');
-    }
-
-    // If the name is like Inbox Support (Ben Gotow), trim it to Ben Gotow
-    if (name.indexOf('(') > 0) {
-      var start = name.indexOf('(') + 1;
-      var end = name.indexOf(')');
-      name = name.substr(start, end-start);
-    }
-    participant.name = name;
-  });
-};
-
 var _valueForQueryParam = function(param_name) {
   var search = window.location.search;
   var tokenStart = search.indexOf(param_name+'=');
@@ -269,7 +239,6 @@ controller('ThreadCtrl', ['$scope', '$modal', '$routeParams', '$location', funct
     var namespace = $scope.me.namespace;
 
     namespace.thread($routeParams['id']).then(function(thread) {
-      _localizeParticipants(thread);
       loadWithThread(thread);
     }, _handleAPIError);
   }
@@ -361,11 +330,6 @@ controller('ThreadListCtrl', ['$scope', '$modal', '$routeParams', function($scop
       threads.sort(function(a, b) {
         return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
       });
-
-      // Perform some pre-processing of participants to localize them
-      // for display. Most efficient to do this once when data is received.
-      _.each(threads, _localizeParticipants);
-
       self.threads = threads;
       return threads;
     }, _handleAPIError);
