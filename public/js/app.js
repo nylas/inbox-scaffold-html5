@@ -186,6 +186,10 @@ service('$threads', ['$me', function($me) {
     if (_.isEqual(filters, self._filters))
       return;
 
+    for (var key in filters) {
+      if (filters[key] == '')
+        delete filters[key];
+    }
     self.setList(null);
     self._filters = filters;
     reload();
@@ -193,7 +197,7 @@ service('$threads', ['$me', function($me) {
 
   self.appendFilters = function(filtersToAppend) {
     self.setList(null);
-    self._filters = _.extend(self._filters, filtersToAppend);
+    self.setFilters(_.extend({}, self._filters, filtersToAppend));
     reload();
   }
 
