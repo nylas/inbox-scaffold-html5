@@ -123,6 +123,7 @@ service('$threads', ['$me', function($me) {
   Events(self);
 
   self._list = null;
+  self._listVersion = 0;
   self._filters = {};
 
   function reload() {
@@ -136,7 +137,11 @@ service('$threads', ['$me', function($me) {
       if (!namespace)
         return;
 
+      self._listVersion += 1;
+      var requested = self._listVersion;
       namespace.threads({}, params).then(function(threads) {
+        if (self._listVersion != requested)
+          return;
         threads.sort(function(a, b) {
           return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
         });
