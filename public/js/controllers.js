@@ -122,12 +122,12 @@ controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
 
 controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
   var self = this;
-  
+
   this.thread = $threads.item($routeParams['id']);
   this.messages = null;
   this.drafts = null;
 
-  // internal methods 
+  // internal methods
 
   if (this.thread) {
     threadReady();
@@ -195,7 +195,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   this.autocomplete = [];
   this.autocompleteSelection = null;
 
-  // internal methods 
+  // internal methods
 
   function updateSearchWithFilters() {
     var filters = $threads.filters();
@@ -208,7 +208,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
 
   function updateFiltersWithSearch() {
     var filters = {};
-    var search_filters = $scope.search.split(' '); 
+    var search_filters = $scope.search.split(' ');
     for (var ii = 0; ii < search_filters.length; ii++) {
       var filter_parts = search_filters[ii].split(':');
       if (filter_parts.length == 2)

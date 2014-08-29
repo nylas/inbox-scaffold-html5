@@ -48,7 +48,7 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
   if ($auth.token) {
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa($auth.token+':'));
-    
+
     self.namespacePromise = $inbox.namespaces().then(function(namespaces) {
       self._namespace = namespaces[0];
 
@@ -70,7 +70,7 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
           $auth.clearToken();
     });
   }
-  
+
 }]).
 
 service('$auth', ['$cookieStore', '$location', function($cookieStore, $location) {
@@ -95,7 +95,7 @@ service('$auth', ['$cookieStore', '$location', function($cookieStore, $location)
     var tokenStart = search.indexOf('access_token=');
     if (tokenStart == -1)
       return;
-    
+
     tokenStart += ('access_token=').length;
 
     var tokenEnd = search.indexOf('&', tokenStart);
@@ -128,7 +128,7 @@ service('$threads', ['$me', function($me) {
 
       if (!namespace)
         return;
-      
+
       namespace.threads({}, params).then(function(threads) {
         threads.sort(function(a, b) {
           return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
@@ -247,7 +247,7 @@ filter('participants', ['$me', function($me) {
         var end = name.indexOf(')');
         name = name.substr(start, end-start);
       }
-      
+
       // Append the name to the output string
       str += str ? ', ' + name : name;
     });
