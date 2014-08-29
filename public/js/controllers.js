@@ -48,21 +48,23 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookie
 }]).
 
 
-controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
+controller('ComposeCtrl', ['$scope', '$namespace', function($scope, $namespace) {
   var self = this;
   this.statusMessage = "";
-  
+
+  if (!$scope.draft) {
+    console.log("Creating new draft");
+    $scope.draft = $namespace.draft();
+  }
+
   this.disposeClicked = function() {
-    $scope.draft.dispose().then(function() {
-    });
-    $scope.$hide();
+    $scope.draft.dispose();
   };
 
   this.saveClicked = function() {
     self.statusMessage = 'Saving...';
-    $scope.draft.save().then(function() {
-      $scope.$hide();
-    });
+    $scope.draft.save();
+    self.statusMessage = 'Saved.';
   };
 
   this.downloadAttachment = function(attachment) {

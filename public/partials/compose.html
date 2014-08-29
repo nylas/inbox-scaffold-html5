@@ -1,20 +1,8 @@
-<div class="modal" ng-controller="ComposeCtrl as Compose" tabindex="-1" role="dialog" style="display: block;">
-  <style>
-  .composer .input-group {
-    width:100%;
-    position: relative;
-    margin-bottom: 2px;
-  }
-
-  .composer .input-group-addon {
-    width:60px;
-    text-align: left;
-  }
-  </style>
-
-  <div class="modal-dialog composer" style="width:685px;">
-    <div class="modal-content">
-      <div class="modal-body">
+<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;">
+  <div class="composer centered beneath-search">
+    <h3>Compose</h3>
+    <div>
+      <div>
 
         <div ng-switch="!!draft.threadID" style="margin-bottom:10px;">
           <div ng-switch-when="true">
@@ -54,7 +42,7 @@
 
       </div>
 
-      <div class="modal-footer">
+      <div>
         <div class="attachments">
           <div class="attachment" ng-repeat="attachment in draft.attachments">
             <i class="glyphicon glyphicon-{{attachment | attachment_type_to_glyph }}"></i>

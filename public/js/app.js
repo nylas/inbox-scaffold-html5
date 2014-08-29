@@ -12,6 +12,9 @@ angular.module('baobab', [
 
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider.when('/thread/:id', { templateUrl: '/partials/thread.html', controller: 'ThreadCtrl as ThreadCtrl' });
+  $routeProvider.when('/compose', { templateUrl: '/partials/compose.html', controller: 'ComposeCtrl as Compose', resolve: {
+    "$namespace": "$namespace"
+  }});
   $routeProvider.when('/:tag', { templateUrl: '/partials/thread_list.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
   $routeProvider.otherwise({redirectTo: '/inbox'});
 }]).
@@ -71,6 +74,10 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
     });
   }
 
+}]).
+
+factory('$namespace', ['$me', function($me) {
+  return $me.namespacePromise;
 }]).
 
 service('$auth', ['$cookieStore', '$location', function($cookieStore, $location) {
