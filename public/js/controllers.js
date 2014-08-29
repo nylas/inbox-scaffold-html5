@@ -18,34 +18,23 @@ var _handleAPIError = function(error) {
   alert(msg);
 };
 
-
-var _valueForQueryParam = function(param_name) {
-  var search = window.location.search;
-  var tokenStart = search.indexOf(param_name+'=');
-  if (tokenStart != -1) {
-    tokenStart += (param_name+'=').length;
-
-    var tokenEnd = search.indexOf('&', tokenStart);
-    if (tokenEnd == -1) tokenEnd = search.length - tokenStart;
-
-    return search.substr(tokenStart, tokenEnd);
-  } else {
-    return null;
-  }
-}
-
 // Controllers
 
 angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']).
 
-controller('AppCtrl', ['$scope', '$me', '$inbox', '$location', '$cookieStore', '$sce', function($scope, $me, $inbox, $location, $cookieStore, $sce) {
+controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookieStore', '$sce', function($scope, $me, $inbox, $auth, $location, $cookieStore, $sce) {
   var self = this;
   window.AppCtrl = this;
 
   this.inboxAuthURL = $sce.trustAsResourceUrl('https://beta.inboxapp.com/oauth/authorize');
   this.inboxClientID = $inbox.appId();
-  this.inboxRedirectURL = window.location.href;
+  this.inboxRedirectURL = window.location.protocol + "//" + window.location.host + "/";
   this.loginHint = '';
+
+  this.clearToken = $auth.clearToken;
+  this.hasToken = function() {
+    return !!$auth.token;
+  }
 
   this.theme = $cookieStore.get('baobab_theme') || 'light';
   this.setTheme = function(theme) {
@@ -53,39 +42,9 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$location', '$cookieStore', '
     $cookieStore.put('baobab_theme', theme);
   }
 
-  this.setToken = function(authToken) {
-    if ((authToken == null) || (authToken == ''))
-      return self.clearToken();
-
-    $cookieStore.put('inbox_auth_token', authToken);
-    $inbox.withCredentials(true);
-    $inbox.setRequestHeader('Authorization', 'Basic '+btoa(authToken+':'));
-    $inbox.namespaces().then(function(namespaces) {
-      $me.setNamespace(namespaces[0]);
-
-    }, function(err) {
-      $me.setNamespace(null);
-      if (confirm("/n/ returned no namespaces for your API token. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
-          self.clearToken();
-    });
-  }
-
-  this.clearToken = function() {
-    $cookieStore.remove('inbox_auth_token');
-    $inbox.setRequestHeader('Authorization', '');
-    self.setMe(null);
-  }
-
-  this.hasToken = function() {
-    return !!$cookieStore.get('inbox_auth_token');
-  }
-
   this.cssForTab = function(path) {
     return ($location.path().indexOf(path) != -1) ? 'active' : '';
   }
-
-  var queryAuthToken = _valueForQueryParam('access_token')
-  this.setToken(queryAuthToken || $cookieStore.get('inbox_auth_token'));
 }]).
 
 
@@ -164,7 +123,7 @@ controller('ComposeCtrl', ['$scope', '$inbox', function($scope, $inbox) {
 controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
   var self = this;
   
-  this.thread = $threads.item($routeParams['id']);;
+  this.thread = $threads.item($routeParams['id']);
   this.messages = null;
   this.drafts = null;
 
@@ -173,7 +132,7 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
   if (this.thread) {
     threadReady();
   } else {
-    $me.ensureNamespace().then(function(namespace) {
+    $me.namespacePromise.then(function(namespace) {
       namespace.thread($routeParams['id']).then(function(thread) {
         self.thread = thread;
         threadReady();
@@ -205,7 +164,6 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
   };
 
   this.composeClicked = function() {
-    self.launchDraftModal($me.namespace().draft());
   }
 
   this.replyClicked = function() {
@@ -279,8 +237,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   // exposed methods
 
   this.composeClicked = function() {
-    var draft = $me.namespace.draft()
-    self.launchDraftModal(draft);
   }
 
   this.archiveClicked = function(thread) {

@@ -13,6 +13,7 @@ angular.module('baobab', [
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider.when('/thread/:id', { templateUrl: '/partials/thread.html', controller: 'ThreadCtrl as ThreadCtrl' });
   $routeProvider.when('/:tag', { templateUrl: '/partials/thread_list.html', controller: 'ThreadListCtrl as ThreadListCtrl' });
+  $routeProvider.otherwise({redirectTo: '/inbox'});
 }]).
 
 config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
@@ -24,7 +25,7 @@ config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceD
       'self', $inboxProvider.baseUrl() + "/**"]);
 }]).
 
-service('$me', [function() {
+service('$me', ['$inbox', '$auth', function($inbox, $auth) {
   var self = this;
   Events(self);
 
@@ -40,45 +41,74 @@ service('$me', [function() {
     return self._contacts;
   }
 
-  self.namespace = function() {
-    return self._namespace;
-  }
-
-  self.setNamespace = function(namespace) {
-    self._namespace = namespace;
-    self.emit('update', self);
-
-    namespace.tags().then(function(tags) {
-      self._tags = tags;
-      self.emit('update-tags', self);
-    }, _handleAPIError);
-
-    namespace.contacts().then(function(contacts) {
-      self._contacts = contacts;
-      self.emit('update-contacts', self);
-    }, _handleAPIError);
-  }
-
-  self.ensureNamespace = function() {
-    return new Promise(function(resolve, reject) {
-      var tryCallback = function() {
-        if (self._namespace) {
-          self.off('update', tryCallback);
-          resolve(self._namespace);
-        }
-      };
-      if (self._namespace) {
-        resolve(self._namespace);
-      } else {
-        self.on('update', tryCallback);
-      }
-    });
-  };
-
   self.emailAddress = function() {
     return (self._namespace) ? self._namespace.emailAddress : null;
   }
+
+  if ($auth.token) {
+    $inbox.withCredentials(true);
+    $inbox.setRequestHeader('Authorization', 'Basic '+btoa($auth.token+':'));
+    
+    self.namespacePromise = $inbox.namespaces().then(function(namespaces) {
+      self._namespace = namespaces[0];
+
+      self._namespace.tags().then(function(tags) {
+        self._tags = tags;
+        self.emit('update-tags', self);
+      }, _handleAPIError);
+
+      self._namespace.contacts().then(function(contacts) {
+        self._contacts = contacts;
+        self.emit('update-contacts', self);
+      }, _handleAPIError);
+
+      return self._namespace;
+
+    }, function(err) {
+      self.setNamespace(null);
+      if (confirm("/n/ returned no namespaces. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
+          $auth.clearToken();
+    });
+  }
   
+}]).
+
+service('$auth', ['$cookieStore', '$location', function($cookieStore, $location) {
+  var self = this;
+
+  this.clearToken = function() {
+    $cookieStore.remove('inbox_auth_token');
+    window.location = '/';
+  }
+
+  this.readTokenFromCookie = function() {
+    try {
+      self.token = $cookieStore.get('inbox_auth_token');
+    } catch (e) {
+      self.clearToken();
+    }
+    return (!!self.token);
+  }
+
+  this.readTokenFromURL = function() {
+    var search = window.location.search;
+    var tokenStart = search.indexOf('access_token=');
+    if (tokenStart == -1)
+      return;
+    
+    tokenStart += ('access_token=').length;
+
+    var tokenEnd = search.indexOf('&', tokenStart);
+    if (tokenEnd == -1) tokenEnd = search.length - tokenStart;
+
+    var token = search.substr(tokenStart, tokenEnd);
+    $cookieStore.put('inbox_auth_token', token);
+    window.location.href = '/';
+  }
+
+  if (!this.readTokenFromCookie())
+    this.readTokenFromURL();
+
 }]).
 
 service('$threads', ['$me', function($me) {
@@ -89,22 +119,23 @@ service('$threads', ['$me', function($me) {
   self._filters = {};
 
   function reload() {
-    var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
-    var namespace = $me.namespace();
-    var params = _.extend({}, self._filters, {
-      lastMessageAfter: _2WeeksAgo,
-      limit: 1000
-    });
-
-    if (!namespace)
-      return;
-    
-    namespace.threads({}, params).then(function(threads) {
-      threads.sort(function(a, b) {
-        return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
+    $me.namespacePromise.then(function(namespace) {
+      var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
+      var params = _.extend({}, self._filters, {
+        lastMessageAfter: _2WeeksAgo,
+        limit: 1000
       });
-      self.setList(threads);
-    }, _handleAPIError);
+
+      if (!namespace)
+        return;
+      
+      namespace.threads({}, params).then(function(threads) {
+        threads.sort(function(a, b) {
+          return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
+        });
+        self.setList(threads);
+      }, _handleAPIError);
+    });
   }
 
   self.list = function() {
@@ -123,7 +154,6 @@ service('$threads', ['$me', function($me) {
   self.itemArchived = function(id) {
     if (self._filters['tag'] == 'archive')
       return;
-    debugger;
     self.setList(_.filter(self._list, function(t) {return t.id != id; }));
   }
 
@@ -145,10 +175,6 @@ service('$threads', ['$me', function($me) {
     self._filters = _.extend(self._filters, filtersToAppend);
     reload();
   }
-
-  $me.on('update', function() {
-    reload();
-  });
 
 }]).
 
