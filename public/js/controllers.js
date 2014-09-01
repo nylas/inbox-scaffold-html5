@@ -122,7 +122,7 @@ controller('ComposeCtrl', ['$scope', '$namespace', function($scope, $namespace) 
 
 }]).
 
-controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', '$location', function($scope, $me, $threads, $modal, $routeParams, $location) {
+controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', function($scope, $namespace, $threads, $modal, $routeParams, $location) {
   var self = this;
 
   this.thread = $threads.item($routeParams['id']);
@@ -134,12 +134,10 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
   if (this.thread) {
     threadReady();
   } else {
-    $me.namespacePromise.then(function(namespace) {
-      namespace.thread($routeParams['id']).then(function(thread) {
-        self.thread = thread;
-        threadReady();
-      }, _handleAPIError);
-    });
+    $namespace.thread($routeParams['id']).then(function(thread) {
+      self.thread = thread;
+      threadReady();
+    }, _handleAPIError);
   }
 
 
@@ -185,7 +183,7 @@ controller('ThreadCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams',
 controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', function($scope, $me, $threads, $modal, $routeParams) {
   var self = this;
 
-  $scope.search = '';
+  $scope.search = $threads.filters()['any_email'] || '';
   $scope.$watch('search', function() {
     updateAutocomplete();
   })
@@ -198,26 +196,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   this.autocompleteSelection = null;
 
   // internal methods
-
-  function updateSearchWithFilters() {
-    var filters = $threads.filters();
-    var filterKeys = Object.keys(filters);
-    var search = ''
-    for (var ii = 0; ii < filterKeys.length; ii++)
-      search += filterKeys[ii] + ':' + filters[filterKeys[ii]] + ' ';
-    $scope.search = search;
-  }
-
-  function updateFiltersWithSearch() {
-    var filters = {};
-    var search_filters = $scope.search.split(' ');
-    for (var ii = 0; ii < search_filters.length; ii++) {
-      var filter_parts = search_filters[ii].split(':');
-      if (filter_parts.length == 2)
-        filters[filter_parts[0]] = filter_parts[1].trim();
-    }
-    $threads.setFilters(filters);
-  }
 
   function updateAutocomplete() {
     var contacts = $me.contacts();
@@ -238,6 +216,12 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
 
   // exposed methods
 
+  this.tokenizedFilters = function() {
+    var filters = $threads.filters();
+    delete filters['any_email'];
+    return filters;
+  }
+
   this.composeClicked = function() {
   }
 
@@ -248,7 +232,27 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   }
 
   this.searchClicked = function() {
-    updateFiltersWithSearch();
+    var filters = {};
+    var search = $scope.search;
+
+    if (search.indexOf(':') > 0) {
+      _.each(search.split(' '), function(term) {
+        var parts = term.split(':');
+        if (parts.length == 2) {
+          filters[parts[0]] = parts[1];
+          search = search.replace(term, '');
+        }
+      });
+
+    } else {
+      filters['any_email'] = search;
+    }
+    
+    $threads.appendFilters(filters);
+    $scope.search = search;
+
+    self.autocomplete = [];
+    self.autocompleteSelection = null;
   }
 
   this.searchCleared = function() {
@@ -294,7 +298,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
 
     if (e.keyCode == 13) {
       if (self.autocompleteSelection)
-        $scope.search = "email:"+self.autocompleteSelection.email
+        $scope.search = self.autocompleteSelection.email
       self.searchClicked();
     }
 
@@ -310,7 +314,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   $threads.on('update', function() {
     self.threads = $threads.list();
   });
-  updateSearchWithFilters();
 
 }]);
 
