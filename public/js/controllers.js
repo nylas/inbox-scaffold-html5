@@ -193,7 +193,7 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
 }]).
 
 
-controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routeParams', function($scope, $me, $threads, $modal, $routeParams) {
+controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location', '$routeParams', function($scope, $me, $threads, $modal, $location, $routeParams) {
   var self = this;
 
   $scope.search = $threads.filters()['any_email'] || '';
@@ -238,10 +238,16 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$routePara
   this.composeClicked = function() {
   }
 
-  this.archiveClicked = function(thread) {
+  this.threadClicked = function(thread) {
+    $location.path('/thread/'+thread.id);
+  };
+
+  this.archiveClicked = function(thread, event) {
     thread.removeTags(['inbox']).then(function(response) {
       $threads.itemArchived(thread.id);
     }, _handleAPIError);
+
+    event.stopPropagation();
   }
 
   this.searchClicked = function() {
