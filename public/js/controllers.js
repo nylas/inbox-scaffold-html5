@@ -48,78 +48,30 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookie
 }]).
 
 
-controller('ComposeCtrl', ['$scope', '$namespace', function($scope, $namespace) {
+controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
   var self = this;
-  this.statusMessage = "";
 
-  if (!$scope.draft) {
-    console.log("Creating new draft");
-    $scope.draft = $namespace.draft();
+  if (!_.isObject($scope.draft)) {
+    // Create a new draft if the outer context didn't provide one
+    newDraft();
   }
 
-  this.disposeClicked = function() {
-    $scope.draft.dispose();
-  };
-
-  this.saveClicked = function() {
-    self.statusMessage = 'Saving...';
-    $scope.draft.save();
-    self.statusMessage = 'Saved.';
-  };
-
-  this.downloadAttachment = function(attachment) {
-    $scope.draft.getAttachments().then(function(attachments) {
-      for(i = 0; i < attachments.length; i++)
-      {
-        if(attachments[i].id == attachment.id)
-          attachments[i].download().then(function(response) {
-            saveAs(response.blob, response.filename);
-          }, function(err) {
-            console.log('error:' + err);
-          });
-      }
-    }, _handleAPIError)
-  };
-
-  this.removeAttachment = function(attachment) {
-    $scope.draft.removeAttachment(attachment);
+  function newDraft() {
+    $scope.draft = null;
+    $me.namespacePromise.then(function ($namespace) {
+      $scope.draft = $namespace.draft();
+    });
   }
 
-  this.attached = function() {
-      var file_node = document.getElementById('upload');
-      self.file = file_node.files[0];
-      $scope.draft.uploadAttachment(self.file).then(function(in_file){
-          self.statusMessage = '';
-      }, function(err){
-          console.log('error:' + err);
-      }, function(){
-        // progress??
-      });
-      self.statusMessage = 'uploading: ' + self.file.name;
-  }
-
-  this.attachClicked = function(file_node) {
-    var self = this;
-    var file_node = document.getElementById('upload');
-    if(self.change_attached != true)
-    {
-      self.change_attached = true;
-      $(file_node).on("change", this.attached);
-    }
-    file_node.click();
-    return false;
+  this.discardClicked = function () {
+    $scope.draft.dispose().then(newDraft);
   };
 
-  this.sendClicked = function() {
-    self.statusMessage = 'Saving...';
-    $scope.draft.save().then(function() {
-      self.statusMessage = 'Sending...';
-      $scope.draft.send().then(function() {
-        $scope.$hide();
-      });
+  this.sendClicked = function () {
+    $scope.draft.save().then(function () {
+      $scope.draft.send().then(newDraft);
     });
   };
-
 }]).
 
 controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespace, $threads, $modal, $routeParams, $location, $scrollState) {
@@ -276,7 +228,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     } else {
       filters['any_email'] = search;
     }
-    
+
     $threads.appendFilters(filters);
     $scope.search = search;
 

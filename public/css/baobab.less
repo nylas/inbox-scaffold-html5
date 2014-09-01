@@ -88,8 +88,8 @@ a {
       opacity: 0.3;
       color:white;
     }
-  
-    &.active, 
+
+    &.active,
     &.active img,
     &.active a {
       opacity: 1;
@@ -106,6 +106,7 @@ a {
   position: absolute;
   left:76px;
   right:0;
+  height: 100%;
   min-height: 100%;
 
   .centered {
@@ -427,44 +428,70 @@ a {
 
 /* Composer */
 
-.composer .note-editor .note-toolbar {
-  margin-left:0 !important;
+.composer {
+  background: white;
+  height: 100%;
 }
 
-.composer .input-group-add-cc {
-  position: absolute;
-  right: 1px;
+.composer .composer-input {
+  display: block;
+  overflow: hidden;
+  padding-top: 0.5em;
   background-color: white;
-  z-index: 10;
-  padding: 6px;
-  box-shadow: -1px 0 1px rgba(0,0,0,0.2);
-  top: 1px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  color: gray;
-}
-.composer .input-group-add-cc:hover {
-  background-color: #eee;
-  text-decoration: none;
-}
+  border-bottom: 1px solid #ccc;
+  outline: none;
 
-.theme-dark {
-  .input-group-add-cc {
-    background-color: #111;
+  input, textarea {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: none;
+    font-family: Sans-serif;
+    font-size: Medium;
+    outline: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    resize: none;
   }
 
-  .composer .input-group-add-cc:hover {
-    background-color: #000;
-    text-decoration: none;
+  label[for="to"] {
+    display: block;
+    color: #999;
+    float: left;
+    padding-top: 2px;
   }
 
-  .note-editor,
-  .note-resizebar,
-  .note-editor .note-toolbar,
-  input[type="text"] {
-    background-color:black;
-    border-color:#333;
-    color:white;
+  span[for="to"] {
+    padding-left: 1.6em;
+  }
+
+  span {
+    padding: 2px;
+    display: block;
+  }
+}
+
+.composer-footer {
+  padding-top: 4px;
+
+  .discard-btn {
+    float: left;
+    a {
+      color: #ccc;
+      font-size: Small;
+    }
+  }
+
+  .send-btn {
+    float: right;
+  }
+
+  div {
+    padding: 2px;
+    a {
+      text-decoration: none;
+    }
   }
 }
 
@@ -517,15 +544,15 @@ a {
 
 
 @-webkit-keyframes stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
   20% { -webkit-transform: scaleY(1.0) }
 }
 
 @keyframes stretchdelay {
-  0%, 40%, 100% { 
+  0%, 40%, 100% {
     transform: scaleY(0.4);
     -webkit-transform: scaleY(0.4);
-  }  20% { 
+  }  20% {
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }

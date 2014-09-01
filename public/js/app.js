@@ -19,12 +19,9 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
       "$namespace": function($me) { return $me.namespacePromise; },
     }
   });
-  $routeProvider.when('/compose', {
+  $routeProvider.when('/mail/compose', {
     templateUrl: '/partials/compose.html',
     controller: 'ComposeCtrl as Compose',
-    resolve: {
-      "$namespace": function($me) { return $me.namespacePromise; }
-    }
   });
   $routeProvider.when('/:tag', {
     templateUrl: '/partials/thread_list.html',

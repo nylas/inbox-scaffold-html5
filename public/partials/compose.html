@@ -1,68 +1,11 @@
-<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;">
-  <div class="composer centered beneath-search">
-    <h3>Compose</h3>
-    <div>
-      <div>
-
-        <div ng-switch="!!draft.threadID" style="margin-bottom:10px;">
-          <div ng-switch-when="true">
-            <!-- Draft In Reply To Thread -->
-            <div class="input-group">
-              <span class="input-group-addon">Recipients:</span>
-              <input type="text" readonly in-participants class="form-control" name="to" ng-model="draft.to" />
-            </div>
-          </div>
-
-          <div ng-switch-when="false">
-            <!-- New Draft -->
-            <div class="input-group">
-              <span class="input-group-addon">To:</span>
-              <a ng-hide="expanded" ng-click="expanded = true" class="input-group-add-cc">Show CC/BCC</a>
-              <input type="text" in-participants class="form-control" name="to" ng-model="draft.to" />
-            </div>
-            <div ng-show="expanded || draft.cc.length > 0 || draft.bcc.length > 0">
-              <div class="input-group">
-                <span class="input-group-addon">CC:</span>
-                <input type="text" in-participants class="form-control" name="cc" ng-model="draft.cc" />
-              </div>
-              <div class="input-group">
-                <span class="input-group-addon">BCC:</span>
-                <input type="text" in-participants class="form-control" name="bcc" ng-model="draft.bcc" />
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="input-group" style="margin-bottom:10px;">
-          <input type="text" ng-readonly="draft.threadID" class="form-control" placeholder="Subject" name="subject" ng-model="draft.subject" />
-        </div>
-
-        <div in-summer-note ng-model="draft.body" height="200"></div>
-
-      </div>
-
-      <div>
-        <div class="attachments">
-          <div class="attachment" ng-repeat="attachment in draft.attachments">
-            <i class="glyphicon glyphicon-{{attachment | attachment_type_to_glyph }}"></i>
-            {{attachment.filename}} ({{attachment.size | pretty_size}})
-            <a class="btn btn-default" href="#" ng-click="Compose.removeAttachment(attachment)"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;Remove</a> 
-          </div>
-        </div>
-        <span style="padding-right:10px;">{{Compose.statusMessage}}</span>
-        <form id="attachment">
-        <input type="file" id="upload" name="upload" style="visibility: hidden; width: 1px; height: 1px" multiple ng-onchange="Compose.attach()" />
-        </form>
-        <div class="btn-group pull-left">
-          <button type="button" class="btn btn-default" ng-click="Compose.disposeClicked()"><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete</button>
-        </div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default" ng-click="Compose.attachClicked()"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Attach</button>
-          <button type="button" class="btn btn-default" ng-click="Compose.saveClicked()"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;Save</button>
-          <button type="button" class="btn btn-default" ng-click="Compose.sendClicked()"><i class="glyphicon glyphicon-send"></i>&nbsp;Send</button>
-        </div>
-      </div>
+<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
+  <form class="centered beneath-search" ng-show="draft">
+    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" ng-model="draft.to"/></span></div>
+    <div class="composer-input composer-subject"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="draft.subject"/></span></div>
+    <div class="composer-input composer-body"><span><textarea name="body" class="compose-body" rows=10 placeholder="Write a message…" ng-model="draft.body"></textarea></span></div>
+    <div class="composer-footer">
+      <div class="discard-btn"><a ng-click="Compose.discardClicked()">Discard</a></div>
+      <div class="send-btn"><a ng-click="Compose.sendClicked()">Send</a></div>
     </div>
-  </div>
+  </form>
 </div>
