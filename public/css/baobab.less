@@ -187,11 +187,11 @@ a {
   border-bottom: 1px solid #BBBBBB;
   padding:12px;
   padding-bottom:8px;
-  position: absolute;
+  position: fixed;
   top:0;
-  left:0;
+  left:75px;
   right:0;
-  z-index:2;
+  z-index:1;
 
   .btn-container {
     width:20%; display:inline-block; float:right; padding-left:15px; box-sizing:border-box;
@@ -280,6 +280,7 @@ a {
   .thread {
     display:block;
     box-sizing:border-box;
+    position: relative;
     width:100%;
     font-size:14px;
     color:#757575;
@@ -352,6 +353,19 @@ a {
       vertical-align: top;
       color:#979797;
       width:7%;
+    }
+
+    .actions {
+      display:none;
+      padding-top:4px;
+      right:5px;
+      position: absolute;
+      text-align: right;
+      z-index:2;
+    }
+
+    &:hover .actions {
+      display:inline-block;
     }
   }
 
