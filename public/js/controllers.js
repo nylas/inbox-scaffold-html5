@@ -203,7 +203,13 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
 
   $threads.setFilters({tag: $routeParams['tag'] || 'inbox'});
 
-  this.threads = $threads.list();
+  this.list = $threads.list();
+  this.extendList = $threads.extendList;
+
+  $threads.on('update', function() {
+    self.list = $threads.list();
+  });
+
   this.viewName = $routeParams['tag'];
   this.autocomplete = [];
   this.autocompleteSelection = null;
@@ -228,6 +234,10 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
   }
 
   // exposed methods
+
+  this.showNoMore = function() {
+    return $threads.listIsCompleteSet() && $threads.listIsMultiplePages();
+  }
 
   this.tokenizedFilters = function() {
     var filters = $threads.filters();
@@ -329,10 +339,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     if(e.keyCode == 38)
       self.selectThreadRelative(-1);
   }
-
-  $threads.on('update', function() {
-    self.threads = $threads.list();
-  });
 
 }]);
 

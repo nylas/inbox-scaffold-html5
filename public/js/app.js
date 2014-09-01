@@ -7,6 +7,7 @@ angular.module('baobab', [
   'mgcrea.ngStrap.modal',
   'mgcrea.ngStrap.tooltip',
   'mgcrea.ngStrap.popover',
+  'infinite-scroll',
   'baobab.controllers'
 ]).
 
@@ -165,30 +166,61 @@ service('$threads', ['$me', function($me) {
 
   self._list = null;
   self._listVersion = 0;
+  self._listPendingParams = {};
+  self._listIsCompleteSet = false;
   self._filters = {};
+  self._page = 0;
 
-  function reload() {
+  function makeAPIRequest() {
     $me.namespacePromise.then(function(namespace) {
-      var _2WeeksAgo = ((new Date().getTime() - 1209600000) / 1000) >>> 0;
+      var pageSize = 100;
       var params = _.extend({}, self._filters, {
-        lastMessageAfter: _2WeeksAgo,
-        limit: 1000
+        limit: pageSize,
+        offset: self._page * pageSize
       });
 
-      if (!namespace)
+      // bail if params are identical to the previous request
+      if (_.isEqual(params, self._listPendingParams))
         return;
 
+      // bail if the last request returned fewer items than requested
+      if (self._listIsCompleteSet)
+        return;
+
+      // increment the list verison number so any pending requests with old
+      // params will be ignored when they complete.
       self._listVersion += 1;
+      self._listPendingParams = params;
+
       var requested = self._listVersion;
       namespace.threads({}, params).then(function(threads) {
+        // ignore this response if we've moved on to new params
         if (self._listVersion != requested)
           return;
+
+        // if we received fewer items than we requested, this must
+        // be the last page in the list
+        self._listIsCompleteSet = (threads.length < pageSize);
+
+        if (self._list)
+          threads = threads.concat(self._list);
         threads.sort(function(a, b) {
           return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
         });
+
         self.setList(threads);
+        self._page += 1;
+
       }, _handleAPIError);
     });
+  }
+
+  self.reload = function() {
+    self._page = 0;
+    self._listPendingParams = {};
+    self._listIsCompleteSet = false;
+    self.setList(null);
+    makeAPIRequest();
   }
 
   self.list = function() {
@@ -198,6 +230,18 @@ service('$threads', ['$me', function($me) {
   self.setList = function(list) {
     self._list = list;
     self.emit('update', self);
+  }
+
+  self.extendList = function() {
+    makeAPIRequest();
+  }
+
+  self.listIsCompleteSet = function() {
+    return self._listIsCompleteSet;
+  }
+
+  self.listIsMultiplePages = function() {
+    return (self._page > 0);
   }
 
   self.item = function(id) {
@@ -222,15 +266,13 @@ service('$threads', ['$me', function($me) {
       if (filters[key] == '')
         delete filters[key];
     }
-    self.setList(null);
     self._filters = filters;
-    reload();
+    self.reload();
   }
 
   self.appendFilters = function(filtersToAppend) {
-    self.setList(null);
     self.setFilters(_.extend({}, self._filters, filtersToAppend));
-    reload();
+    self.reload();
   }
 
 }]).

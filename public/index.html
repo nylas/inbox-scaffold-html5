@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="/css/angular-animation.css"/>
     <style>.clickable { cursor: pointer; }</style>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-sanitize.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-cookies.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-route.js"></script>
     <script src="https://code.angularjs.org/1.2.18/angular-animate.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.min.js"></script>
     <script src="//oss.maxcdn.com/angular.strap/2.0.0/angular-strap.tpl.min.js"></script>
@@ -22,6 +22,7 @@
     <script src="/js/pretty.js"></script>
     <script src="/js/FileSaver.js"></script>
     <script src="/js/angular-inbox.js"></script>
+    <script src="/js/infinite-scroll.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/controllers.js"></script>
 
@@ -69,7 +70,7 @@
           </ul>
 
           <ul class="pull-bottom">
-            <li class="{{App.cssForTab('settings')}}"><a ng-click="App.clearToken()" href="#">Settings</a></li>
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="/img/tab_logout@2x.png" /> Log Out</a></li>
           </ul>
         </div>
 

@@ -29,8 +29,8 @@
 
 <div class="centered beneath-search">
   <h3 style="text-transform:capitalize;">{{ThreadListCtrl.viewName}}</h3>
-  <div class="thread-list bordered">
-    <div class="thread clickable" ng-repeat="thread in ThreadListCtrl.threads" ng-click="ThreadListCtrl.threadClicked(thread, $event);" id="{{thread.id}}">
+  <div class="thread-list bordered" infinite-scroll="ThreadListCtrl.extendList()" infinite-scroll-distance="1">
+    <div class="thread clickable" ng-repeat="thread in ThreadListCtrl.list" ng-click="ThreadListCtrl.threadClicked(thread, $event);" id="{{thread.id}}">
         <div class="actions">
           <a class="btn" ng-click="ThreadListCtrl.archiveClicked(thread, $event);">Archive</a>
         </div>
@@ -42,12 +42,17 @@
         <div class="snippet"><span class="subject">{{thread.subject}}</span> {{thread.snippet}}</div>
     </div></div></div>
 
-    <div ng-show="!ThreadListCtrl.threads" class="loading-indicator">
+    <div ng-show="!ThreadListCtrl.list" class="loading-indicator">
       <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
     </div>
 
-    <div ng-show="ThreadListCtrl.threads.length == 0" style="text-align:center; padding:140px; color:#ccc;">
+    <div ng-show="ThreadListCtrl.list.length == 0" style="text-align:center; padding:140px; color:#ccc;">
       Sorry, no threads matched your criteria.
     </div>
+
+    <div ng-show="ThreadListCtrl.showNoMore()" style="text-align:center; padding:140px; color:#ccc;">
+      That's all we've got!
+    </div>
+
   </div>
 </div>
