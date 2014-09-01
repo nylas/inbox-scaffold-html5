@@ -122,7 +122,7 @@ controller('ComposeCtrl', ['$scope', '$namespace', function($scope, $namespace) 
 
 }]).
 
-controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', function($scope, $namespace, $threads, $modal, $routeParams, $location) {
+controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespace, $threads, $modal, $routeParams, $location, $scrollState) {
   var self = this;
 
   this.thread = $threads.item($routeParams['id']);
@@ -142,12 +142,25 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
 
 
   function threadReady() {
-    if (self.thread.hasTag('unread')) {
-      self.thread.removeTags(['unread']).then(function(response) {
-      }, _handleAPIError);
-    }
     self.thread.messages().then(function(messages) {
       self.messages = messages;
+
+      // scroll to the first unread message, or the last message
+      // if the entire conversation is read.
+      var scrollTo = messages[messages.length - 1];
+      for (var ii = 0; ii < messages.length; ii++) {
+        if (messages[ii].unread) {
+          scrollTo = messages[ii];
+          break;
+        }
+      }
+      $scrollState.scrollTo('msg-' + scrollTo.id);
+
+      // mark the thread as read
+      if (self.thread.hasTag('unread')) {
+        self.thread.removeTags(['unread']).then(function(response) {
+        }, _handleAPIError);
+      }
     }, _handleAPIError);
 
     self.thread.drafts().then(function(drafts) {

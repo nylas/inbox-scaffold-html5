@@ -49,10 +49,10 @@ img {
 
   <div class="message-list">
     <!-- Display messages -->
-    <div class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
+    <div id="msg-{{msg.id}}" class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
 
     <!-- Display drafts -->
-    <div class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts"></div>
+    <div id="msg-{{msg.id}}" class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts"></div>
   </div>
 
   <!-- Empty State -->
