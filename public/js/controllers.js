@@ -57,7 +57,6 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
   }
 
   function newDraft() {
-    $scope.draft = null;
     $me.namespacePromise.then(function ($namespace) {
       $scope.draft = $namespace.draft();
     });

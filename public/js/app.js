@@ -21,7 +21,6 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
   });
   $routeProvider.when('/mail/compose', {
     templateUrl: '/partials/compose.html',
-    controller: 'ComposeCtrl as Compose',
   });
   $routeProvider.when('/:tag', {
     templateUrl: '/partials/thread_list.html',
