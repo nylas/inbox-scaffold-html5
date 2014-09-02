@@ -237,7 +237,7 @@ service('$threads', ['$me', function($me) {
   }
 
   self.listIsMultiplePages = function() {
-    return (self._page > 0);
+    return (self._page > 1);
   }
 
   self.item = function(id) {
