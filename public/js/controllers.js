@@ -56,6 +56,19 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
     newDraft();
   }
 
+  if (!_.isString($scope.to)) {
+    $scope.to = "";
+  }
+
+  $scope.$watch('to', function () {
+    // TODO(zip): remove me once to is a tag field
+    if (!$scope.draft) return;
+    var emails = $scope.to.split(/[, ;]+/);
+    $scope.draft.to = _.map(emails, function (email) {
+      return { 'email': email };
+    });
+  });
+
   function newDraft() {
     $me.namespacePromise.then(function ($namespace) {
       var $draftscope = $scope;
@@ -65,6 +78,7 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
       if (!$draftscope.$parent) {
         $draftscope = $scope;
       }
+      $scope.to = "";
       $draftscope.draft = $namespace.draft();
     });
   }
