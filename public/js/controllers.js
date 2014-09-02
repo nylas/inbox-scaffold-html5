@@ -276,20 +276,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     $threads.appendFilters({'any_email': null});
   }
 
-  this.selectThreadRelative = function(direction) {
-    for(i = 0; i < self.threads.length; i++) {
-      if(self.threads[i] == self.selectedThread) {
-        if(i + direction < self.threads.length - 1 && i + direction > 0) {
-          self.selectedThread = self.threads[i + direction];
-          angular.element(selectedNode).removeClass('active');
-          selectedNode = document.getElementById(self.selectedThread.id);
-          angular.element(selectedNode).addClass('active');
-          break;
-        }
-      }
-    }
-  }
-
   this.keypressInAutocomplete = function(e) {
     var index = self.autocomplete.indexOf(self.autocompleteSelection);
 
@@ -319,13 +305,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     }
 
     updateTypeaheadWithSelection();
-  }
-
-  this.keypressCallback = function(e) {
-    if(e.keyCode == 40)
-      self.selectThreadRelative(1);
-    if(e.keyCode == 38)
-      self.selectThreadRelative(-1);
   }
 
 }]);
