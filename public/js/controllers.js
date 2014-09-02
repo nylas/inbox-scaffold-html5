@@ -58,7 +58,14 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
 
   function newDraft() {
     $me.namespacePromise.then(function ($namespace) {
-      $scope.draft = $namespace.draft();
+      var $draftscope = $scope;
+      while ($draftscope.$parent && !$draftscope.draft) {
+        $draftscope = $draftscope.$parent;
+      }
+      if (!$draftscope.$parent) {
+        $draftscope = $scope;
+      }
+      $draftscope.draft = $namespace.draft();
     });
   }
 
