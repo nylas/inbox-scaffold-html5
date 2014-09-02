@@ -49,7 +49,7 @@ img {
 
   <div class="message-list">
     <!-- Display messages -->
-    <div id="msg-{{msg.id}}" class="message" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
+    <div id="msg-{{msg.id}}" class="message" ng-class="{'unread': msg.unread}" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
 
     <!-- Display drafts -->
     <div id="msg-{{msg.id}}" class="message draft" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts"></div>

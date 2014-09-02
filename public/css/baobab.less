@@ -137,6 +137,18 @@ a {
   background-color: #FCFBFC;
   margin-bottom:20px;
 
+  &.unread {
+    background-color:#E9F9FF;
+    -webkit-transition: background-color 1000ms linear;
+    -moz-transition: background-color 1000ms linear;
+    -o-transition: background-color 1000ms linear;
+    -ms-transition: background-color 1000ms linear;
+    transition: background-color 1000ms linear;
+    animation-delay: 500ms;
+    animation-timing-function: ease-out;
+    animation-direction: alternate;
+  }
+
   &.draft {
     background-color:#FFF5DA;
   }
