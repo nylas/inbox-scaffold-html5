@@ -554,3 +554,9 @@ directive('inSummerNote', function() {
     }
   };
 });
+
+
+/* Helpers */
+angular.scope = function (selector) {
+  return this.element(document.querySelector(selector)).scope();
+}
