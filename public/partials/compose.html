@@ -1,6 +1,6 @@
 <div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
   <form class="centered beneath-search" ng-show="draft">
-    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" ng-model="to"/></span></div>
+    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" in-participants ng-model="draft.to"/></span></div>
     <div class="composer-input composer-subject"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="draft.subject"/></span></div>
     <div class="composer-input composer-body"><span><textarea name="body" class="compose-body" rows=10 placeholder="Write a message…" ng-model="draft.body"></textarea></span></div>
     <div class="composer-footer">
