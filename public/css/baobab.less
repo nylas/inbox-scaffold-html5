@@ -106,7 +106,6 @@ a {
   position: absolute;
   left:76px;
   right:0;
-  height: 100%;
   min-height: 100%;
 
   .centered {
@@ -212,6 +211,7 @@ a {
 
   .input-inset-container {
     position: absolute;
+    z-index:3;
     top:5px;
     right:5px;
   }
@@ -249,12 +249,18 @@ a {
     border-color: rgba(82, 168, 236, 0.8);
   }
 
+  .typeahead {
+    z-index:1;
+    position:absolute;
+    color:#ccc;
+    background-color: white;
+  }
+
   .search-field {
     width:80%;
     border-radius:3px; border:1px solid #aaa; box-sizing:border-box;
     overflow-x:hidden;
     white-space: nowrap;
-    background-color: white;
   }
 
   .search-field.active {
@@ -266,6 +272,9 @@ a {
   }
 
   .search-field input {
+    z-index:2;
+    position:absolute;
+    background-color: transparent;
     width:100%;
     font-size:16px; padding:8px;
     outline: 0;

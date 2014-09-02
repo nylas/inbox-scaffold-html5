@@ -117,8 +117,12 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
       // mark the thread as read
       if (self.thread.hasTag('unread')) {
         self.thread.removeTags(['unread']).then(function(response) {
+          for (var ii = 0; ii < messages.length; ii++) {
+            messages[ii].unread = false;
+          }
         }, _handleAPIError);
       }
+
     }, _handleAPIError);
 
     self.thread.drafts().then(function(drafts) {
@@ -155,6 +159,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
   var self = this;
 
   $scope.search = $threads.filters()['any_email'] || '';
+  $scope.searchTypeahead = '';
   $scope.$watch('search', function() {
     updateAutocomplete();
   })
@@ -179,8 +184,11 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     var term = $scope.search.toLowerCase();
     var results = []
 
-    if (term.length == 0)
-      return self.autocomplete = [];
+    if ((term.length == 0) || (term == $threads.filters()['any_email'])) {
+      $scope.searchTypeahead = '';
+      self.autocomplete = [];
+      return;
+    }
 
     for (var ii = 0; ii < contacts.length; ii ++) {
       if ((contacts[ii].email.toLowerCase().indexOf(term) == 0) || (contacts[ii].name.toLowerCase().indexOf(term) == 0))
@@ -188,7 +196,27 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
       if (results.length == 3)
         break;
     }
+
     self.autocomplete = results;
+    setAutocompleteSelection(results[0]);
+  }
+
+  function updateTypeaheadWithSelection() {
+    var contact = self.autocompleteSelection;
+    var term = $scope.search.toLowerCase();
+
+    if (contact && (term == contact.email.toLowerCase().substr(0,term.length))) {
+      $scope.searchTypeahead = $scope.search + contact.email.substr($scope.search.length);
+    } else if (contact && (term == contact.name.toLowerCase().substr(0,term.length))) {
+      $scope.searchTypeahead = $scope.search + contact.name.substr($scope.search.length);
+    } else {
+      $scope.searchTypeahead = '';
+    }
+  }
+
+  function setAutocompleteSelection(item) {
+    self.autocompleteSelection = item;
+    updateTypeaheadWithSelection();
   }
 
   // exposed methods
@@ -239,12 +267,13 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     $scope.search = search;
 
     self.autocomplete = [];
-    self.autocompleteSelection = null;
+    setAutocompleteSelection(null);
   }
 
   this.searchCleared = function() {
     $scope.search = "";
-    $threads.setFilters({});
+    $scope.searchFocused = false;
+    $threads.appendFilters({'any_email': null});
   }
 
   this.selectThreadRelative = function(direction) {
@@ -264,31 +293,32 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
   this.keypressInAutocomplete = function(e) {
     var index = self.autocomplete.indexOf(self.autocompleteSelection);
 
-    if(e.keyCode == 40) {
-      if (self.autocompleteSelection == null)
-        self.autocompleteSelection = self.autocomplete[0]
-      else {
-        if (index == -1)
-          self.autocompleteSelection = self.autocomplete[0]
-        else if (index + 1 < self.autocomplete.length)
-          self.autocompleteSelection = self.autocomplete[index+1];
-      }
+    if(e.keyCode == 40) { // down arrow
+      if ((self.autocompleteSelection == null) || (index == -1))
+        setAutocompleteSelection(self.autocomplete[0]);
+      else if (index + 1 < self.autocomplete.length)
+        setAutocompleteSelection(self.autocomplete[index+1]);
       e.preventDefault();
     }
 
-    if(e.keyCode == 38) {
+    if (e.keyCode == 38) { // up arrow
       if (index > 0) {
-        self.autocompleteSelection = self.autocomplete[index-1];
+        setAutocompleteSelection(self.autocomplete[index-1]);
       }
       e.preventDefault();
     }
 
-    if (e.keyCode == 13) {
+    if (e.keyCode == 39) { // right arrow
+      $scope.search = $scope.searchTypeahead;
+    }
+
+    if (e.keyCode == 13) { // enter
       if (self.autocompleteSelection)
-        $scope.search = self.autocompleteSelection.email
+        $scope.search = self.autocompleteSelection.email;
       self.searchClicked();
     }
 
+    updateTypeaheadWithSelection();
   }
 
   this.keypressCallback = function(e) {

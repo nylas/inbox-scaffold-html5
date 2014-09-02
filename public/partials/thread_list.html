@@ -11,7 +11,8 @@
 
       <div class="search-field" ng-class="{'active': searchFocused}" >
         <div class="token" ng-repeat="(key, value) in ThreadListCtrl.tokenizedFilters()"><span>{{key}}:</span> {{value}}</div>
-        <input type="text" ng-model="search" ng-focus="searchFocused = true" ng-blur="searchFocused = (search.length > 0)" placeholder="Search" ng-keydown="ThreadListCtrl.keypressInAutocomplete($event)">
+        <input class="typeahead" type="text" ng-model="searchTypeahead" disabled/>
+        <input type="text" ng-model="search" ng-focus="searchFocused = true" ng-blur="searchFocused = (search.length > 0)" placeholder="Search" ng-keydown="ThreadListCtrl.keypressInAutocomplete($event)"/>
       </div>  
 
 
