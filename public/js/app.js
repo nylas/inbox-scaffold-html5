@@ -293,15 +293,14 @@ filter('tag_expand', function() {
   }
 }).
 
-filter('pretty_date', function() {
-  return function(input) {
-    return prettyDate(input);
-  }
-}).
-
 filter('pretty_size', function() {
-  return function(input) {
-    return prettySize(input);
+  return function(filesize) {
+    if(filesize < 1000)
+      return filesize + " B";
+    if(filesize < 1000000)
+      return Math.floor(filesize/1000) + " KB";
+    else
+      return Math.floor(filesize/1000000) + " MB";
   }
 }).
 
@@ -351,6 +350,31 @@ filter('participants', ['$me', function($me) {
     return str;
   }
 }]).
+
+filter('timestamp_ago', function() {
+  return function(date) {
+    return moment(date).fromNow();
+  }
+}).
+
+filter('timestamp_short', function(){
+  return function(date){
+    var date = moment(date);
+    var dateYear = date.format('YYYY')/1;
+    var nowYear = moment().format('YYYY')/1;
+    var dateDay = date.format('DDD')/1 + 365 * dateYear;
+    var nowDay = moment().format('DDD')/1 + 365 * nowYear;
+
+    if (dateDay == nowDay)
+      return date.format('h:mma');
+    else if (nowDay - dateDay < 7)
+      return date.format('dddd, h:mma')
+    else if (nowYear == dateYear)
+      return date.format('MMM Do');
+    else
+      return date.format('M/D/YYYY');
+  };
+}).
 
 filter('extension', function() {
   return function(filename) {

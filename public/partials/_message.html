@@ -1,5 +1,5 @@
 <div class="inset heading">
-  <span class="sent" ng-show="msg.object != 'draft'" title="{{msg.date.toString()}}">{{msg.date | pretty_date}}</span>
+  <span class="sent" ng-show="msg.object != 'draft'" title="{{msg.date.toString()}}">{{msg.date | timestamp_ago}}</span>
   <span class="sent" ng-show="msg.object == 'draft'">DRAFT</span>
 
   <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
