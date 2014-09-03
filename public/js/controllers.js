@@ -90,6 +90,9 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
   this.messages = null;
   this.drafts = null;
 
+  this.currentAttachment = null;
+  this.currentAttachmentDataURL = null;
+  
   // internal methods
 
   if (this.thread) {
@@ -135,10 +138,31 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
 
   // exposed methods
 
-  this.downloadAttachment = function(msg, id) {
+  this.viewAttachment = function(msg, id) {
+    self.currentAttachmentLoading = true;
     msg.attachment(id).download().then(function(blob) {
-      saveAs(blob, blob.fileName);
-    }, _handleAPIError);
+      self.currentAttachment = blob;
+      if (blob.type.indexOf('image/') != -1) {
+        var fileReader = new FileReader();
+        fileReader.onload = function() {
+          self.currentAttachmentDataURL = this.result;
+          self.currentAttachmentLoading = false;
+          if (!$scope.$$phase) $scope.$apply();
+        };
+        fileReader.readAsDataURL(blob);
+      } else {
+        self.currentAttachmentLoading = false;
+        self.downloadCurrentAttachment();
+      }
+    });
+  }
+
+  this.hideAttachment = function() {
+    self.currentAttachmentDataURL = null;
+  }
+ 
+  this.downloadCurrentAttachment = function() {
+    saveAs(self.currentAttachment, self.currentAttachment.fileName);
   };
 
   this.composeClicked = function() {

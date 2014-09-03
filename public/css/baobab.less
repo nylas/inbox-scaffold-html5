@@ -201,7 +201,7 @@ a {
     padding-bottom:12px;
   }
   .attachment .file-name {
-    padding-top:8px;
+    padding-top:6px;
     padding-left:10px;
     color:#979797;
   }
@@ -426,8 +426,44 @@ a {
   }
 }
 
+.lightbox {
+  position: fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color: rgba(0,0,0,0.5);
+
+  &.ng-hide-remove {
+      transition: all 250ms ease-out;
+      opacity: 0;
+  }
+  &.ng-hide-remove-active {
+      opacity: 1;
+  }
+}
 
 
+.lightbox-pane {
+  background-color: white;
+  margin:auto;
+  position: fixed;
+  top:50%;
+  left:50%;
+  min-width:250px;
+  transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  img {
+    max-width:100%;
+    max-height:100%;
+  }
+  a {
+    padding:15px;
+    display:inline-block;
+  }
+}
 
 /* Button */
 

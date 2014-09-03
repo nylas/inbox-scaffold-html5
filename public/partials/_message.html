@@ -9,7 +9,7 @@
 
 <iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
 <div class="inset attachments">
-  <a class="attachment" ng-repeat="data in msg.attachmentData" ng-click="ThreadCtrl.downloadAttachment(msg, data.id)">{{aID}}
+  <a class="attachment" ng-repeat="data in msg.attachmentData" ng-click="ThreadCtrl.viewAttachment(msg, data.id)">{{aID}}
     <div class="pull-left file-type-icon"><span class="corner"></span><span class="type">{{data.filename | extension}}</span></div>
     <div class="pull-left file-name">{{data.filename}}</div>
   </a>

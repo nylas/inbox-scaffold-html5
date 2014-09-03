@@ -67,4 +67,17 @@ img {
     <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
   </div>
 
+  <!-- Attachment Preview -->
+  <div class="lightbox" ng-show="ThreadCtrl.currentAttachmentDataURL || ThreadCtrl.currentAttachmentLoading" ng-click="ThreadCtrl.hideAttachment()">
+    <div class="lightbox-pane">
+      <div ng-show="ThreadCtrl.currentAttachmentLoading" class="loading-indicator">
+        <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
+      </div>
+      <div ng-show="ThreadCtrl.currentAttachmentDataURL">
+        <img ng-src="{{ThreadCtrl.currentAttachmentDataURL}}"/>
+        <a ng-click="ThreadCtrl.downloadCurrentAttachment();">Download this Image</a>
+      </div>
+    </div>
+  </div>
+
 </div>
