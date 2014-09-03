@@ -221,8 +221,24 @@ a {
   right:0;
   z-index:1;
 
-  .btn-container {
-    width:20%; display:inline-block; float:right; padding-left:15px; box-sizing:border-box;
+  .compose-container {
+    width:20%;
+    display:inline-block;
+    position: absolute;
+    right: 0;
+    padding-left:15px;
+    box-sizing:border-box;
+
+    &.ng-hide-remove {
+      opacity: 0;
+      -webkit-transition: opacity 250ms ease-out;
+      transition: opacity 250ms ease-out;
+      -webkit-transition-delay: 100ms;
+      transition-delay: 100ms;
+    }
+    &.ng-hide-remove-active {
+      opacity: 1;
+    }
   }
 
   .input-inset-container {
@@ -230,6 +246,36 @@ a {
     z-index:3;
     top:5px;
     right:5px;
+
+    &.ng-hide-remove {
+      opacity: 0;
+      -webkit-transition: opacity 250ms ease-out;
+      transition: opacity 250ms ease-out;
+      -webkit-transition-delay: 250ms;
+      transition-delay: 250ms;
+    }
+    &.ng-hide-remove-active {
+      opacity: 1;
+    }
+  }
+
+  .autocomplete {
+    overflow:hidden;
+    max-height: 0px;
+    opacity:0;
+
+    &.populated-add {
+      transition: all 250ms ease-out;
+      -webkit-transition-delay: 150ms;
+      transition-delay: 150ms;
+    }
+    &.populated-remove {
+      transition: all 250ms ease-out;
+    }
+    &.populated {
+      max-height:300px;
+      opacity:1;
+    }
   }
 
   .token {
@@ -277,13 +323,20 @@ a {
     border-radius:3px; border:1px solid #aaa; box-sizing:border-box;
     overflow-x:hidden;
     white-space: nowrap;
-  }
 
-  .search-field.active {
-    width:100%;
-    border: 1px solid #00A8C8;
-    outline: 0;
-    box-shadow: 0px 0px 3px rgba(0,168,200,0.5), #F6F6F6 0px 0px 2px inset;
+    &.active {
+      width:100%;
+      border: 1px solid #00A8C8;
+      outline: 0;
+      box-shadow: 0px 0px 3px rgba(0,168,200,0.5), #F6F6F6 0px 0px 2px inset;
+    }
+
+    &.active-add {
+      transition: all 250ms ease-out;
+    }
+    &.active-remove {
+      transition: all 250ms ease-out;
+    }
   }
 
   .search-field input {

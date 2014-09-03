@@ -1,7 +1,7 @@
 <div class="search">
   <div class="centered">
     <form role="search" ng-submit="ThreadListCtrl.searchClicked()">
-      <div class="btn-container" ng-show="!searchFocused">
+      <div class="compose-container" ng-show="!searchFocused">
         <a class="btn" style="display:block;" ng-click="ThreadListCtrl.composeClicked()"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a>
       </div>
 
@@ -9,7 +9,7 @@
         <a class="btn btn-small" ng-click="ThreadListCtrl.searchCleared()">Clear</a>
       </div>
 
-      <div class="search-field" ng-class="{'active': searchFocused}" >
+      <div class="search-field" ng-class="{'active': searchFocused}">
         <div class="token" ng-repeat="(key, value) in ThreadListCtrl.tokenizedFilters()"><span>{{key}}:</span> {{value}}</div>
         <input class="typeahead" type="text" ng-model="searchTypeahead" disabled/>
         <input type="text" ng-model="search" ng-focus="searchFocused = true" ng-blur="searchFocused = (search.length > 0)" placeholder="Search" ng-keydown="ThreadListCtrl.keypressInAutocomplete($event)"/>
@@ -18,7 +18,7 @@
 
     </form>
 
-    <div class="thread-list autocomplete">
+    <div class="thread-list autocomplete" ng-class="{'populated': ThreadListCtrl.autocomplete.length > 0}">
       <a class="thread" ng-class="{active: contact == ThreadListCtrl.autocompleteSelection}" ng-repeat="contact in ThreadListCtrl.autocomplete"><div><div>
         <in-participant-bubble email="{{contact.email}}"></in-participant-bubble>
         <div class="participants">{{contact.name}}</div>
