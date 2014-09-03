@@ -177,19 +177,20 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
   });
 
   this.viewName = $routeParams['tag'];
-  this.autocomplete = [];
-  this.autocompleteSelection = null;
+  setAutocomplete([]);
 
   // internal methods
 
   function updateAutocomplete() {
     var contacts = $me.contacts();
     var term = $scope.search.toLowerCase();
+    var search = $threads.filters()['any_email'];
     var results = []
 
-    if ((term.length == 0) || (term == $threads.filters()['any_email'])) {
-      $scope.searchTypeahead = '';
-      self.autocomplete = [];
+    // don't show autocompletions if the field is empty, or if the
+    // field contents have already been applied to the $thread filters
+    if ((term.length == 0) || (search && (term.toLowerCase() == search.toLowerCase()))) {
+      setAutocomplete([]);
       return;
     }
 
@@ -200,21 +201,27 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
         break;
     }
 
-    self.autocomplete = results;
-    setAutocompleteSelection(results[0]);
+    setAutocomplete(results);
   }
 
   function updateTypeaheadWithSelection() {
     var contact = self.autocompleteSelection;
     var term = $scope.search.toLowerCase();
 
-    if (contact && (term == contact.email.toLowerCase().substr(0,term.length))) {
+    if (!contact || (term.length == 0)) {
+      $scope.searchTypeahead = '';
+    } else if (term == contact.email.toLowerCase().substr(0,term.length)) {
       $scope.searchTypeahead = $scope.search + contact.email.substr($scope.search.length);
-    } else if (contact && (term == contact.name.toLowerCase().substr(0,term.length))) {
+    } else if (term == contact.name.toLowerCase().substr(0,term.length)) {
       $scope.searchTypeahead = $scope.search + contact.name.substr($scope.search.length);
     } else {
       $scope.searchTypeahead = '';
     }
+  }
+
+  function setAutocomplete(items) {
+    self.autocomplete = items;
+    setAutocompleteSelection(items[0]);
   }
 
   function setAutocompleteSelection(item) {
@@ -269,8 +276,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     $threads.appendFilters(filters);
     $scope.search = search;
 
-    self.autocomplete = [];
-    setAutocompleteSelection(null);
+    setAutocomplete([]);
   }
 
   this.searchCleared = function() {
