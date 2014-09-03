@@ -45,7 +45,7 @@ img {
 
 <div class="centered">
 
-  <div class="message-subject">{{ThreadCtrl.thread.subject || "No Subject"}}</div>
+  <div class="message-subject">{{ThreadCtrl.thread ? (ThreadCtrl.thread.subject || "No Subject") : "&nbsp;"}}</div>
 
   <div class="message-list">
     <!-- Display messages -->
