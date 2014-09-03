@@ -136,8 +136,8 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
   // exposed methods
 
   this.downloadAttachment = function(msg, id) {
-    msg.attachment(id).download().then(function(response) {
-      saveAs(response.blob, response.filename);
+    msg.attachment(id).download().then(function(blob) {
+      saveAs(blob, blob.fileName);
     }, _handleAPIError);
   };
 
