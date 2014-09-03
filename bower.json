@@ -1,0 +1,26 @@
+{
+  "name": "baobab",
+  "version": "0.0.1",
+  "description": "Inbox Internal Web Client",
+  "main": "public/js/app.js",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23",
+    "angular-cookies": "~1.2.23",
+    "angular-sanitize": "~1.2.23",
+    "angular-route": "~1.2.23",
+    "bootstrap": "~3.2.0",
+    "jquery": "<2.0.0",
+    "angular-strap": "~2.0.5",
+    "font-awesome": "~4.2.0",
+    "underscore": "~1.7.0",
+    "moment": "~2.8.2"
+  }
+}

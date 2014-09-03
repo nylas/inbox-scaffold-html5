@@ -7,6 +7,7 @@ Baobab
 sudo apt-get install node npm gulp
 npm update
 npm run-script postinstall
+bower install
 ```
 
 ##Running Baobab

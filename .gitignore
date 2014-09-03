@@ -4,3 +4,5 @@
 /node_modules/
 public/js/angular-inbox.js
 npm-debug.log
+bower.json
+bower_components
