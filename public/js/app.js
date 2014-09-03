@@ -304,9 +304,11 @@ filter('pretty_size', function() {
 }).
 
 filter('participants', ['$me', function($me) {
-  return function(participants) {
+  return function(participants, preset) {
     var meParts = $me.emailAddress().split('@');
     var str = '';
+
+    preset = preset || 'short';
 
     _.each(participants, function(participant) {
       // If we are the participant, show "Me" instead of our name
@@ -324,22 +326,26 @@ filter('participants', ['$me', function($me) {
         name = participant.email;
         var parts = name.split('@');
 
-        // If the name contains the user's domain name, strip it out
-        // team@inboxapp.com => team
-        if (parts[1] == meParts[1])
-          name = parts[0];
+        if (preset == 'short') {
+          // If the name contains the user's domain name, strip it out
+          // team@inboxapp.com => team
+          if (parts[1] == meParts[1])
+            name = parts[0];
 
-        // If the participant is an automated responder, show the email domain
-        else if (_.contains(['support', 'no-reply', 'info'], parts[0]))
-          name = parts[1];
+          // If the participant is an automated responder, show the email domain
+          else if (_.contains(['support', 'no-reply', 'info'], parts[0]))
+            name = parts[1];
+        }
       }
 
-      // If the name contains parenthesis "Inbox Support (Ben Gotow)", trim it
-      // to the contents of the parenthesis
-      if (name.indexOf('(') > 0) {
-        var start = name.indexOf('(') + 1;
-        var end = name.indexOf(')');
-        name = name.substr(start, end-start);
+      if (preset == 'short') {
+        // If the name contains parenthesis "Inbox Support (Ben Gotow)", trim it
+        // to the contents of the parenthesis
+        if (name.indexOf('(') > 0) {
+          var start = name.indexOf('(') + 1;
+          var end = name.indexOf(')');
+          name = name.substr(start, end-start);
+        }
       }
 
       // Append the name to the output string

@@ -2,9 +2,13 @@
   <span class="sent" ng-show="msg.object != 'draft'" title="{{msg.date.toString()}}">{{msg.date | timestamp_ago}}</span>
   <span class="sent" ng-show="msg.object == 'draft'">DRAFT</span>
 
-  <span class="from" ng-repeat="from in msg.from" bs-tooltip data-trigger="hover" data-title="{{from.email}}">{{from.name}}</span>
+  <span class="from">{{msg.from | participants:'long'}}</span>
   <span class="to"> to </span>
-  <span class="to" ng-repeat="to in msg.to" bs-tooltip data-trigger="hover" data-title="{{to.email}}">{{to.name}}</span>
+  <span class="to">{{msg.to | participants:'long'}}</span>
+  <span class="cc" ng-show="msg.cc.length"> cc </span>
+  <span class="cc">{{msg.cc | participants:'long'}}</span>
+  <span class="bcc" ng-show="msg.bcc.length"> bcc </span>
+  <span class="bcc">{{msg.bcc | participants:'long'}}</span>
 </div>
 
 <iframe class="body" seamless="seamless" ng-model="msg.body" in-bind-iframe-contents></iframe>
