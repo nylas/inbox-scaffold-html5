@@ -31,7 +31,7 @@
   </head>
 
   <body>
-    <div ng-controller="AppCtrl as App" ng-switch="App.hasToken()" class="theme-{{App.theme}}">
+    <div ng-controller="AppCtrl as App" ng-switch="!!App.token()" class="theme-{{App.theme}}">
 
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
@@ -65,6 +65,7 @@
 
         <div id="content" ng-view></div>
 
+        <div id="debug-info">Token: {{App.token()}}<br>Namespace: {{App.namespace().id}}</div>
       </div>
     </div>
   </body>

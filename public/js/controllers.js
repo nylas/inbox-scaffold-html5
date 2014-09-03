@@ -32,10 +32,13 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookie
   this.loginHint = '';
 
   this.clearToken = $auth.clearToken;
-  this.hasToken = function() {
-    return !!$auth.token;
+  this.token = function() {
+    return $auth.token;
   }
-
+  this.namespace = function() {
+    return $me._namespace;
+  }
+  
   this.theme = $cookieStore.get('baobab_theme') || 'light';
   this.setTheme = function(theme) {
     self.theme = theme;
