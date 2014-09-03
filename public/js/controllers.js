@@ -107,7 +107,9 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
 
   function threadReady() {
     self.thread.messages().then(function(messages) {
-      self.messages = messages;
+      self.messages = messages.sort(function(a, b) {
+        return a.date.getTime() - b.date.getTime(); //oldest -> newest
+      });
 
       // scroll to the first unread message, or the last message
       // if the entire conversation is read.
@@ -132,7 +134,10 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
     }, _handleAPIError);
 
     self.thread.drafts().then(function(drafts) {
-      self.drafts = drafts;
+      self.drafts = drafts.sort(function(a, b) {
+        return a.date.getTime() - b.date.getTime(); // oldest-newest
+      });
+
     }, _handleAPIError);
   }
 
