@@ -556,29 +556,58 @@ a {
 
 /* Composer */
 
-.composer {
+.composer-zen {
   background: white;
-  height: 100%;
+  min-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.replying {
+  padding-bottom: 335px;
+}
+
+.composer-reply {
+  background: white;
+  border-top: 1px solid #ccc;
+  box-shadow: 0 -1px 10px #ccc;
+  left: 0;
+  max-width: initial;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  height: 335px;
+}
+
+.composer {
+  background-color: white;
+  padding: 15px 20px;
+  display: block;
+
+  label {
+    /* Undo the damage that bootstrap did */
+    font-weight: inherit;
+    font-size: inherit;
+    margin-bottom: 0;
+  }
 }
 
 .composer .composer-input {
   display: block;
   overflow: hidden;
   padding-top: 0.5em;
-  background-color: white;
+  background-color: inherit;
   border-bottom: 1px solid #ccc;
-  outline: none;
 
   input, textarea {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border: none;
-    font-family: Sans-serif;
-    font-size: Medium;
-    outline: none;
     margin: 0px;
-    padding: 0px;
     width: 100%;
     resize: none;
   }
@@ -587,11 +616,13 @@ a {
     display: block;
     color: #999;
     float: left;
-    padding-top: 2px;
+    margin-top: 2px; // from span.padding
+    padding-top: 1px; // from input.padding
+    padding-left: 3px;
   }
 
   span[for="to"] {
-    padding-left: 1.6em;
+    padding-left: 1.8em;
   }
 
   span {
@@ -602,9 +633,13 @@ a {
 
 .composer-footer {
   padding-top: 4px;
+  padding-bottom: 4px;
+  position: relative;
+  height: 1.5em; // Default line-height
 
   .discard-btn {
-    float: left;
+    position: absolute;
+    left: 0;
     a {
       color: #ccc;
       font-size: Small;
@@ -612,7 +647,8 @@ a {
   }
 
   .send-btn {
-    float: right;
+    position: absolute;
+    right: 0;
   }
 
   div {

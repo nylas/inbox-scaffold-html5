@@ -38,7 +38,7 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookie
   this.namespace = function() {
     return $me._namespace;
   }
-  
+
   this.theme = $cookieStore.get('baobab_theme') || 'light';
   this.setTheme = function(theme) {
     self.theme = theme;
@@ -54,41 +54,48 @@ controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookie
 controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
   var self = this;
 
-  if (!_.isObject($scope.draft)) {
-    // Create a new draft if the outer context didn't provide one
-    newDraft();
-  }
+  self.reply = false;
+  clearDraft();
 
-  function newDraft() {
+  function clearDraft() {
+    $scope.$emit("compose-cleared");
     $me.namespacePromise.then(function ($namespace) {
-      var $draftscope = $scope;
-      while ($draftscope.$parent && !$draftscope.draft) {
-        $draftscope = $draftscope.$parent;
-      }
-      if (!$draftscope.$parent) {
-        $draftscope = $scope;
-      }
-      $draftscope.draft = $namespace.draft();
+      self.reply = false;
+      self.draft = $namespace.draft();
     });
   }
 
   this.discardClicked = function () {
-    $scope.draft.dispose().then(newDraft);
+    self.draft.dispose().then(function () {
+      $scope.$emit("compose-discard");
+      clearDraft();
+    });
   };
 
   this.sendClicked = function () {
-    $scope.draft.save().then(function () {
-      $scope.draft.send().then(newDraft);
+    self.draft.save().then(function () {
+      $scope.$emit("compose-saved");
+      self.draft.send().then(function () {
+        $scope.$emit("compose-sent");
+        clearDraft();
+      });
     });
   };
+
+  $scope.$on("compose-set-draft", function (event, draft) {
+    self.draft = draft;
+    self.reply = _.isString(draft.thread);
+    $scope.$emit("compose-replying");
+  })
 }]).
 
-controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespace, $threads, $modal, $routeParams, $location, $scrollState) {
+controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', '$scrollState', '$me', function($scope, $namespace, $threads, $modal, $routeParams, $location, $scrollState, $me) {
   var self = this;
 
   this.thread = $threads.item($routeParams['id']);
   this.messages = null;
   this.drafts = null;
+  $scope.replying = false;
 
   this.currentAttachment = null;
   this.currentAttachmentDataURL = null;
@@ -174,7 +181,20 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
   }
 
   this.replyClicked = function() {
-    self.launchDraftModal(thread.reply());
+    if (!$scope.replying) {
+      var draft = self.draft = self.thread.reply();
+      var me = $me.emailAddress();
+      var participants = _.reject(self.thread.participants, function (p) {
+        return p.email == me;
+      });
+      if (_.isEmpty(participants)) {
+        participants = self.thread.participants; // Self-emails are people too
+      }
+      draft.addRecipients(participants);
+      $scope.$broadcast("compose-set-draft", draft);
+    } else if (_.isEmpty(self.draft.body)) { // We know self.draft is set by now
+      $scope.replying = false;
+    }
   }
 
   this.archiveClicked = function() {
@@ -183,6 +203,14 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
       $location.path('/inbox');
     }, _handleAPIError);
   }
+
+  $scope.$on("compose-replying", function (event) {
+    $scope.replying = true;
+  });
+
+  $scope.$on("compose-cleared", function (event) {
+    $scope.replying = false;
+  })
 
 }]).
 

@@ -20,7 +20,7 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
     }
   });
   $routeProvider.when('/mail/compose', {
-    templateUrl: '/partials/compose.html',
+    templateUrl: '/partials/compose-zen.html',
   });
   $routeProvider.when('/:tag', {
     templateUrl: '/partials/thread_list.html',
@@ -88,7 +88,7 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
 
 service('$scrollState', ['$rootScope', function($rootScope) {
   var self = this;
-  
+
   self._scrollID = null;
 
   this.scrollTo = function(id) {

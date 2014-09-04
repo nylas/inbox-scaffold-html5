@@ -1,6 +1,6 @@
 
 <div class="pull-right" style="margin-right:15px; margin-top:15px;">
-  <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked()"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+  <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked();"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
   <a class="btn btn-default" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
 </div>
 
@@ -43,27 +43,28 @@ img {
 </style>
 </script>
 
-<div class="centered">
+<div ng-class="{replying: replying}">
 
   <div class="message-subject">{{ThreadCtrl.thread ? (ThreadCtrl.thread.subject || "No Subject") : "&nbsp;"}}</div>
 
-  <div class="message-list">
+  <div class="message-list centered">
     <!-- Display messages -->
     <div id="msg-{{msg.id}}" class="message" ng-class="{'unread': msg.unread}" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
 
     <!-- Display drafts -->
     <div id="msg-{{msg.id}}" class="message draft" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts"></div>
+
   </div>
 
   <!-- Empty State -->
-  <div class="panel-body" ng-show="ThreadCtrl.drafts && ThreadCtrl.messages && ThreadCtrl.drafts.length + ThreadCtrl.messages.length == 0">
+  <div class="panel-body centered" ng-show="ThreadCtrl.drafts && ThreadCtrl.messages && ThreadCtrl.drafts.length + ThreadCtrl.messages.length == 0">
     <p>
       This thread does not contain any messages.
     </p>
   </div>
 
   <!-- Loading State -->
-  <div ng-show="!ThreadCtrl.messages" class="loading-indicator">
+  <div ng-show="!ThreadCtrl.messages" class="loading-indicator centered">
     <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
   </div>
 
@@ -79,5 +80,8 @@ img {
       </div>
     </div>
   </div>
+
+  <!-- Compose State -->
+  <div class="composer-reply" ng-include="'/partials/compose.html'" ng-show="replying"></div>
 
 </div>

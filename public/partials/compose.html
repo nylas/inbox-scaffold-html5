@@ -1,11 +1,12 @@
-<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
-  <form class="centered beneath-search" ng-show="draft">
-    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" in-participants ng-model="draft.to"/></span></div>
-    <div class="composer-input composer-subject"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="draft.subject"/></span></div>
-    <div class="composer-input composer-body"><span><textarea name="body" class="compose-body" rows=10 placeholder="Write a message…" ng-model="draft.body"></textarea></span></div>
+<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer centered" ng-class="{ 'composer-zen': zen, 'beneath-search': zen }">
+  <form ng-show="Compose.draft">
+    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" in-participants ng-model="Compose.draft.to"/></span></div>
+    <div class="composer-input composer-subject" ng-hide="Compose.reply"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="Compose.draft.subject"/></span></div>
+    <div class="composer-input composer-body"><span><textarea name="body" class="compose-body" rows=10 placeholder="Write a message…" ng-model="Compose.draft.body"></textarea></span></div>
     <div class="composer-footer">
       <div class="discard-btn"><a ng-click="Compose.discardClicked()">Discard</a></div>
       <div class="send-btn"><a ng-click="Compose.sendClicked()">Send</a></div>
     </div>
   </form>
+  <div ng-show="!Compose.draft">Loading...</div>
 </div>
