@@ -556,7 +556,7 @@ a {
 
 /* Composer */
 
-.composer-zen {
+.composer-zen { /* Full screen */
   background: white;
   min-height: 100%;
   position: absolute;
@@ -570,8 +570,8 @@ a {
   padding-bottom: 335px;
 }
 
-.composer-reply {
-  background: white;
+.composer-reply { /* Slide-up reply */
+  background-color: white;
   border-top: 1px solid #ccc;
   box-shadow: 0 -1px 10px #ccc;
   left: 0;
@@ -580,6 +580,21 @@ a {
   right: 0;
   bottom: 0;
   height: 335px;
+  overflow: hidden;
+  .transition(height 250ms ease-out);
+
+  &.ng-hide-add {
+    height: 335px;
+  }
+  &.ng-hide-add-active {
+    height: 0;
+  }
+  &.ng-hide-remove {
+    height: 0;
+  }
+  &.ng-hide-remove-active {
+    height: 335px;
+  }
 }
 
 .composer {
