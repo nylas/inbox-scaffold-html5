@@ -574,7 +574,7 @@ a {
   background-color: white;
   border-top: 1px solid #ccc;
   box-shadow: 0 -1px 10px #ccc;
-  left: 0;
+  left: 76px; // For the sidebar
   max-width: initial;
   position: fixed;
   right: 0;
@@ -601,6 +601,7 @@ a {
   background-color: white;
   padding: 15px 20px;
   display: block;
+  outline: none;
 
   label {
     /* Undo the damage that bootstrap did */
@@ -625,6 +626,7 @@ a {
     margin: 0px;
     width: 100%;
     resize: none;
+    outline-color: #ccc;
   }
 
   label[for="to"] {
