@@ -515,52 +515,7 @@ directive('inParticipants', function() {
       ngModel.$parsers.push(parse);
     }
   };
-}).
-
-directive('inSummerNote', function() {
-  return {
-    require: '?ngModel',
-    link: function(scope, element, attr, ngModel) {
-      element = $(element);
-      element.summernote({
-        codemirror: {
-          theme: 'monokai'
-        },
-        height: attr.height || 300,
-        onpaste: listener,
-        onChange: listener,
-        onToolbarClick: listener,
-        toolbar: [
-          ['style', ['bold', 'italic', 'underline']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['fontsize', ['fontsize']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['extra', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
-        ]
-      });
-
-      setTimeout(function() {
-        element.code(ngModel.$viewValue);
-      }, 0);
-
-      function listener() {
-        var contents = element.code();
-        if (ngModel && contents !== ngModel.$viewValue) {
-          ngModel.$setViewValue(contents);
-          scope.$apply();
-        }
-      }
-
-      function destroy() {
-        element.destroy();
-      }
-
-      scope.$on('$destroy', destroy);
-    }
-  };
 });
-
 
 /* Helpers */
 angular.scope = function (selector) {
