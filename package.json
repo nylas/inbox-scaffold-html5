@@ -26,5 +26,16 @@
     "less": "^1.7.4",
     "logfmt": "^1.1.2",
     "request": "^2.40.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.7.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-jscs": "^1.1.0",
+    "gulp-jshint": "^1.6.2",
+    "gulp-connect": "^2.0.5",
+    "gulp-coffeelint": "^0.4.0",
+    "karma": "^0.12.16",
+    "karma-jasmine": "^0.1.5",
+    "jshint-stylish": "^0.2.0"
   }
 }

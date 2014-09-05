@@ -1,0 +1,13 @@
+{
+  "indent": 2,
+  "node": true,
+  "undef": true,
+  "expr": true,
+  "browser": true,
+  "eqnull": true,
+  "strict": false,
+  "sub": true,
+  "globals": {
+
+  }
+}

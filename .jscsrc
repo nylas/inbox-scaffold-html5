@@ -1,0 +1,30 @@
+{
+  "preset": "google",
+  "maximumLineLength": {
+    "value": 100,
+    "allowComments": true,
+    "allowRegex": true
+  },
+  "disallowSpacesInsideObjectBrackets": null,
+  "disallowSpacesInsideArrayBrackets": null,
+  "disallowMultipleLineBreaks": null,
+  "requireCurlyBraces": [
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireSpaceAfterKeywords": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "return",
+    "try"
+  ],
+  "validateJSDoc": null
+}
