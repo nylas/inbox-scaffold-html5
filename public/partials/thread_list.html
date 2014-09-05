@@ -2,7 +2,7 @@
   <div class="centered">
     <form role="search" ng-submit="ThreadListCtrl.searchClicked()">
       <div class="compose-container" ng-show="!searchFocused">
-        <a class="btn" style="display:block;" ng-click="ThreadListCtrl.composeClicked()"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a>
+        <a class="btn" style="display:block;" hotkey="b" href="#/mail/compose"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a>
       </div>
 
       <div class="input-inset-container" ng-show="searchFocused">

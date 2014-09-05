@@ -187,10 +187,6 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
     saveAs(self.currentAttachment, self.currentAttachment.fileName);
   };
 
-  this.composeClicked = function() {
-    console.log("Clicked.");
-  }
-
   this.replyClicked = function() {
     if (!$scope.replying) {
       var draft = self.draft = self.thread.reply();
@@ -313,10 +309,6 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
     var filters = $threads.filters();
     delete filters['any_email'];
     return filters;
-  }
-
-  this.composeClicked = function() {
-    console.log('Click!');
   }
 
   this.threadClicked = function(thread) {
