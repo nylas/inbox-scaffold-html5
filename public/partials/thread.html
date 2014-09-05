@@ -1,5 +1,5 @@
 
-<div style="position: absolute; right: 15px; top: 15px;">
+<div style="position: fixed; right: 15px; top: 15px;">
   <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked();"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
   <a class="btn btn-default" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
 </div>
@@ -43,7 +43,7 @@ img {
 </style>
 </script>
 
-<div ng-class="{replying: replying}">
+<div class="thread-container" ng-class="{replying: replying}">
 
   <div class="message-subject">{{ThreadCtrl.thread ? (ThreadCtrl.thread.subject || "No Subject") : "&nbsp;"}}</div>
 

@@ -569,6 +569,13 @@ a {
 
 /* Composer */
 
+.thread-container {
+  .transition(padding-bottom 250ms ease-out);
+  &.replying {
+    padding-bottom: 335px;
+  }
+}
+
 .composer-zen { /* Full screen */
   background: white;
   min-height: 100%;
@@ -577,10 +584,6 @@ a {
   bottom: 0;
   right: 0;
   left: 0;
-}
-
-.replying {
-  padding-bottom: 335px;
 }
 
 .composer-reply { /* Slide-up reply */
