@@ -62,6 +62,7 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
     $me.namespacePromise.then(function ($namespace) {
       self.reply = false;
       self.draft = $namespace.draft();
+      $scope.$emit("compose-active");
     });
   }
 
@@ -86,6 +87,7 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
     self.draft = draft;
     self.reply = _.isString(draft.thread);
     $scope.$emit("compose-replying");
+    $scope.$emit("compose-active");
   })
 }]).
 

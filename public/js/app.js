@@ -515,7 +515,22 @@ directive('inParticipants', function() {
       ngModel.$parsers.push(parse);
     }
   };
-});
+
+}).
+
+directive('autofocus', ['$timeout', function ($timeout) {
+  return function(scope, elem, attr) {
+    scope.$on(attr.autofocus, function(e) {
+      var focusable = $(elem).find("input, textarea");
+      var targets = focusable.filter(function (i, input) {
+        var model = angular.element(input).attr("ng-model");
+        return _.isEmpty(scope.$eval(model));
+      });
+      var target = _.isEmpty(targets) ? focusable.last() : targets.first();
+      $timeout(_.bind(target.focus, target), 0);
+    });
+  }
+}]);
 
 /* Helpers */
 angular.scope = function (selector) {
