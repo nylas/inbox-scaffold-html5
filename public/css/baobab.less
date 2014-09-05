@@ -175,6 +175,9 @@ a {
 
   &.draft {
     background-color:#FFF5DA;
+    &.editing {
+      .box-shadow(0 0 8px #7799FF);
+    }
   }
   .inset {
     width:640px;
@@ -238,7 +241,7 @@ a {
     padding-left:15px;
     box-sizing:border-box;
     z-index: 3;
-    
+
     &.ng-hide-remove {
       opacity: 0;
       -webkit-transition: opacity 250ms ease-out;
@@ -684,6 +687,17 @@ a {
       text-decoration: none;
     }
   }
+}
+
+.composer .leave-btn {
+  position: absolute;
+  a { text-decoration: none; }
+  right: 10px;
+  top: 10px;
+}
+
+.composer-zen .leave-btn {
+  display: none;
 }
 
 /* Loading Indicator */

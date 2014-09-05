@@ -83,6 +83,14 @@ controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
     });
   };
 
+  this.leaveClicked = function () {
+    self.draft.save().then(function() {
+      $scope.$emit("compose-saved");
+      $scope.$emit("compose-cleared");
+      self.draft = null;
+    });
+  }
+
   $scope.$on("compose-set-draft", function (event, draft) {
     self.draft = draft;
     self.reply = _.isString(draft.thread);
@@ -200,6 +208,11 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
     }
   }
 
+  this.draftClicked = function (msg) {
+    self.draft = msg;
+    $scope.$broadcast("compose-set-draft", msg);
+  }
+
   this.archiveClicked = function() {
     self.thread.removeTags(['inbox']).then(function(response) {
       $threads.itemArchived(self.thread.id);
@@ -212,6 +225,7 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
   });
 
   $scope.$on("compose-cleared", function (event) {
+    self.draft = null;
     $scope.replying = false;
   })
 
