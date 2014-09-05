@@ -518,6 +518,112 @@ directive('inParticipants', function() {
 
 }).
 
+directive('hotkey', ["$rootScope", "$parse", "$location", function ($rootScope, $parse, $location) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      $rootScope.keybindings = $rootScope.keybindings || {};
+      var action = undefined;
+      if (attrs['ngClick']) {
+        action = _.bind($parse(attrs['ngClick']), this, scope, {});
+      } else if (element.is("a") && !!attrs["href"]) {
+        action = function () {
+          $location.path(attrs["href"].replace(/^#/, ""));
+          scope.$apply();
+          console.log(attrs["href"]);
+        }
+      } else {
+        return;
+      }
+
+      var mapping = {
+        "enter": 13,
+      };
+      var key = mapping[attrs['hotkey']] || attrs['hotkey'].charCodeAt(0);
+
+      $rootScope.keybindings[key & ~(64 | 32)] = action;
+
+      var timeout = undefined;
+      var hint = $("<div class='hotkey-overlay'></div>");
+
+      function showHint() {
+        hint.width(element.outerWidth())
+          .height(element.outerHeight())
+          .css("top", element.position().top)
+          .css("left", element.position().left)
+          .css("position", "absolute")
+          .text(attrs['hotkey'])
+          ;
+        hint.insertAfter(element);
+      }
+
+      function hideHint() {
+        hint.remove();
+      }
+
+      function clearHint() {
+        if (timeout) {
+          window.clearTimeout(timeout);
+        }
+        hideHint();
+      }
+
+      scope.$on("meta-down", function () {
+        timeout = window.setTimeout(showHint, 500);
+      });
+
+      scope.$on("meta-up", clearHint);
+      scope.$on("meta-used", clearHint);
+
+      scope.$on("$destroy", function () {
+        delete hint;
+        if ($rootScope.keybindings[key & ~(64 | 32)] == action) {
+          $rootScope.keybindings[key & ~(64 | 32)] = undefined;
+        }
+      })
+    },
+  }
+}]).
+
+directive('bindKeys', ["$rootScope", function ($rootScope) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      var meta = false;
+
+      var isMeta = function(event) {
+        return event.ctrlKey;
+      }
+
+      element.bind('keyup', function(event) {
+        if (isMeta(event) || !meta) { return true; }
+        meta = false;
+        $rootScope.$broadcast("meta-up");
+        return true;
+      });
+
+      element.bind('keydown', function(event) {
+        if (!isMeta(event) || meta) { return true; }
+        meta = true;
+        $rootScope.$broadcast("meta-down");
+        return true;
+      });
+
+      element.bind('keypress', function(event) {
+        if (!isMeta(event)) { return true; }
+        var action = $rootScope.keybindings[event.which];
+        if (action) {
+          event.preventDefault();
+          $rootScope.$broadcast("meta-used");
+          action();
+          return false;
+        }
+        return true;
+      });
+    }
+  }
+}]).
+
 directive('autofocus', ['$timeout', function ($timeout) {
   return function(scope, elem, attr) {
     scope.$on(attr.autofocus, function(e) {

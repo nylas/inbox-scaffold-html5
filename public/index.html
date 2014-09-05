@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="/css/baobab.less">
   </head>
 
-  <body>
+  <body bind-keys>
     <div style="position:absolute; height:0; overflow:hidden;">
       <embed src="/sound/key-new-05.mp3" autostart="false" width="0" height="0" id="key-new-00" enablejavascript="true">
       <embed src="/sound/key-new-01.mp3" autostart="false" width="0" height="0" id="key-new-01" enablejavascript="true">
@@ -62,8 +62,8 @@
       <div ng-switch-when="true">
         <div id="content-sidebar">
           <ul>
-            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox"><img src="/img/tab_inbox@2x.png" /> Inbox</a></li>
-            <li class="{{App.cssForTab('compose')}}"><a href="#/mail/compose"><img src="/img/tab_compose@2x.png" /> Compose</a></li>
+            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox" hotkey="i"><img src="/img/tab_inbox@2x.png" /> Inbox</a></li>
+            <li class="{{App.cssForTab('compose')}}"><a href="#/mail/compose" hotkey="b"><img src="/img/tab_compose@2x.png" /> Compose</a></li>
             <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts"><img src="/img/tab_drafts@2x.png" /> Drafts</a></li>
             <li class="{{App.cssForTab('sent')}}"><a href="#/sent"><img src="/img/tab_sent@2x.png" /> Sent</a></li>
             <li class="{{App.cssForTab('archive')}}"><a href="#/archive"><img src="/img/tab_archive@2x.png" /> Archive</a></li>

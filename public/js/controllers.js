@@ -101,7 +101,7 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
 
   this.currentAttachment = null;
   this.currentAttachmentDataURL = null;
-  
+
   // internal methods
 
   if (this.thread) {
@@ -174,12 +174,13 @@ controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeP
   this.hideAttachment = function() {
     self.currentAttachmentDataURL = null;
   }
- 
+
   this.downloadCurrentAttachment = function() {
     saveAs(self.currentAttachment, self.currentAttachment.fileName);
   };
 
   this.composeClicked = function() {
+    console.log("Clicked.");
   }
 
   this.replyClicked = function() {
@@ -301,6 +302,7 @@ controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location'
   }
 
   this.composeClicked = function() {
+    console.log('Click!');
   }
 
   this.threadClicked = function(thread) {
