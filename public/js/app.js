@@ -626,14 +626,32 @@ directive('bindKeys', ["$rootScope", function ($rootScope) {
 
 directive('autofocus', ['$timeout', function ($timeout) {
   return function(scope, elem, attr) {
-    scope.$on(attr.autofocus, function(e) {
+
+    var findTargetWithin = function(elem) {
       var focusable = $(elem).find("input, textarea");
       var targets = focusable.filter(function (i, input) {
         var model = angular.element(input).attr("ng-model");
         return _.isEmpty(scope.$eval(model));
       });
-      var target = _.isEmpty(targets) ? focusable.last() : targets.first();
-      $timeout(_.bind(target.focus, target), 0);
+      return _.isEmpty(targets) ? focusable.last() : targets.first();
+    };
+
+    var performFocus = function(target) {
+      var animatingParent = target.closest('.ng-animate');
+      if (animatingParent.length) {
+        animatingParent.on('transitionend webkitTransitionEnd', function() {
+          $timeout(_.bind(target.focus, target),1);
+        });
+      } else {
+        $timeout(_.bind(target.focus, target),1);
+      }
+    }
+
+    scope.$on(attr.autofocus, function(e) {
+      $timeout(function() {
+        var target = findTargetWithin(elem);
+        performFocus(target);
+      });
     });
   }
 }]).
