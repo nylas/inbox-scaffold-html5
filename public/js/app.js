@@ -58,6 +58,7 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
     return (self._namespace) ? self._namespace.emailAddress : null;
   }
 
+
   if ($auth.token) {
     $inbox.withCredentials(true);
     $inbox.setRequestHeader('Authorization', 'Basic '+btoa($auth.token+':'));
@@ -82,6 +83,8 @@ service('$me', ['$inbox', '$auth', function($inbox, $auth) {
       if (confirm("/n/ returned no namespaces. Click OK to be logged out, or Cancel if you think this is a temporary issue."))
           $auth.clearToken();
     });
+  } else {
+    self.namespacePromise = Promise.reject("No auth token");
   }
 
 }]).
