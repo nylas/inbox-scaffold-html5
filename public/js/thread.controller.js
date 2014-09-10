@@ -40,7 +40,8 @@ BaobabControllers
           break;
         }
       }
-      $scrollState.scrollTo('msg-' + scrollTo.id);
+      if (scrollTo != undefined)
+        $scrollState.scrollTo('msg-' + scrollTo.id);
 
       // mark the thread as read
       if (self.thread.hasTag('unread')) {
