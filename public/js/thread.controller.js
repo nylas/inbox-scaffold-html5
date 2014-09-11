@@ -85,6 +85,7 @@ BaobabControllers
 
   this.hideAttachment = function() {
     self.currentAttachmentDataURL = null;
+    self.currentAttachment = null;
   };
 
   this.downloadCurrentAttachment = function() {
