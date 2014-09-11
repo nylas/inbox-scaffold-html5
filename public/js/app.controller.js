@@ -6,7 +6,7 @@ BaobabControllers
   var self = this;
   window.AppCtrl = this;
 
-  this.inboxAuthURL = $sce.trustAsResourceUrl('https://beta.inboxapp.com/oauth/authorize');
+  this.inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize');
   this.inboxClientID = $inbox.appId();
   this.inboxRedirectURL = window.location.protocol + "//" + window.location.host + "/";
   this.loginHint = '';
