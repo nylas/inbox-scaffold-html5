@@ -52,7 +52,7 @@ define(["angular", "underscore", "moment"], function (angular, _, moment) {
           return;
 
         // If no name is provided, use the email address
-        if ((name === false) || (name.length === 0)) {
+        if (_.isEmpty(name)) {
           name = participant.email;
           var parts = name.split('@');
 
