@@ -10,30 +10,23 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/angular/angular.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/angular-sanitize/angular-sanitize.min.js',
-      'bower_components/angular-cookies/angular-cookies.min.js',
-      'bower_components/angular-route/angular-route.min.js',
-      'bower_components/angular-animate/angular-animate.min.js',
-      'bower_components/angular-strap/dist/angular-strap.min.js',
       'node_modules/mock-promises/lib/mock-promises.js',
-      'public/js/minievents.js',
-      'public/js/infinite-scroll.js',
-      'public/js/angular-inbox.js',
-      'public/js/app.js',
-      'public/js/controllers.js',
-      'test/**/*.coffee',
+      { pattern: 'bower_components/**/*.js', included: false },
+      { pattern: 'public/js/*.js', included: false },
+      { pattern: 'public/js/*.coffee', included: false },
+      { pattern: 'test/**/*spec.coffee', included: false },
+      'test/test-main.coffee',
     ],
 
 
     // list of files to exclude
     exclude: [
+      'public/js/main.js',
     ],
 
 

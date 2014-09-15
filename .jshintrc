@@ -8,6 +8,6 @@
   "strict": false,
   "sub": true,
   "globals": {
-
-  }
+  },
+  "predef": ["define", "$", "alert"]
 }

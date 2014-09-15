@@ -1,49 +1,97 @@
 "use strict";
-var angular, alert; //globals
 
-var Baobab = angular.module('baobab', [
-  'inbox',
-  'ngSanitize',
-  'ngCookies',
-  'ngRoute',
-  'ngAnimate',
-  'mgcrea.ngStrap.modal',
-  'mgcrea.ngStrap.tooltip',
-  'mgcrea.ngStrap.popover',
-  'infinite-scroll',
-  'baobab.controllers'
-]).
+define([
+  'angular',
+  'angular-inbox',
+  'angularRoute',
+  'angularSanitize',
+  'angularCookies',
+  'angularAnimate',
+  'angularStrap',
+  'angularInfiniteScroll',
+  'baobab.controller.app',
+  'baobab.controller.threadList',
+  'baobab.controller.thread',
+  'baobab.controller.compose',
+  'baobab.service.me',
+  'baobab.service.scrollstate',
+  'baobab.service.auth',
+  'baobab.service.threads',
+  'baobab.directive.inParticipants',
+  'baobab.directive.inParticipantBubble',
+  'baobab.directive.inBindIframeContents',
+  'baobab.directive.hotkeys',
+  'baobab.directive.autofocus',
+  'baobab.directive.typewriter',
+  'baobab.filter',
+], function (angular) {
+  // Controllers
+  angular.module('baobab.controllers', [
+    'baobab.controller.threadlist',
+    'baobab.controller.thread',
+    'baobab.controller.app',
+    'baobab.controller.compose'
+  ]);
 
-config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-  $routeProvider.when('/thread/:id', {
+  angular.module('baobab.services', [
+    'baobab.service.me',
+    'baobab.service.scrollstate',
+    'baobab.service.auth',
+    'baobab.service.threads',
+  ]);
+
+  angular.module('baobab.directives', [
+    'baobab.directive.inParticipants',
+    'baobab.directive.inBindIframeContents',
+    'baobab.directive.inParticipantBubble',
+    'baobab.directive.hotkeys',
+    'baobab.directive.autofocus',
+    'baobab.directive.typewriter',
+  ]);
+
+  return angular.module('baobab', [
+    'inbox',
+    'ngSanitize',
+    'ngCookies',
+    'ngRoute',
+    'ngAnimate',
+    'mgcrea.ngStrap.modal',
+    'mgcrea.ngStrap.tooltip',
+    'mgcrea.ngStrap.popover',
+    'infinite-scroll',
+    'baobab.controllers',
+    'baobab.filter',
+    'baobab.services',
+    'baobab.directives',
+  ])
+
+  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $routeProvider.when('/thread/:id', {
     templateUrl: '/partials/thread.html',
     controller: 'ThreadCtrl as ThreadCtrl',
     resolve: {
-      "$namespace": function($me) { return $me.namespacePromise; },
+    "$namespace": function($me) { return $me.namespacePromise; },
     }
-  });
-  $routeProvider.when('/mail/compose', {
+    });
+    $routeProvider.when('/mail/compose', {
     templateUrl: '/partials/compose-zen.html',
-  });
-  $routeProvider.when('/:tag', {
+    });
+    $routeProvider.when('/:tag', {
     templateUrl: '/partials/thread_list.html',
     controller: 'ThreadListCtrl as ThreadListCtrl'
-  });
-  $routeProvider.otherwise({redirectTo: '/inbox'});
-}]).
+    });
+    $routeProvider.otherwise({redirectTo: '/inbox'});
+  }])
 
-config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
-  $inboxProvider.
+  .config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
+    $inboxProvider.
     baseUrl('https://api.inboxapp.com').
     appId('xdfim6g4mbduytzjhn8ud490');
 
-  $sceDelegateProvider.resourceUrlWhitelist([
+    $sceDelegateProvider.resourceUrlWhitelist([
       'self', $inboxProvider.baseUrl() + "/**"]);
-}]);
-
-// Controllers
-
-var BaobabControllers = angular.module('baobab.controllers', ['inbox', 'ngSanitize', 'ngCookies']);
+  }]);
+});
 
 /* Helpers */
 var _scope = function (selector) {
