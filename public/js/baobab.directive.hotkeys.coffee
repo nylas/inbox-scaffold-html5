@@ -52,7 +52,7 @@ define ["angular"], (angular) ->
           return
 
         mapping =
-          "enter": 13,
+          "enter": 13
         key = mapping[attrs['hotkey']] || attrs['hotkey'].charCodeAt(0)
 
         $rootScope.keybindings[key & ~(64 | 32)] = action
@@ -61,15 +61,20 @@ define ["angular"], (angular) ->
         hint = $("<div class='hotkey-overlay'></div>")
 
         showHint = ->
-          hint.width(element.outerWidth())
-            .height(element.outerHeight())
-            .css("top", element.position().top)
-            .css("left", element.position().left)
+          el = element
+          hint
+            .css("top", el.position().top)
+            .css("left", el.position().left)
             .css("position", "absolute")
+            .width(el.outerWidth())
+            .height(el.outerHeight())
+            .css("line-height", el.outerHeight()+"px")
             .text(attrs['hotkey'])
           hint.insertAfter(element)
+          element.css('opacity', 0.2)
 
         hideHint = ->
+          element.css('opacity', '')
           hint.remove()
 
         clearHint = ->

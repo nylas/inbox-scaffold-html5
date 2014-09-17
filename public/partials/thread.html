@@ -1,7 +1,7 @@
 
 <div style="position: fixed; right: 15px; top: 15px;">
-  <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked();"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
-  <a class="btn btn-default" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
+  <a class="btn btn-default" hotkey="r" ng-click="ThreadCtrl.replyClicked();"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+  <a class="btn btn-default" hotkey="x" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
 </div>
 
 <script type="text/css" id="iframe-css">

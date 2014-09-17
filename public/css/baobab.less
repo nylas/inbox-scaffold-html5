@@ -20,10 +20,11 @@ a {
 .hotkey-overlay {
   z-index: 2;
   text-align: center;
-  font-size: 200%;
+  font-size: 20px;
   font-weight: bold;
   vertical-align: middle;
-  text-shadow: 0px 0px 8px yellow !important;
+  border:2px dotted rgba(100,100,100,0.5);
+  text-transform: uppercase;
 }
 
 .list-group-item:hover {
@@ -97,8 +98,6 @@ a {
     list-style-type:none;
     text-align:center;
     font-size:13px;
-    padding-top:10px;
-    padding-bottom:25px;
     color:white;
 
     img {
@@ -110,9 +109,12 @@ a {
     }
 
     a {
+      padding-top:10px;
       text-decoration: none;
       opacity: 0.3;
       color:white;
+      margin-bottom:25px;
+      display:block;
     }
 
     &.active,
