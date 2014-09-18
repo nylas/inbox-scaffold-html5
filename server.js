@@ -41,8 +41,12 @@ app.get("/avatar/:email", function(req, res) {
   var getNext = function() {
     var url = urls.pop();
     if (url == undefined) {
-      res.setHeader('Content-Type', 'image/gif');
-      return res.end(new Buffer("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64"));
+      if (req.query['fail'] == '404') {
+        return res.status(404).end();
+      } else {
+        res.setHeader('Content-Type', 'image/gif');
+        return res.end(new Buffer("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64"));
+      }
     }
     request({url: url, encoding: null}, function (error, response, body) {
       if (error || (response.headers['content-type'].indexOf('image') == -1) || (response.statusCode != 200))
