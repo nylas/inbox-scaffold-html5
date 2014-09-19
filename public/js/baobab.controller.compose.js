@@ -8,11 +8,38 @@ define(["angular", "underscore"], function(angular, _) {
     self.reply = false;
     clearDraft();
 
+    this.completionOptions = {
+      complete: function(search) {
+        if (_.isEmpty(search)) {
+          return [];
+        }
+        return $me.contacts().filter(function (contact) {
+          return (
+            contact.email.toLowerCase().indexOf(search.toLowerCase()) === 0 ||
+            !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) === 0
+          );
+        });
+      },
+      parse: function(text) {
+        var candidates = $me.contacts().filter(function (contact) {
+          return contact.email.toLowerCase() == text.toLowerCase();
+        });
+        if (candidates.length == 1) {
+          return candidates[0];
+        } else {
+          return {
+            email: text
+          };
+        }
+      }
+    }
+
     function clearDraft() {
       $scope.$emit("compose-cleared");
       $me.namespacePromise.then(function ($namespace) {
         self.reply = false;
         self.draft = $namespace.draft();
+        self.draft.to = []; // Gross
         $scope.$emit("compose-active");
       });
     }

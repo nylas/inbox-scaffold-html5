@@ -655,16 +655,39 @@ a {
     margin-top: 2px; // from span.padding
     padding-top: 1px; // from input.padding
     padding-left: 3px;
+    padding-right: 2px;
   }
 
-  span[for="to"] {
-    padding-left: 1.8em;
+  .autocomplete span {
+    padding: 0px;
+    padding-left: 1px;
+    padding-right: 1px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
   }
 
   span {
     padding: 2px;
     display: block;
   }
+
+  span.tag {
+    padding-left: 3px;
+    padding-right: 3px;
+    background: #eee;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+}
+
+.composer .thread-list { // Autocomplete
+  position: absolute;
+  width: 100%;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  border-top: none;
 }
 
 .composer-footer {

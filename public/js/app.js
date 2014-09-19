@@ -23,6 +23,7 @@ define([
   'baobab.directive.hotkeys',
   'baobab.directive.autofocus',
   'baobab.directive.typewriter',
+  'baobab.directive.autocomplete',
   'baobab.filter',
 ], function (angular) {
   // Controllers
@@ -47,6 +48,7 @@ define([
     'baobab.directive.hotkeys',
     'baobab.directive.autofocus',
     'baobab.directive.typewriter',
+    'baobab.directive.autocomplete',
   ]);
 
   return angular.module('baobab', [

@@ -3,7 +3,9 @@ var _handleAPIError; //globals
 
 define(["angular", "underscore"], function(angular, _) {
   angular.module("baobab.controller.threadlist", [])
-  .controller('ThreadListCtrl', ['$scope', '$me', '$threads', '$modal', '$location', '$routeParams', function($scope, $me, $threads, $modal, $location, $routeParams) {
+  .controller('ThreadListCtrl', [
+    '$scope', '$me', '$threads', '$location', '$routeParams',
+    function($scope, $me, $threads, $location, $routeParams) {
     var self = this;
 
     $scope.search = $threads.filters()['any_email'] || '';
