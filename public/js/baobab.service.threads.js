@@ -15,10 +15,11 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
     self._listIsCompleteSet = false;
     self._filters = {};
     self._page = 0;
+    self._pageSize = 100;
 
     function makeAPIRequest() {
       $me.namespacePromise.then(function(namespace) {
-        var pageSize = 100;
+        var pageSize = self._pageSize;
         var params = _.extend({}, self._filters, {
           limit: pageSize,
           offset: self._page * pageSize
@@ -36,6 +37,7 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
         // params will be ignored when they complete.
         self._listVersion += 1;
         self._listPendingParams = params;
+        self.setSilentRefreshEnabled(false);
 
         var requested = self._listVersion;
         namespace.threads({}, params).then(function(threads) {
@@ -49,11 +51,9 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
 
           if (self._list)
             threads = threads.concat(self._list);
-          threads.sort(function(a, b) {
-            return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
-          });
 
           self.setList(threads);
+          self.setSilentRefreshEnabled(true);
           self._page += 1;
 
         }, _handleAPIError);
@@ -73,6 +73,11 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
     };
 
     self.setList = function(list) {
+      if (list) {
+        list.sort(function(a, b) {
+          return b.lastMessageDate.getTime() - a.lastMessageDate.getTime();
+        });
+      }
       self._list = list;
       self.emit('update', self);
     };
@@ -119,6 +124,36 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
       self.setFilters(_.extend({}, self._filters, filtersToAppend));
       self.reload();
     };
+
+    self.silentRefresh = function() {
+      $me.namespacePromise.then(function(namespace) {
+        var params = _.extend({}, self._filters, {
+          offset: 0,
+          limit: self._page * self._pageSize
+        });
+
+        self.setSilentRefreshEnabled(false);
+
+        var requested = self._listVersion;
+        namespace.threads({}, params).then(function(threads) {
+          // ignore this response if we've moved on to new params
+          if (self._listVersion != requested)
+            return;
+
+          self.setList(threads);
+          self.setSilentRefreshEnabled(true);
+
+        }, _handleAPIError);
+      });
+    }
+
+    self.setSilentRefreshEnabled = function(enabled) {
+      if (self._timer)
+        clearInterval(self._timer);
+      if (enabled)
+        self._timer = setInterval(self.silentRefresh, 10000);
+      console.log('silent refresh: '+enabled);
+    }
 
   }]);
 });
