@@ -17,6 +17,7 @@ require.config
     "Events": "minievents"
     "moment": "/components/moment/min/moment.min"
     "bootstrap": "/components/bootstrap/dist/js/bootstrap.min"
+    "scribe": "/components/scribe/scribe"
 
   shim:
     "angular":

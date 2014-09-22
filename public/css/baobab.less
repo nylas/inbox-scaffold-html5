@@ -637,7 +637,7 @@ a {
   background-color: inherit;
   border-bottom: 1px solid #ccc;
 
-  input, textarea {
+  input, textarea, span[scribe] {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -646,6 +646,12 @@ a {
     width: 100%;
     resize: none;
     outline: none;
+  }
+
+  &.composer-body {
+    min-height: 6em;
+    height: calc(~"80vh - 75px - 5em"); // 80% viewport - top gap - to/subject/send default heights
+    overflow: scroll;
   }
 
   label[for="to"] {

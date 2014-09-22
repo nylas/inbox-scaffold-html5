@@ -24,6 +24,7 @@ define([
   'baobab.directive.autofocus',
   'baobab.directive.typewriter',
   'baobab.directive.autocomplete',
+  'baobab.directive.scribe',
   'baobab.filter',
 ], function (angular) {
   // Controllers
@@ -49,6 +50,7 @@ define([
     'baobab.directive.autofocus',
     'baobab.directive.typewriter',
     'baobab.directive.autocomplete',
+    'baobab.directive.scribe',
   ]);
 
   return angular.module('baobab', [
