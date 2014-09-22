@@ -41,7 +41,7 @@ define(["angular", "underscore"], function (angular, _) {
             break;
           }
         }
-      if (scrollTo != undefined)
+      if (scrollTo !== undefined)
         $scrollState.scrollTo('msg-' + scrollTo.id);
 
         // mark the thread as read

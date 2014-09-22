@@ -32,7 +32,7 @@ define(["angular", "underscore"], function(angular, _) {
           };
         }
       }
-    }
+    };
 
     function clearDraft() {
       $scope.$emit("compose-cleared");

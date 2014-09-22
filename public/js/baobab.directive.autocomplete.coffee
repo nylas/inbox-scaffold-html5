@@ -8,8 +8,9 @@ define ['angular', 'underscore'], (angular, _) ->
       "autocomplete": "="
       "target": "="
     template: (elem, attr) ->
-      '<div><span ng-repeat="tag in target track by $index" class="tag" ng-include="\'/partials/tag.html\'">' +
-      '</span><span class="tag-wrap-input" ng-transclude/></div>'
+      '<div><span ng-repeat="tag in target track by $index" class="tag" ' +
+      'ng-include="\'/partials/tag.html\'"></span><span ' +
+      'class="tag-wrap-input" ng-transclude/></div>'
     transclude: 'element'
     replace: true
     link: (scope, elem, attr) ->
@@ -37,14 +38,23 @@ define ['angular', 'underscore'], (angular, _) ->
         input.css("width", 20 + span.offsetWidth + "px")
         span.remove()
 
+      AutocompleteException = (message) ->
+        @name = "AutocompleteException"
+        @message = message
+
       # Retrieve options
       scope.$watch 'autocomplete', _.once (options) ->
         if !options
-          throw "Could not retrieve options while configuring autocomplete"
+          throw
+            new AutocompleteException "" +
+              "Could not retrieve options while configuring autocomplete"
         if !options.complete
-          throw "No completion function provided to autocomplete"
+          throw
+            new AutocompleteException "" +
+              "No completion function provided to autocomplete"
         if !options.parse
-          throw "No parse provided in autocomplete model"
+          throw
+            new AutocompleteException "No parse provided in autocomplete model"
         complete = options.complete
         parse = options.parse
 
@@ -60,7 +70,7 @@ define ['angular', 'underscore'], (angular, _) ->
           return if _.isEmpty(results.selection)
           model = scope.target
           if !model
-            console.log "No model on selectCompletion"
+            console.log "WARN: No model on selectCompletion"
             return
           model.push(results.selection)
           input.val("")
@@ -69,7 +79,7 @@ define ['angular', 'underscore'], (angular, _) ->
         removeTag = () ->
           model = scope.target
           if !model
-            console.log "No model on removeTag"
+            console.log "WARN: No model on removeTag"
             return
           model.pop()
 
@@ -92,7 +102,7 @@ define ['angular', 'underscore'], (angular, _) ->
             scope.$apply () ->
               model = scope.target
               if !model
-                console.log "No model on comma completion"
+                console.log "WARN: No model on comma completion"
                 return
               _.map val, (contact) ->
                 model.push(contact)
@@ -111,7 +121,7 @@ define ['angular', 'underscore'], (angular, _) ->
           scope.$apply () ->
             model = scope.target
             if !model
-              console.log "No model on blur"
+              console.log "WARN: No model on blur"
               return
             _.map val, (contact) ->
               model.push(contact)
