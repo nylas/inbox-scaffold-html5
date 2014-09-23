@@ -3,10 +3,10 @@
 define(["angular", "jQuery"], function (angular, jquery) {
   angular.module('baobab.directive.typewriter', [])
 
-  .directive('typewriter', ['$timeout', '$me', function ($timeout,$me) {
+  .directive('typewriter', ['$timeout', '$namespaces', function ($timeout, $namespaces) {
     return function(scope, elem, attr) {
       var ii = 0;
-      if ($me.emailAddress() != 'mg@inboxapp.com')
+      if ($namespaces.current().emailAddress != 'mg@inboxapp.com')
         return;
 
       $('body').on('keydown', function(e) {

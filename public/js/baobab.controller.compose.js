@@ -2,7 +2,7 @@
 
 define(["angular", "underscore"], function(angular, _) {
   angular.module("baobab.controller.compose", [])
-  .controller('ComposeCtrl', ['$scope', '$me', function($scope, $me) {
+  .controller('ComposeCtrl', ['$scope', '$namespaces', '$contacts', function($scope, $namespaces, $contacts) {
     var self = this;
 
     self.reply = false;
@@ -13,7 +13,7 @@ define(["angular", "underscore"], function(angular, _) {
         if (_.isEmpty(search)) {
           return [];
         }
-        return $me.contacts().filter(function (contact) {
+        return $contacts.list().filter(function (contact) {
           return (
             contact.email.toLowerCase().indexOf(search.toLowerCase()) === 0 ||
             !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) === 0
@@ -21,7 +21,7 @@ define(["angular", "underscore"], function(angular, _) {
         });
       },
       parse: function(text) {
-        var candidates = $me.contacts().filter(function (contact) {
+        var candidates = $contacts.list().filter(function (contact) {
           return contact.email.toLowerCase() == text.toLowerCase();
         });
         if (candidates.length == 1) {
@@ -36,12 +36,10 @@ define(["angular", "underscore"], function(angular, _) {
 
     function clearDraft() {
       $scope.$emit("compose-cleared");
-      $me.namespacePromise.then(function ($namespace) {
-        self.reply = false;
-        self.draft = $namespace.draft();
-        self.draft.to = []; // Gross
-        $scope.$emit("compose-active");
-      });
+      self.reply = false;
+      self.draft = $namespaces.current().draft();
+      self.draft.to = []; // Gross
+      $scope.$emit("compose-active");
     }
 
     this.discardClicked = function () {

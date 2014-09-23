@@ -4,7 +4,7 @@ require(["angular"], function (angular) {
 
   angular.module('baobab.service.auth', [])
 
-  .service('$auth', ['$cookieStore', '$location', function($cookieStore, $location) {
+  .service('$auth', ['$cookieStore', '$location', '$inbox', function($cookieStore, $location, $inbox) {
     var self = this;
 
     this.clearToken = function() {
@@ -39,6 +39,12 @@ require(["angular"], function (angular) {
 
     if (!this.readTokenFromCookie())
       this.readTokenFromURL();
+
+    if (self.token) {
+      $inbox.withCredentials(true);
+      $inbox.setRequestHeader('Authorization', 'Basic '+btoa(self.token+':'));
+    };
+
   }]);
 
 });

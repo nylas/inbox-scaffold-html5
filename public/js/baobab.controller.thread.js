@@ -3,7 +3,7 @@ var _handleAPIError, saveAs; //globals
 
 define(["angular", "underscore"], function (angular, _) {
   return angular.module("baobab.controller.thread", [])
-  .controller('ThreadCtrl', ['$scope', '$namespace', '$threads', '$modal', '$routeParams', '$location', '$scrollState', '$me', function($scope, $namespace, $threads, $modal, $routeParams, $location, $scrollState, $me) {
+  .controller('ThreadCtrl', ['$scope', '$namespaces', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespaces, $threads, $modal, $routeParams, $location, $scrollState) {
     var self = this;
 
     this.thread = $threads.item($routeParams['id']);
@@ -19,7 +19,7 @@ define(["angular", "underscore"], function (angular, _) {
     if (this.thread) {
       threadReady();
     } else {
-      $namespace.thread($routeParams['id']).then(function(thread) {
+      $namespaces.current().thread($routeParams['id']).then(function(thread) {
         self.thread = thread;
         threadReady();
       }, _handleAPIError);
@@ -96,7 +96,7 @@ define(["angular", "underscore"], function (angular, _) {
     this.replyClicked = function() {
       if (!$scope.replying) {
         var draft = self.draft = self.thread.reply();
-        var me = $me.emailAddress();
+        var me = $namespaces.current().emailAddress;
         var participants = _.reject(self.thread.participants, function (p) {
           return p.email == me;
         });

@@ -33,9 +33,10 @@ define(["angular", "underscore", "moment"], function (angular, _, moment) {
     };
   })
 
-  .filter('participants', ['$me', function($me) {
+  .filter('participants', ['$namespaces', function($namespaces) {
     return function(participants, preset) {
-      var meParts = $me.emailAddress().split('@');
+      var meEmail = $namespaces.current().emailAddress;
+      var meParts = meEmail.split('@');
       var str = '';
 
       preset = preset || 'short';
@@ -43,7 +44,7 @@ define(["angular", "underscore", "moment"], function (angular, _, moment) {
       _.each(participants, function(participant) {
         // If we are the participant, show "Me" instead of our name
         var name = participant.name;
-        if (participant.email == $me.emailAddress())
+        if (participant.email == meEmail)
           name = 'Me';
 
         // If there are only two participants, and we're one of them,

@@ -4,7 +4,7 @@ var _handleAPIError;
 define(["angular", "Events", "underscore"], function (angular, Events, _) {
   angular.module("baobab.service.threads", [])
 
-  .service('$threads', ['$me', function($me) {
+  .service('$threads', ['$namespaces', function($namespaces) {
     var self = this;
     var events = Events; // Lint thinks this is a constructor (rightly so)
     events(self);
@@ -18,46 +18,44 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
     self._pageSize = 100;
 
     function makeAPIRequest() {
-      $me.namespacePromise.then(function(namespace) {
-        var pageSize = self._pageSize;
-        var params = _.extend({}, self._filters, {
-          limit: pageSize,
-          offset: self._page * pageSize
-        });
-
-        // bail if params are identical to the previous request
-        if (_.isEqual(params, self._listPendingParams))
-          return;
-
-        // bail if the last request returned fewer items than requested
-        if (self._listIsCompleteSet)
-          return;
-
-        // increment the list verison number so any pending requests with old
-        // params will be ignored when they complete.
-        self._listVersion += 1;
-        self._listPendingParams = params;
-        self.setSilentRefreshEnabled(false);
-
-        var requested = self._listVersion;
-        namespace.threads({}, params).then(function(threads) {
-          // ignore this response if we've moved on to new params
-          if (self._listVersion != requested)
-            return;
-
-          // if we received fewer items than we requested, this must
-          // be the last page in the list
-          self._listIsCompleteSet = (threads.length < pageSize);
-
-          if (self._list)
-            threads = threads.concat(self._list);
-
-          self.setList(threads);
-          self.setSilentRefreshEnabled(true);
-          self._page += 1;
-
-        }, _handleAPIError);
+      var pageSize = self._pageSize;
+      var params = _.extend({}, self._filters, {
+        limit: pageSize,
+        offset: self._page * pageSize
       });
+
+      // bail if params are identical to the previous request
+      if (_.isEqual(params, self._listPendingParams))
+        return;
+
+      // bail if the last request returned fewer items than requested
+      if (self._listIsCompleteSet)
+        return;
+
+      // increment the list verison number so any pending requests with old
+      // params will be ignored when they complete.
+      self._listVersion += 1;
+      self._listPendingParams = params;
+      self.setSilentRefreshEnabled(false);
+
+      var requested = self._listVersion;
+      $namespaces.current().threads({}, params).then(function(threads) {
+        // ignore this response if we've moved on to new params
+        if (self._listVersion != requested)
+          return;
+
+        // if we received fewer items than we requested, this must
+        // be the last page in the list
+        self._listIsCompleteSet = (threads.length < pageSize);
+
+        if (self._list)
+          threads = threads.concat(self._list);
+
+        self.setList(threads);
+        self.setSilentRefreshEnabled(true);
+        self._page += 1;
+
+      }, _handleAPIError);
     }
 
     self.reload = function() {
@@ -126,25 +124,23 @@ define(["angular", "Events", "underscore"], function (angular, Events, _) {
     };
 
     self.silentRefresh = function() {
-      $me.namespacePromise.then(function(namespace) {
-        var params = _.extend({}, self._filters, {
-          offset: 0,
-          limit: self._page * self._pageSize
-        });
-
-        self.setSilentRefreshEnabled(false);
-
-        var requested = self._listVersion;
-        namespace.threads({}, params).then(function(threads) {
-          // ignore this response if we've moved on to new params
-          if (self._listVersion != requested)
-            return;
-
-          self.setList(threads);
-          self.setSilentRefreshEnabled(true);
-
-        }, _handleAPIError);
+      var params = _.extend({}, self._filters, {
+        offset: 0,
+        limit: self._page * self._pageSize
       });
+
+      self.setSilentRefreshEnabled(false);
+
+      var requested = self._listVersion;
+      $namespaces.current().threads({}, params).then(function(threads) {
+        // ignore this response if we've moved on to new params
+        if (self._listVersion != requested)
+          return;
+
+        self.setList(threads);
+        self.setSilentRefreshEnabled(true);
+
+      }, _handleAPIError);
     }
 
     self.setSilentRefreshEnabled = function(enabled) {

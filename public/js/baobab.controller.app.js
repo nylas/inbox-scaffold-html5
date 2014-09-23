@@ -2,7 +2,7 @@
 
 define(['angular'], function (angular) {
 angular.module("baobab.controller.app", [])
-  .controller('AppCtrl', ['$scope', '$me', '$inbox', '$auth', '$location', '$cookieStore', '$sce', function($scope, $me, $inbox, $auth, $location, $cookieStore, $sce) {
+  .controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$auth', '$location', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $auth, $location, $cookieStore, $sce) {
     var self = this;
     window.AppCtrl = this;
 
@@ -16,7 +16,7 @@ angular.module("baobab.controller.app", [])
       return $auth.token;
     };
     this.namespace = function() {
-      return $me._namespace;
+      return $namespaces.current();
     };
 
     this.theme = $cookieStore.get('baobab_theme') || 'light';

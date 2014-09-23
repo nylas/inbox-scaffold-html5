@@ -13,7 +13,9 @@ define([
   'baobab.controller.threadList',
   'baobab.controller.thread',
   'baobab.controller.compose',
-  'baobab.service.me',
+  'baobab.service.namespace',
+  'baobab.service.contacts',
+  'baobab.service.tags',
   'baobab.service.scrollstate',
   'baobab.service.auth',
   'baobab.service.threads',
@@ -36,7 +38,9 @@ define([
   ]);
 
   angular.module('baobab.services', [
-    'baobab.service.me',
+    'baobab.service.contacts',
+    'baobab.service.namespace',
+    'baobab.service.tags',
     'baobab.service.scrollstate',
     'baobab.service.auth',
     'baobab.service.threads',
@@ -71,18 +75,18 @@ define([
 
   .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.when('/thread/:id', {
-    templateUrl: '/partials/thread.html',
-    controller: 'ThreadCtrl as ThreadCtrl',
-    resolve: {
-    "$namespace": function($me) { return $me.namespacePromise; },
-    }
+      templateUrl: '/partials/thread.html',
+      controller: 'ThreadCtrl as ThreadCtrl',
+      resolve: ['$namespaces-promise']
     });
     $routeProvider.when('/mail/compose', {
-    templateUrl: '/partials/compose-zen.html',
+      templateUrl: '/partials/compose-zen.html',
+      resolve: ['$namespaces-promise']
     });
     $routeProvider.when('/:tag', {
-    templateUrl: '/partials/thread_list.html',
-    controller: 'ThreadListCtrl as ThreadListCtrl'
+      templateUrl: '/partials/thread_list.html',
+      controller: 'ThreadListCtrl as ThreadListCtrl',
+      resolve: ['$namespaces-promise']
     });
     $routeProvider.otherwise({redirectTo: '/inbox'});
   }])

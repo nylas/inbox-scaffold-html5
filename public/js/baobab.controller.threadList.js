@@ -4,8 +4,8 @@ var _handleAPIError; //globals
 define(["angular", "underscore"], function(angular, _) {
   angular.module("baobab.controller.threadlist", [])
   .controller('ThreadListCtrl', [
-    '$scope', '$me', '$threads', '$location', '$routeParams',
-    function($scope, $me, $threads, $location, $routeParams) {
+    '$scope', '$contacts', '$threads', '$location', '$routeParams',
+    function($scope, $contacts, $threads, $location, $routeParams) {
     var self = this;
 
     $scope.search = $threads.filters()['any_email'] || '';
@@ -29,7 +29,7 @@ define(["angular", "underscore"], function(angular, _) {
     // internal methods
 
     function updateAutocomplete() {
-      var contacts = $me.contacts();
+      var contacts = $contacts.list();
       var term = $scope.search.toLowerCase();
       var search = $threads.filters()['any_email'];
       var results = [];

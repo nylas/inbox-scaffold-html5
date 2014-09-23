@@ -66,7 +66,7 @@ define ['angular', 'angularMocks', 'baobab.controller.thread'], (angular) ->
           $scope: $scope
           $me: $me,
           $threads: $threads,
-          $namespace: null,
+          $namespaces: null,
           $modal: null,
           $scrollState: null,
           $routeParams: {'id': 'fake_thread_id1'}
