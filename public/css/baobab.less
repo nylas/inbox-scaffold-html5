@@ -630,6 +630,14 @@ a {
   }
 }
 
+.composer-reply .composer-body > span {
+  height: calc(335px * 0.55);
+}
+
+.composer-zen .composer-body > span {
+  height: calc(~"80vh - 165px");
+}
+
 .composer .composer-input {
   display: block;
   overflow: hidden;
@@ -650,7 +658,6 @@ a {
 
   &.composer-body > span {
     min-height: 6em;
-    height: calc(~"80vh - 75px - 5em"); // 80% viewport - top gap - to/subject/send default heights
     overflow: scroll;
   }
 
