@@ -26,10 +26,10 @@ define ['angular', 'angularMocks', 'baobab.filter'], (angular) ->
 
     beforeEach ->
       angular.module("baobab.test", ["baobab.filter"])
-        .service "$me", () ->
-          @emailAddress = () ->
-            "me@example.com"
-          return
+        .service "$namespaces", () ->
+          current: () ->
+            emailAddress: "me@example.com"
+          
       angular.mock.module("baobab.test")
       angular.mock.inject ($filter) ->
         participants = $filter("participants")

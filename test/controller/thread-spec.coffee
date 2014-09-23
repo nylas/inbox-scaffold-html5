@@ -1,7 +1,7 @@
 define ['angular', 'angularMocks', 'baobab.controller.thread'], (angular) ->
   describe 'ThreadCtrl', ->
     $scope = null
-    $me = null
+    $namespaces = null
     controller = null
     promises = null
     msg = null
@@ -54,8 +54,9 @@ define ['angular', 'angularMocks', 'baobab.controller.thread'], (angular) ->
       `Promise = mockPromises.getMockPromise(Promise);`
       angular.mock.module 'baobab.controller.thread'
 
-      $me =
-        emailAddress: -> "ben@inboxapp.com"
+      $namespaces =
+        current: ->
+          emailAddress: -> "ben@inboxapp.com"
 
       $threads =
         item: -> mockThread1
@@ -64,7 +65,7 @@ define ['angular', 'angularMocks', 'baobab.controller.thread'], (angular) ->
         $scope = $rootScope.$new()
         controller = $controller 'ThreadCtrl',
           $scope: $scope
-          $me: $me,
+          $namespaces: $namespaces,
           $threads: $threads,
           $namespaces: null,
           $modal: null,

@@ -1,7 +1,7 @@
 define ['angular', 'baobab.controller.compose', 'angularMocks'], (angular) ->
   describe 'ComposeCtrl', ->
     $scope = null
-    $me = null
+    $namespaces = null
     controller = null
     promises = null
     mockDraft1 =
@@ -43,16 +43,17 @@ define ['angular', 'baobab.controller.compose', 'angularMocks'], (angular) ->
       `Promise = mockPromises.getMockPromise(Promise);`
       angular.mock.module 'baobab.controller.compose'
 
-      $me =
-        namespacePromise: Promise.resolve
-          draft: ->
-            mockDraft1
+      $namespaces =
+        current: ->
+            draft: ->
+              mockDraft1
 
       angular.mock.inject ($rootScope, $controller) ->
         $scope = $rootScope.$new()
         controller = $controller 'ComposeCtrl',
-          $scope: $scope
-          $me: $me
+          $scope: $scope,
+          $contacts: null,
+          $namespaces: $namespaces
         return
 
       promises =
@@ -63,8 +64,6 @@ define ['angular', 'baobab.controller.compose', 'angularMocks'], (angular) ->
       spyOn(mockDraft1, 'save').andReturn promises.save
       spyOn(mockDraft1, 'send').andReturn promises.send
       spyOn(mockDraft1, 'dispose').andReturn promises.dispose
-
-      mockPromises.executeForPromise($me.namespacePromise)
       return
 
     afterEach ->
