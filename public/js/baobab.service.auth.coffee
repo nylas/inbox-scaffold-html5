@@ -19,7 +19,7 @@ require ["angular"], (angular) ->
     @readTokenFromURL = () =>
       search = window.location.search
       tokenStart = search.indexOf('access_token=')
-      return if tokenStart == -1    
+      return if tokenStart == -1
 
       tokenStart += ('access_token=').length
 

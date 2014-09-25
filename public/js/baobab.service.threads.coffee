@@ -73,7 +73,7 @@ define ["angular", "Events", "underscore"], (angular, Events, _) ->
       @emit('update', @)
 
 
-    @extendList = () =>
+    @extendList = () ->
       makeAPIRequest()
 
 

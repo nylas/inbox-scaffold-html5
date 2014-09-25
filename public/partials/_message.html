@@ -1,7 +1,6 @@
 <div class="inset heading">
   <span class="sent" ng-show="msg.object != 'draft'" title="{{msg.date.toString()}}">{{msg.date | timestamp_ago}}</span>
   <span class="sent" ng-show="msg.object == 'draft'">DRAFT</span>
-
   <span class="from">{{msg.from | participants:'long'}}</span>
   <span class="to"> to </span>
   <span class="to">{{msg.to | participants:'long'}}</span>
