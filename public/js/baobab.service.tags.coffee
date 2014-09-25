@@ -1,5 +1,5 @@
 
-define ["angular"], (angular, events) ->
+define ["angular", "error"], (angular, error) ->
   angular.module('baobab.service.tags', [])
   .service('$tags', ['$namespaces', ($namespaces) ->
 
@@ -8,7 +8,7 @@ define ["angular"], (angular, events) ->
 
     $namespaces.current().tags().then (tags) =>
       @_list = tags
-    , _handleAPIError
+    , error._handleAPIError
 
     @
   ])

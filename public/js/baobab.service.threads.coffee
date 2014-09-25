@@ -1,5 +1,5 @@
 
-define ["angular", "Events", "underscore"], (angular, Events, _) ->
+define ["angular", "Events", "underscore", "error"], (angular, Events, _, error) ->
   angular.module("baobab.service.threads", [])
   .service('$threads', ['$namespaces', ($namespaces) ->
     events = Events # Lint thinks this is a constructor (rightly so)
@@ -22,11 +22,11 @@ define ["angular", "Events", "underscore"], (angular, Events, _) ->
 
       # bail if params are identical to the previous request
       return if _.isEqual(params, @_listPendingParams)
-        
+
 
       # bail if the last request returned fewer items than requested
       return if @_listIsCompleteSet
-        
+
 
       # increment the list verison number so any pending requests with old
       # params will be ignored when they complete.
@@ -49,7 +49,7 @@ define ["angular", "Events", "underscore"], (angular, Events, _) ->
         @setSilentRefreshEnabled(true)
         @_page += 1
 
-      , _handleAPIError)
+      , error._handleAPIError)
 
 
     @reload = () =>
@@ -103,7 +103,7 @@ define ["angular", "Events", "underscore"], (angular, Events, _) ->
 
       for key in filters
         delete filters[key] if (filters[key] == '')
-      
+
       @_filters = filters
       @reload()
 
@@ -129,7 +129,7 @@ define ["angular", "Events", "underscore"], (angular, Events, _) ->
         @setList(threads)
         @setSilentRefreshEnabled(true)
 
-      , _handleAPIError)
+      , error._handleAPIError)
 
 
     @setSilentRefreshEnabled = (enabled) =>

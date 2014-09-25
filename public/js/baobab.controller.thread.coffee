@@ -1,5 +1,5 @@
 
-define ["angular", "underscore"], (angular, _) ->
+define ["angular", "underscore", "error"], (angular, _, error) ->
   angular.module("baobab.controller.thread", [])
   .controller('ThreadCtrl', ['$scope', '$namespaces', '$threads', '$modal', '$routeParams', '$location', '$scrollState',
     ($scope, $namespaces, $threads, $modal, $routeParams, $location, $scrollState) ->
@@ -34,13 +34,13 @@ define ["angular", "underscore"], (angular, _) ->
             if (@thread.hasTag('unread'))
               @thread.removeTags(['unread']).then((response) ->
                 messages.forEach (message) -> message.unread = false
-              ,_handleAPIError)
+              , error._handleAPIError)
 
-        ,_handleAPIError)
+        , error._handleAPIError)
 
-        @.thread.drafts().then((drafts) =>
+        @thread.drafts().then((drafts) =>
           @drafts = drafts.sort (a, b) -> a.date.getTime() - b.date.getTime()
-        , _handleAPIError)
+        , error._handleAPIError)
 
 
       $scope.$on "compose-replying", (event) =>
@@ -102,7 +102,7 @@ define ["angular", "underscore"], (angular, _) ->
         @thread.removeTags(['inbox']).then((response) =>
           $threads.itemArchived(@thread.id)
           $location.path('/inbox')
-        , _handleAPIError)
+        , error._handleAPIError)
 
 
       if (@thread)
@@ -111,7 +111,7 @@ define ["angular", "underscore"], (angular, _) ->
         $namespaces.current().thread($routeParams['id']).then (thread) =>
           @thread = thread
           threadReady()
-        , _handleAPIError
+        , error._handleAPIError
 
       @
   ])

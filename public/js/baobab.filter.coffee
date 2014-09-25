@@ -6,7 +6,8 @@ define ["angular", "underscore", "moment"], (angular, _, moment) ->
     (input) ->
       if typeof input == 'string' && input.length > 64
         input.substring(0, 60) + ' ...'
-      input
+      else
+        input
   )
 
   .filter('tag_expand', () ->
@@ -38,6 +39,9 @@ define ["angular", "underscore", "moment"], (angular, _, moment) ->
         # If we are the participant, show "Me" instead of our name
         name = participant.name
         name = 'Me' if (participant.email == meEmail)
+
+        if participants.length == 2 && name == 'Me'
+          return
 
         # If no name is provided, use the email address
         if _.isEmpty(name)

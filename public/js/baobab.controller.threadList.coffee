@@ -1,10 +1,33 @@
 
-define ["angular", "underscore"], (angular, _) ->
+define ["angular", "underscore", "error"], (angular, _, error) ->
   angular.module("baobab.controller.threadlist", [])
   .controller('ThreadListCtrl', [
     '$scope', '$contacts', '$threads', '$location', '$routeParams',
     ($scope, $contacts, $threads, $location, $routeParams) ->
-      
+
+      setAutocomplete = (items) =>
+        @autocomplete = items
+        setAutocompleteSelection(items[0])
+
+
+      setAutocompleteSelection = (item) =>
+        @autocompleteSelection = item
+        updateTypeaheadWithSelection()
+
+
+      updateTypeaheadWithSelection = () =>
+        contact = @autocompleteSelection
+        term = $scope.search.toLowerCase()
+
+        if (!contact || (term.length == 0))
+          $scope.searchTypeahead = ''
+        else if (term == contact.email.toLowerCase().substr(0,term.length))
+          $scope.searchTypeahead = $scope.search + contact.email.substr($scope.search.length)
+        else if (term == contact.name.toLowerCase().substr(0,term.length))
+          $scope.searchTypeahead = $scope.search + contact.name.substr($scope.search.length)
+        else
+          $scope.searchTypeahead = ''
+
       $scope.search = $threads.filters()['any_email'] || ''
       $scope.searchTypeahead = ''
       $scope.$watch 'search', () ->
@@ -43,31 +66,6 @@ define ["angular", "underscore"], (angular, _) ->
 
         setAutocomplete(results)
 
-
-      updateTypeaheadWithSelection = () =>
-        contact = @autocompleteSelection
-        term = $scope.search.toLowerCase()
-
-        if (!contact || (term.length == 0))
-          $scope.searchTypeahead = ''
-        else if (term == contact.email.toLowerCase().substr(0,term.length))
-          $scope.searchTypeahead = $scope.search + contact.email.substr($scope.search.length)
-        else if (term == contact.name.toLowerCase().substr(0,term.length))
-          $scope.searchTypeahead = $scope.search + contact.name.substr($scope.search.length)
-        else
-          $scope.searchTypeahead = ''
-
-
-      setAutocomplete = (items) =>
-        @autocomplete = items
-        setAutocompleteSelection(items[0])
-
-
-      setAutocompleteSelection = (item) =>
-        @autocompleteSelection = item
-        updateTypeaheadWithSelection()
-      
-
       # exposed methods
 
       @showNoMore = () =>
@@ -87,7 +85,7 @@ define ["angular", "underscore"], (angular, _) ->
       @archiveClicked = (thread, event) =>
         thread.removeTags(['inbox']).then((response)->
           $threads.itemArchived(thread.id)
-        , _handleAPIError)
+        , error._handleAPIError)
 
         event.stopPropagation()
 
@@ -104,7 +102,7 @@ define ["angular", "underscore"], (angular, _) ->
               search = search.replace(term, '')
         else
           filters['any_email'] = search
-        
+
         $threads.appendFilters(filters)
         $scope.search = search
 

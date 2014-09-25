@@ -29,6 +29,7 @@ define([
   'baobab.directive.scribe',
   'baobab.filter',
 ], function (angular) {
+
   // Controllers
   angular.module('baobab.controllers', [
     'baobab.controller.threadlist',
@@ -101,25 +102,5 @@ define([
   }]);
 });
 
-/* Helpers */
-var _scope = function (selector) {
-  return this.element(document.querySelector(selector)).scope();
-};
 
-var _clone = function(obj) {
-    return JSON.parse(JSON.stringify(obj));
-};
 
-var _displayErrors = true;
-window.onbeforeunload = function () {
-  _displayErrors = false;
-};
-
-var _handleAPIError = function(error) {
-  if (!_displayErrors)
-    return;
-  var msg = "An unexpected error occurred. (HTTP code " + error['status'] + "). Please try again.";
-  if (error['message'])
-      msg = error['message'];
-  alert(msg);
-};

@@ -1,5 +1,5 @@
 
-define ["angular"], (angular, events) ->
+define ["angular", "error"], (angular, error) ->
   angular.module('baobab.service.contacts', [])
   .service('$contacts', ['$namespaces', ($namespaces) ->
 
@@ -8,7 +8,7 @@ define ["angular"], (angular, events) ->
 
     $namespaces.current().contacts().then (contacts) =>
       @_list = contacts
-    , _handleAPIError
+    , error._handleAPIError
 
     @
   ])
