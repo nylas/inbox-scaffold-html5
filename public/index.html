@@ -18,6 +18,8 @@
   <body bind-keys>
     <div ng-controller="AppCtrl as App" ng-switch="!!App.token()" class="theme-{{App.theme}}">
 
+      <link rel="stylesheet" type="text/css" ng-href="/css/baobab-{{App.theme}}.less">
+
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
           <h2>Please Sign In</h2>
@@ -43,6 +45,9 @@
           </ul>
 
           <ul class="pull-bottom">
+
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.toggleTheme()" href="#"><img src="/img/tab_theme@2x.png" /> Theme</a></li>
+
             <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="/img/tab_logout@2x.png" /> Log Out</a></li>
           </ul>
         </div>
