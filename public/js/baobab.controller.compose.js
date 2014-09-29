@@ -80,6 +80,15 @@ define(["angular", "underscore"], function(angular, _) {
       $scope.$emit("compose-replying");
     });
 
+    $scope.$on("$destroy", function () {
+      if (!self.draft.to && !self.draft.from && !self.draft.cc && !self.draft.bcc
+          && !self.draft.subject && !self.draft.body) {
+        return
+      }
+      console.log("Saving...");
+      self.draft.save().then(function () { console.log("Saved.")})
+    });
+
     self.dropzoneConfig = {
       options: {
         'url': $namespaces.current().resourceUrl() + '/files',

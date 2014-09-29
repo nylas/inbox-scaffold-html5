@@ -135,7 +135,6 @@ define ["angular", "Events", "underscore", "error"], (angular, Events, _, error)
     @setSilentRefreshEnabled = (enabled) =>
       clearInterval(@_timer) if @_timer
       @_timer = setInterval(@silentRefresh, 10000) if enabled
-      console.log('silent refresh: '+enabled)
 
     @
   ])
