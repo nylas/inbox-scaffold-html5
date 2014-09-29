@@ -20,7 +20,7 @@ define ["angular", "underscore", "error"], (angular, _, error) ->
 
           # scroll to the first unread message, or the last message
           # if the entire conversation is read.
-          scrollTo = messages[-1]
+          scrollTo = messages[messages.length-1]
           messages.every (message) ->
             if message.unread
               scrollTo = message
@@ -84,11 +84,12 @@ define ["angular", "underscore", "error"], (angular, _, error) ->
 
         draft = @draft = @thread.reply()
         me = $namespaces.current().emailAddress
-        lastMessage = @messages[-1]
+        lastMessage = @messages[@messages.length-1]
 
-        draft.to = _.union(lastMessage.from, lastMessage.to)
-        draft.to = _.reject(draft.to, (p) -> p.email == me ) if to.length > 1
-        draft.cc = _.reject(lastMessage.cc, (p) -> p.email == me ) if replyAll
+        draft.to = lastMessage.from
+        if replyAll
+          draft.cc = _.union(lastMessage.to, lastMessage.cc)
+          draft.cc = _.reject(draft.cc, (p) -> p.email == me )
 
         $scope.$broadcast("compose-set-draft", draft)
 
