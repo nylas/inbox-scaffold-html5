@@ -27,6 +27,7 @@ define([
   'baobab.directive.typewriter',
   'baobab.directive.autocomplete',
   'baobab.directive.scribe',
+  'baobab.directive.dropzone',
   'baobab.filter',
 ], function (angular) {
 
@@ -56,6 +57,7 @@ define([
     'baobab.directive.typewriter',
     'baobab.directive.autocomplete',
     'baobab.directive.scribe',
+    'baobab.directive.dropzone',
   ]);
 
   return angular.module('baobab', [

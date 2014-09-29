@@ -18,6 +18,7 @@ require.config
     "moment": "/components/moment/min/moment.min"
     "bootstrap": "/components/bootstrap/dist/js/bootstrap.min"
     "scribe": "/components/scribe/scribe"
+    "dropzone": "/components/dropzone/downloads/dropzone-amd-module.min"
 
   shim:
     "angular":

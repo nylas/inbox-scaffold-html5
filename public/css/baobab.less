@@ -635,14 +635,6 @@ a {
   }
 }
 
-.composer-reply .composer-body > span {
-  height: calc(335px * 0.55);
-}
-
-.composer-zen .composer-body > span {
-  height: calc(~"80vh - 165px");
-}
-
 .composer .composer-input {
   display: block;
   overflow: hidden;
@@ -717,6 +709,7 @@ a {
   .discard-btn {
     position: absolute;
     left: 0;
+    top: 0;
     a {
       color: #ccc;
       font-size: Small;
@@ -726,12 +719,22 @@ a {
   .send-btn {
     position: absolute;
     right: 0;
+    top: 0;
   }
 
   div {
     padding: 2px;
     a {
       text-decoration: none;
+    }
+  }
+
+  .dropzone {
+    width: 80%;
+    margin: auto;
+
+    span {
+      padding: 0;
     }
   }
 }

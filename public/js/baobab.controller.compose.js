@@ -2,10 +2,11 @@
 
 define(["angular", "underscore"], function(angular, _) {
   angular.module("baobab.controller.compose", [])
-  .controller('ComposeCtrl', ['$scope', '$namespaces', '$contacts', function($scope, $namespaces, $contacts) {
+  .controller('ComposeCtrl', ['$scope', '$auth', '$namespaces', '$contacts', function($scope, $auth, $namespaces, $contacts) {
     var self = this;
 
     self.reply = false;
+    var setAttachments = function () {}; // noop, we set this later
     clearDraft();
 
     this.completionOptions = {
@@ -37,8 +38,14 @@ define(["angular", "underscore"], function(angular, _) {
     function clearDraft() {
       $scope.$emit("compose-cleared");
       self.reply = false;
-      self.draft = $namespaces.current().draft();
-      self.draft.to = []; // Gross
+      setDraft($namespaces.current().draft());
+    }
+
+    function setDraft(draft) {
+      setAttachments(draft.attachments())
+      self.draft = draft
+      self.draft.to = self.draft.to || []; // Gross
+      self.draft.fileData = self.draft.fileData || [];
       $scope.$emit("compose-active");
     }
 
@@ -68,10 +75,38 @@ define(["angular", "underscore"], function(angular, _) {
     };
 
     $scope.$on("compose-set-draft", function (event, draft) {
-      self.draft = draft;
+      setDraft(draft);
       self.reply = _.isString(draft.thread);
       $scope.$emit("compose-replying");
-      $scope.$emit("compose-active");
     });
+
+    self.dropzoneConfig = {
+      options: {
+        'url': $namespaces.current().resourceUrl() + '/files',
+        'autoProcessQueue': true,
+        'headers': {
+          'Authorization': 'Basic '+btoa($auth.token+':')
+        },
+        'addRemoveLinks': true,
+        'previewsContainer': '.dropzone-previews'
+      },
+      eventHandlers: {
+        success: function (file, response, e) {
+          self.draft.addAttachment(response[0]);
+        },
+        removedfile: function (file) {
+          self.draft.removeAttachment(file);
+        },
+      },
+      dropzoneReady: function (dropzone) {
+        setAttachments = function (newFiles) {
+          dropzone.removeAllFiles(true);
+          _.forEach(newFiles, function (file) {
+            dropzone.putFile(file);
+          });
+        };
+      },
+    };
+
   }]);
 });
