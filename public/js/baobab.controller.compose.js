@@ -81,8 +81,8 @@ define(["angular", "underscore"], function(angular, _) {
     });
 
     $scope.$on("$destroy", function () {
-      if (!self.draft.to && !self.draft.from && !self.draft.cc && !self.draft.bcc
-          && !self.draft.subject && !self.draft.body) {
+      if (_.isEmpty(self.draft.to) && _.isEmpty(self.draft.from) && _.isEmpty(self.draft.cc) && _.isEmpty(self.draft.bcc)
+          && _.isEmpty(self.draft.subject) && _.isEmpty(self.draft.body)) {
         return
       }
       console.log("Saving...");
