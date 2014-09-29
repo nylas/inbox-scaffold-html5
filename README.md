@@ -14,11 +14,15 @@ The Inbox Web Client Scaffold includes support for:
 - Replying to threads with attachments
 - Saving, editing, and sending drafts
 
-<a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_threads.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_threads.png" width="175" /></a><a href="://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_thread.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_thread.png" width="175" /></a><a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_reply.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_reply.png" width="175" /></a><a href="://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_compose.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_compose.png" width="175" /></a>
+<a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_threads.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_threads.png" height="230" /></a>
+<a href="://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_thread.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_thread.png" height="230" /></a>
+
+<a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_reply.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_reply.png" height="230" /></a>
+<a href="://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_compose.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_compose.png" height="230" /></a>
 
 Yes, it even has a dark theme:
 
-<a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_dark_theme.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_dark_theme.png" width="250" /></a>
+<a href="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_dark_theme.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-client-scaffold-web/master/screenshots/screenshot_dark_theme.png" height="230" /></a>
 
 
 ## By Developers, For Developers
