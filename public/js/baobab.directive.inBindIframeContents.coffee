@@ -13,9 +13,11 @@ define ["angular", "jQuery"], (angular) ->
           doc.body.className += ' ' + 'heightDetermined'
           $(element).height(height)
           scope.$emit('inIframeLoaded')
-        
+
         style = $('#iframe-css').html()
         doc.open()
         doc.write(style)
+        doc.write("<base target='_blank'>")
+        doc.write("<script>window.top.document.getElementById('content').style.background = 'red'</script>")
         doc.write(ngModel.$viewValue)
         doc.close()
