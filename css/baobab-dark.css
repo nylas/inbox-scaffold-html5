@@ -1,0 +1,152 @@
+h3 {
+  color: rgba(255, 255, 255, 0.8);
+}
+#content-sidebar {
+  background: #132029;
+  border-right: 1px solid #333;
+}
+#content {
+  background-color: #132029;
+}
+/* Thread View */
+.message-subject {
+  color: #eee;
+}
+.message {
+  border: 1px solid #E1E1E1;
+  border-bottom: 1px solid #BBB;
+  background-color: #FCFBFC;
+}
+.message.unread {
+  background-color: #E9F9FF;
+}
+.message.draft {
+  background-color: #FFF5DA;
+}
+.message .from {
+  color: #333;
+}
+.message .heading {
+  border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+  color: #979797;
+}
+.message .attachment .file-name {
+  color: #979797;
+}
+/* Thread List View */
+.search {
+  background: #132029;
+  border-bottom: 1px solid black;
+  box-shadow: none;
+}
+.search .token {
+  background-color: #2B363E;
+  color: white;
+}
+.search .token span {
+  color: #AAA;
+}
+.search .typeahead {
+  color: #666;
+}
+.search .search-field {
+  background-color: black;
+  border: 1px solid #5E666C;
+  color: white;
+}
+.search .search-field.active {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  outline: 0;
+  box-shadow: 0px 0px 3px rgba(0, 168, 200, 0.5), #f6f6f6 0px 0px 2px inset;
+}
+.search .search-field.active-add {
+  transition: all 250ms ease-out;
+}
+.search .search-field.active-remove {
+  transition: all 250ms ease-out;
+}
+.search .search-field input {
+  background-color: transparent;
+}
+.thread-list.bordered {
+  border: 1px solid #5E666C;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.thread-list .thread {
+  color: #757575;
+}
+.thread-list .thread:hover,
+.thread-list .thread.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.thread-list .thread > div.unread {
+  border-left: 4px solid #0089D7;
+}
+.thread-list .thread .participants {
+  color: rgba(255, 255, 255, 0.75);
+}
+.thread-list .thread .snippet .subject {
+  color: rgba(255, 255, 255, 0.75);
+}
+.thread-list .thread .date {
+  color: #979797;
+}
+/* Button */
+.btn {
+  border: 1px solid #D3D3D3;
+  color: #5E676D;
+  background-color: #fefefe;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#f6f6f6));
+  background: -webkit-linear-gradient(top, #fefefe, #f6f6f6);
+  background: -moz-linear-gradient(top, #fefefe, #f6f6f6);
+  background: -ms-linear-gradient(top, #fefefe, #f6f6f6);
+  background: -o-linear-gradient(top, #fefefe, #f6f6f6);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05), #f6f6f6 0px 0px 2px inset;
+}
+.btn > a {
+  color: #333;
+}
+.btn:hover {
+  border: 1px solid #00A8C8;
+  color: #00A8C8;
+  box-shadow: 0px 0px 3px rgba(0, 168, 200, 0.5), #f6f6f6 0px 0px 2px inset;
+}
+.btn:active {
+  color: black;
+}
+/* Composer */
+.composer-zen {
+  /* Full screen */
+  background: #132029;
+}
+.composer-reply {
+  /* Slide-up reply */
+  background-color: #132029;
+  border-top: 1px solid #ccc;
+  box-shadow: 0 -1px 10px #cccccc;
+}
+.composer {
+  background-color: #132029;
+}
+.composer input,
+.composer span[contenteditable] {
+  background-color: transparent;
+  color: white;
+}
+.composer .composer-input {
+  border-bottom: 1px solid rgba(150, 150, 150, 0.3);
+  background-color: transparent;
+}
+.composer .thread-list {
+  background: #333;
+  border: none;
+}
+.composer-footer .discard-btn a {
+  color: #ccc;
+}
+/* Loading Indicator */
+.loading-indicator > div {
+  background-color: rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,59 @@
+<div class="search">
+  <div class="centered">
+    <form role="search" ng-submit="ThreadListCtrl.searchClicked()">
+      <div class="compose-container" ng-show="!searchFocused">
+        <a class="btn" style="display:block;" hotkey="b" href="#/mail/compose"><i class="glyphicon glyphicon-plus"></i>&nbsp; Compose</a>
+      </div>
+
+      <div class="input-inset-container" ng-show="searchFocused">
+        <a class="btn btn-small" ng-click="ThreadListCtrl.searchCleared()">Clear</a>
+      </div>
+
+      <div class="search-field" ng-class="{'active': searchFocused}">
+        <div class="token" ng-repeat="(key, value) in ThreadListCtrl.tokenizedFilters()"><span>{{key}}:</span> {{value}}</div>
+        <input class="typeahead" type="text" ng-model="searchTypeahead" disabled/>
+        <input type="text" ng-model="search" ng-focus="searchFocused = true" ng-blur="searchFocused = (search.length > 0)" placeholder="Search" ng-keydown="ThreadListCtrl.keypressInAutocomplete($event)"/>
+      </div>
+
+
+    </form>
+
+    <div class="thread-list autocomplete" ng-class="{'populated': ThreadListCtrl.autocomplete.length > 0}">
+      <a class="thread" ng-class="{active: contact == ThreadListCtrl.autocompleteSelection}" ng-repeat="contact in ThreadListCtrl.autocomplete"><div><div>
+        <in-participant-bubble email="{{contact.email}}"></in-participant-bubble>
+        <div class="participants">{{contact.name}}</div>
+        <div class="snippet">{{contact.email}}</div>
+      </div></div></a>
+    </div>
+  </div>
+</div>
+
+<div class="centered beneath-search">
+  <h3 style="text-transform:capitalize;">{{ThreadListCtrl.viewName}}</h3>
+  <div class="thread-list bordered" infinite-scroll="ThreadListCtrl.extendList()" infinite-scroll-distance="1">
+    <div class="thread clickable" ng-repeat="thread in ThreadListCtrl.list" ng-click="ThreadListCtrl.threadClicked(thread, $event);" id="{{thread.id}}">
+        <div class="actions">
+          <a class="btn" ng-hide="thread.hasTag('archive')" ng-click="ThreadListCtrl.archiveClicked(thread, $event);">Archive</a>
+        </div>
+
+        <div class="{{thread.tagData | tag_expand}}"><div>
+        <in-participant-bubble email="{{thread.participants[0].email}}"></in-participant-bubble>
+        <div class="participants">{{thread.participants | participants}}</div>
+        <div class="date">{{thread.lastMessageDate | timestamp_short}}</div>
+        <div class="snippet"><span class="subject">{{thread.subject}}</span> {{thread.snippet}}</div>
+    </div></div></div>
+
+    <div ng-show="!ThreadListCtrl.list" class="loading-indicator">
+      <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
+    </div>
+
+    <div ng-show="ThreadListCtrl.list.length == 0" style="text-align:center; padding:140px; color:#ccc;">
+      Sorry, no threads matched your criteria.
+    </div>
+
+    <div ng-show="ThreadListCtrl.showNoMore()" style="text-align:center; padding:140px; color:#ccc;">
+      That's all we've got!
+    </div>
+
+  </div>
+</div>

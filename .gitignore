@@ -1,0 +1,7 @@
+.DS_Store
+*.less
+**/*.less
+*.coffee
+**/*.coffee
+**/*.json
+**/*.gzip

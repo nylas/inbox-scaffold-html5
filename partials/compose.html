@@ -1,0 +1,21 @@
+<div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
+  <form ng-show="Compose.draft" autofocus="compose-active" class="centered">
+    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" autocomplete="Compose.completionOptions" results="resultsTo" target="Compose.draft.to"/></span></div>
+    <div class="thread-list" ng-class="{'populated': autocomplete.length > 0}">
+      <a class="thread" ng-class="{active: contact == resultsTo.selection}" ng-repeat="contact in resultsTo.completions"><div><div>
+        <in-participant-bubble email="{{contact.email}}"></in-participant-bubble>
+        <div class="participants">{{contact.name}}</div>
+        <div class="snippet">{{contact.email}}</div>
+      </div></div></a>
+    </div>
+    <div class="composer-input composer-subject" ng-hide="Compose.reply"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="Compose.draft.subject"/></span></div>
+    <div class="composer-input composer-body"><span scribe ng-model="Compose.draft.body" placeholder="Write a message..."></span>    <div class="dropzone-previews"></div></div>
+    <div class="composer-footer">
+      <div class="discard-btn"><a ng-click="Compose.discardClicked()">Discard</a></div>
+      <div dropzone="Compose.dropzoneConfig"></div>
+      <div class="send-btn"><a ng-click="Compose.sendClicked()" hotkey="enter">Send</a></div>
+    </div>
+  </form>
+  <div ng-show="!Compose.draft">Loading...</div>
+  <div class="leave-btn"><a ng-click="Compose.leaveClicked()">&#x2715;</a></div>
+</div>

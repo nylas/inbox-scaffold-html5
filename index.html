@@ -1,0 +1,61 @@
+<!doctype html>
+<html ng-app="baobab">
+  <head>
+    <base href="./">
+    <title>Baobab</title>
+    <link rel="stylesheet" href="/components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/angular-animation.css"/>
+    <style>.clickable { cursor: pointer; }</style>
+
+    <script src="/components/requirejs/require.js" data-main="/js/main.js"></script>
+
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="/css/baobab.less">
+  </head>
+
+  <body bind-keys>
+    <div ng-controller="AppCtrl as App" ng-switch="!!App.token()" class="theme-{{App.theme}}">
+
+      <link rel="stylesheet" type="text/css" ng-href="/css/baobab-{{App.theme}}.less">
+
+      <div ng-switch-when="false" class="login-background">
+        <div class="login-panel">
+          <h2>Please Sign In</h2>
+          <form action="{{App.inboxAuthURL}}" method="get">
+            <input type="submit" value="" style="display:none;" hidefocus="true" tabindex="-1"/>
+            <input class="form-control" style="text-align:center;" type="email" name="login_hint" placeholder="Email Address" ng-model="App.loginHint"/>
+            <input type="hidden" name="client_id" ng-value="App.inboxClientID"/>
+            <input type="hidden" name="redirect_uri" ng-value="App.inboxRedirectURL"/>
+            <input type="hidden" name="response_type" value="token"/>
+            <br>
+            <a class="btn btn-default" ng-href="{{App.inboxAuthURL}}?client_id={{App.inboxClientID}}&response_type=token&login_hint={{App.loginHint}}&redirect_uri={{App.inboxRedirectURL}}">Log In</a>
+          </form>
+        </div>
+      </div>
+
+      <div ng-switch-when="true">
+        <div id="content-sidebar">
+          <ul>
+            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox" hotkey="i"><img src="/img/tab_inbox@2x.png" /> Inbox</a></li>
+            <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts" hotkey="d"><img src="/img/tab_drafts@2x.png" /> Drafts</a></li>
+            <li class="{{App.cssForTab('sent')}}"><a href="#/sent" hotkey="s"><img src="/img/tab_sent@2x.png" /> Sent</a></li>
+            <li class="{{App.cssForTab('archive')}}"><a href="#/archive" hotkey="a"><img src="/img/tab_archive@2x.png" /> Archive</a></li>
+          </ul>
+
+          <ul class="pull-bottom">
+
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.toggleTheme()" href="#"><img src="/img/tab_theme@2x.png" /> Theme</a></li>
+
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="/img/tab_logout@2x.png" /> Log Out</a></li>
+          </ul>
+        </div>
+
+        <div id="content" ng-view></div>
+
+        <div id="debug-info">Token: {{App.token()}}<br>Namespace: {{App.namespace().id}}</div>
+      </div>
+    </div>
+  </body>
+</html>
