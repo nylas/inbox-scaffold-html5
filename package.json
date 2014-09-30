@@ -23,7 +23,6 @@
     "bower": "^1.3.9",
     "coffee-middleware": "^0.2.1",
     "coffee-script": "^1.8.0",
-    "crypto-js": "^3.1.2-5",
     "express": "^4.6.1",
     "less": "^1.7.4",
     "logfmt": "^1.1.2",

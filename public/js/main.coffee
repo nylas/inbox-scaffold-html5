@@ -19,6 +19,7 @@ require.config
     "bootstrap": "/components/bootstrap/dist/js/bootstrap.min"
     "scribe": "/components/scribe/scribe"
     "dropzone": "/components/dropzone/downloads/dropzone-amd-module.min"
+    "blueimp-md5": "/components/blueimp-md5/js/md5.min"
 
   shim:
     "angular":

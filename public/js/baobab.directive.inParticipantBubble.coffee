@@ -1,5 +1,5 @@
 
-define ["angular", "jQuery"], (angular) ->
+define ["angular", "blueimp-md5", "jQuery"], (angular, md5) ->
   angular.module('baobab.directive.inParticipantBubble', [])
 
   .directive 'inParticipantBubble', () ->
@@ -7,7 +7,7 @@ define ["angular", "jQuery"], (angular) ->
     template: '<div class="participant-bubble"></div>'
     link: (scope, element, attrs, ctrl) ->
       email = attrs['email'].toLowerCase().trim()
-      url = "/avatar/"+email
+      url = "http://www.gravatar.com/avatar/" + md5(email)+ "?d=blank"
       hue = 0
       for ii in [0..email.length-1] by 1
         hue += email.charCodeAt(ii)
