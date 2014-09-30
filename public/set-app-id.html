@@ -1,0 +1,38 @@
+<!doctype html>
+<html ng-app="baobab">
+  <head>
+    <base href="./">
+    <title>Inbox Client</title>
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/baobab.less">
+  </head>
+
+  <body>
+      <script>
+      function setCookie(cname, cvalue, exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          var expires = "expires="+d.toUTCString();
+          document.cookie = cname + "=" + cvalue + "; " + expires;
+      }
+      function setAppId() {
+        var field = document.getElementById('appIdField');
+        setCookie('baobab-app-id', field.value, 31);
+        window.location = 'index.html'
+      }
+      </script>
+      <div ng-switch-when="false" class="login-background">
+        <div class="login-panel" style="height:300px;">
+          <h2>Inbox Client Scaffold</h2>
+          <p>Paste your Inbox App ID below to test-drive the Inbox Client. If you've forked the repository to create your own app, hardcode your App ID in <code>/public/js/app.js</code>.
+          </p>
+          <br>
+          <input id="appIdField" class="form-control" style="text-align:center;" placeholder="Inbox App ID"/>
+          <br>
+          <a class="btn btn-default" onclick="setAppId()">Continue</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -95,9 +95,25 @@ define([
   }])
 
   .config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
-    $inboxProvider.
-    baseUrl('https://api.inboxapp.com').
-    appId('xdfim6g4mbduytzjhn8ud490');
+
+    // Replace `false` with your Inbox App ID
+    var inboxAppID = false; 
+
+    // Delete this code once you've added your Inbox App ID
+    // ---
+    var appIdCookie = 'baobab-app-id=';
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(appIdCookie) != -1)
+          inboxAppID = c.substring(appIdCookie.length,c.length);
+    }
+    if (inboxAppID == false)
+      window.location = 'set-app-id.html'
+    // ---
+
+    $inboxProvider.baseUrl('https://api.inboxapp.com').appId(inboxAppID);
 
     $sceDelegateProvider.resourceUrlWhitelist([
       'self', $inboxProvider.baseUrl() + "/**"]);
