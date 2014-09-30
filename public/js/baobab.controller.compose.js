@@ -111,6 +111,7 @@ define(["angular", "underscore"], function(angular, _) {
         setAttachments = function (newFiles) {
           dropzone.removeAllFiles(true);
           _.forEach(newFiles, function (file) {
+            file.name = file.filename;
             dropzone.putFile(file);
           });
         };

@@ -27,6 +27,9 @@ define ["angular", "underscore", "error"], (angular, _, error) ->
               return false
             return true
 
+          messages.every (message) ->
+            message.attachmentData = message.attachments()
+
           if scrollTo != undefined
             $scrollState.scrollTo('msg-' + scrollTo.id)
 
@@ -61,7 +64,7 @@ define ["angular", "underscore", "error"], (angular, _, error) ->
           if (blob.type.indexOf('image/') != -1)
             fileReader = new FileReader()
             fileReader.onload = () =>
-              @currentAttachmentDataURL = @result
+              @currentAttachmentDataURL = fileReader.result
               @currentAttachmentLoading = false
               $scope.$apply() unless $scope.$$phase
             fileReader.readAsDataURL(blob)

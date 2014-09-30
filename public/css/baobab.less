@@ -817,6 +817,42 @@ a {
   100% { opacity: 100%; }
 }
 
+/* Attachments */
+.dz-filename {
+  color:#979797;
+}
+
+.dropzone-previews {
+  .dz-preview {
+    .dz-details {
+      width: auto;
+      height: auto;
+      background: #FCFBFC;
+
+      .dz-filename {
+        left: 26px;
+        position: relative;
+      }
+    }
+
+    &.dz-file-preview {
+      [data-dz-thumbnail] {
+        display: inherit;
+      }
+      img {
+        .file-type-icon;
+        position: absolute;
+        top: 0;
+        border: 0;
+      }
+    }
+
+    &:hover .dz-details img {
+      display: inherit;
+    }
+  }
+}
+
 /* Icons */
 
 .file-type-icon{display:block; width:24px; height:30px; background:#F9F9F9; position:relative; border:1px solid #ccc; border-radius:2px; box-shadow:inset 1px 1px 0 0 #ffffff, inset -1px -1px 0 0 #ffffff, inset 0 10px 20px -10px rgba(0,0,0,.05);}
