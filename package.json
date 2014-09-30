@@ -1,5 +1,5 @@
 {
-  "name": "baobab",
+  "name": "inbox-client-scaffold-web",
   "version": "0.0.1",
   "description": "Inbox Internal Web Client",
   "main": "server.js",
@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inboxapp/baobab.git"
+    "url": "https://github.com/inboxapp/inbox-client-scaffold-web.git"
   },
   "author": "InboxApp, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inboxapp/baobab/issues"
+    "url": "https://github.com/inboxapp/inbox-client-scaffold-web/issues"
   },
   "engines": {
     "node": "0.10.x"
