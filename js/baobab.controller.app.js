@@ -5,7 +5,7 @@
         window.AppCtrl = this;
         this.inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize');
         this.inboxClientID = $inbox.appId();
-        this.inboxRedirectURL = "" + window.location.protocol + "//" + window.location.host + "/";
+        this.inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '');
         this.loginHint = '';
         this.clearToken = $auth.clearToken;
         this.token = (function(_this) {

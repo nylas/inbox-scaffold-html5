@@ -35,7 +35,7 @@
             }
             token = search.substr(tokenStart, tokenEnd);
             $cookieStore.put('inbox_auth_token', token);
-            return window.location.href = '/';
+            return window.location.href = window.location.href.split('?')[0];
           };
         })(this);
         if (!this.readTokenFromCookie()) {

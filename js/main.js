@@ -1,23 +1,23 @@
 (function() {
   require.config({
     paths: {
-      "scribe": "/components/scribe/scribe",
-      "angular": "/components/angular/angular",
-      "angularRoute": "/components/angular-route/angular-route",
-      "angularSanitize": "/components/angular-sanitize/angular-sanitize",
-      "angularCookies": "/components/angular-cookies/angular-cookies",
-      "angularAnimate": "/components/angular-animate/angular-animate",
-      "angularStrap": ["/components/angular-strap/dist/angular-strap", "/components/angular-strap/dist/angular-strap.tpl"],
-      "angularMocks": "/components/angular-mocks/angular-mocks",
-      "underscore": "/components/underscore/underscore",
+      "scribe": "../components/scribe/scribe",
+      "angular": "../components/angular/angular",
+      "angularRoute": "../components/angular-route/angular-route",
+      "angularSanitize": "../components/angular-sanitize/angular-sanitize",
+      "angularCookies": "../components/angular-cookies/angular-cookies",
+      "angularAnimate": "../components/angular-animate/angular-animate",
+      "angularStrap": ["../components/angular-strap/dist/angular-strap", "../components/angular-strap/dist/angular-strap.tpl"],
+      "angularMocks": "../components/angular-mocks/angular-mocks",
+      "underscore": "../components/underscore/underscore",
       "angularInfiniteScroll": "infinite-scroll",
-      "jQuery": "/components/jquery/dist/jquery",
+      "jQuery": "../components/jquery/dist/jquery",
       "Events": "minievents",
-      "moment": "/components/moment/min/moment.min",
-      "bootstrap": "/components/bootstrap/dist/js/bootstrap.min",
-      "scribe": "/components/scribe/scribe",
-      "dropzone": "/components/dropzone/downloads/dropzone-amd-module.min",
-      "blueimp-md5": "/components/blueimp-md5/js/md5.min"
+      "moment": "../components/moment/min/moment.min",
+      "bootstrap": "../components/bootstrap/dist/js/bootstrap.min",
+      "scribe": "../components/scribe/scribe",
+      "dropzone": "../components/dropzone/downloads/dropzone-amd-module.min",
+      "blueimp-md5": "../components/blueimp-md5/js/md5.min"
     },
     shim: {
       "angular": {
