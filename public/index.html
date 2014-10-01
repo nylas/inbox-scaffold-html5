@@ -3,22 +3,22 @@
   <head>
     <base href="./">
     <title>Inbox Client</title>
-    <link rel="stylesheet" href="/components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/angular-animation.css"/>
+    <link rel="stylesheet" href="./components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/angular-animation.css"/>
     <style>.clickable { cursor: pointer; }</style>
 
-    <script src="/components/requirejs/require.js" data-main="/js/main.js"></script>
+    <script src="./components/requirejs/require.js" data-main="./js/main.js"></script>
 
-    <link rel="icon" type="image/png" href="/img/favicon.png">
-    <link rel="stylesheet" type="text/css" href="/components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/dropzone.css">
-    <link rel="stylesheet" type="text/css" href="/css/baobab.less">
+    <link rel="icon" type="image/png" href="./img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="./components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="./css/baobab.css">
   </head>
 
   <body bind-keys>
     <div ng-controller="AppCtrl as App" ng-switch="!!App.token()" class="theme-{{App.theme}}">
 
-      <link rel="stylesheet" type="text/css" ng-href="/css/baobab-{{App.theme}}.less">
+      <link rel="stylesheet" type="text/css" ng-href="./css/baobab-{{App.theme}}.css">
 
       <div ng-switch-when="false" class="login-background">
         <div class="login-panel">
@@ -38,17 +38,17 @@
       <div ng-switch-when="true">
         <div id="content-sidebar">
           <ul>
-            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox" hotkey="i"><img src="/img/tab_inbox@2x.png" /> Inbox</a></li>
-            <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts" hotkey="d"><img src="/img/tab_drafts@2x.png" /> Drafts</a></li>
-            <li class="{{App.cssForTab('sent')}}"><a href="#/sent" hotkey="s"><img src="/img/tab_sent@2x.png" /> Sent</a></li>
-            <li class="{{App.cssForTab('archive')}}"><a href="#/archive" hotkey="a"><img src="/img/tab_archive@2x.png" /> Archive</a></li>
+            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox" hotkey="i"><img src="./img/tab_inbox@2x.png" /> Inbox</a></li>
+            <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts" hotkey="d"><img src="./img/tab_drafts@2x.png" /> Drafts</a></li>
+            <li class="{{App.cssForTab('sent')}}"><a href="#/sent" hotkey="s"><img src="./img/tab_sent@2x.png" /> Sent</a></li>
+            <li class="{{App.cssForTab('archive')}}"><a href="#/archive" hotkey="a"><img src="./img/tab_archive@2x.png" /> Archive</a></li>
           </ul>
 
           <ul class="pull-bottom">
 
-            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.toggleTheme()" href="#"><img src="/img/tab_theme@2x.png" /> Theme</a></li>
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.toggleTheme()" href="#"><img src="./img/tab_theme@2x.png" /> Theme</a></li>
 
-            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="/img/tab_logout@2x.png" /> Log Out</a></li>
+            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="./img/tab_logout@2x.png" /> Log Out</a></li>
           </ul>
         </div>
 

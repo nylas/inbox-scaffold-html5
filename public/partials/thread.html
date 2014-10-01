@@ -50,10 +50,10 @@ img {
 
   <div class="message-list centered">
     <!-- Display messages -->
-    <div id="msg-{{msg.id}}" class="message" ng-class="{'unread': msg.unread}" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
+    <div id="msg-{{msg.id}}" class="message" ng-class="{'unread': msg.unread}" ng-include="'partials/message.html'" ng-repeat="msg in ThreadCtrl.messages"></div>
 
     <!-- Display drafts -->
-    <div id="msg-{{msg.id}}" ng-class="{editing: ThreadCtrl.draft==msg}" class="message draft" ng-include="'/partials/_message.html'" ng-repeat="msg in ThreadCtrl.drafts" ng-click="ThreadCtrl.draftClicked(msg)"></div>
+    <div id="msg-{{msg.id}}" ng-class="{editing: ThreadCtrl.draft==msg}" class="message draft" ng-include="'partials/message.html'" ng-repeat="msg in ThreadCtrl.drafts" ng-click="ThreadCtrl.draftClicked(msg)"></div>
 
   </div>
 
@@ -83,6 +83,6 @@ img {
   </div>
 
   <!-- Compose State -->
-  <div class="composer-reply" ng-include="'/partials/compose.html'" ng-show="replying"></div>
+  <div class="composer-reply" ng-include="'partials/compose.html'" ng-show="replying"></div>
 
 </div>

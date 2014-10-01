@@ -8,7 +8,7 @@ define ['angular', 'underscore'], (angular, _) ->
       "target": "="
     template: (elem, attr) ->
       '<div><span ng-repeat="tag in target track by $index" class="tag" ' +
-      'ng-include="\'/partials/tag.html\'"></span><span ' +
+      'ng-include="\'partials/tag.html\'"></span><span ' +
       'class="tag-wrap-input" ng-transclude/></div>'
     transclude: 'element'
     replace: true

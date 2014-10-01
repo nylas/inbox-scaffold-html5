@@ -28,7 +28,7 @@ require ["angular"], (angular) ->
 
       token = search.substr(tokenStart, tokenEnd)
       $cookieStore.put('inbox_auth_token', token)
-      window.location.href = '/'
+      window.location.href = window.location.href.split('?')[0]
 
 
     @readTokenFromURL() unless @readTokenFromCookie()

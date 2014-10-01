@@ -5,7 +5,7 @@ define ['angular'], (angular) ->
 
       @inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize')
       @inboxClientID = $inbox.appId()
-      @inboxRedirectURL = "#{window.location.protocol}//#{window.location.host}/"
+      @inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '')
       @loginHint = ''
 
       @clearToken = $auth.clearToken

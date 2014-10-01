@@ -78,16 +78,16 @@ define([
 
   .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.when('/thread/:id', {
-      templateUrl: '/partials/thread.html',
+      templateUrl: 'partials/thread.html',
       controller: 'ThreadCtrl as ThreadCtrl',
       resolve: ['$namespaces-promise']
     });
     $routeProvider.when('/mail/compose', {
-      templateUrl: '/partials/compose-zen.html',
+      templateUrl: 'partials/compose-zen.html',
       resolve: ['$namespaces-promise']
     });
     $routeProvider.when('/:tag', {
-      templateUrl: '/partials/thread_list.html',
+      templateUrl: 'partials/thread_list.html',
       controller: 'ThreadListCtrl as ThreadListCtrl',
       resolve: ['$namespaces-promise']
     });
