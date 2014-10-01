@@ -64,7 +64,7 @@ The Inbox HTML5 Scaffold is fairly simple and is intended to be a solid foundati
 
 In the future, we plan to:
 
-- Wrap the HTML5 Scaffold in [Atom-Shell](http://github.com/github/atom-shell) and rewrite key Angular services to use an SQLite cache, offline action queue, and more.
+- Wrap the HTML5 Scaffold in [Atom-Shell](http://github.com/atom/atom-shell) and rewrite key Angular services to use an SQLite cache, offline action queue, and more.
 
 - Clearly define integration points for you to create your own directives and services that extend the client.
 
