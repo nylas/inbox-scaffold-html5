@@ -1,7 +1,7 @@
 define ['angular', 'underscore'], (angular, _) ->
   angular.module('baobab.directive.autocomplete', [])
 
-  .directive 'autocomplete', ($compile) ->
+  .directive 'autocomplete', ($timeout) ->
     restrict: 'A'
     scope:
       "results": "="
@@ -27,16 +27,24 @@ define ['angular', 'underscore'], (angular, _) ->
 
       # Set the width proportionally to the element
       span = document.createElement("span")
-      setWidth = () ->
+      setWidth = -> $timeout -> $timeout ->
+        # This is an awful hack.  We need to wait two digests to make sure the tags are settled
+
+        # Measure the width of the content using `span`
         content = input.val() || ""
         span.textContent = content
         span.style.visibility = "hidden"
         span.style.position = "absolute"
         input.after(span)
-        span.style.left = input[0].offsetLeft + input[0].clientLeft + 1 + "px"
+        span.style.left = input[0].offsetLeft + input[0].clientLeft - 1 + "px"
         span.style.top = input[0].offsetTop + input[0].clientTop + 1 + "px"
+
+        # Set input to the width of the content so it is positioned on the correct row
         input.css("width", 20 + span.offsetWidth + "px")
-        span.remove()
+        left = input[0].offsetLeft - 2
+        width = elem.width() - left - 4
+        input.css("width", width + "px")
+      setWidth()
 
       AutocompleteException = (message) ->
         @name = "AutocompleteException"
@@ -59,8 +67,7 @@ define ['angular', 'underscore'], (angular, _) ->
         parse = options.parse
 
         updateCompletions = () ->
-          setWidth()
-          results.completions = complete(input.val())
+          results.completions = _.first(complete(input.val()), 10)
           results.index = results.completions.indexOf(results.selection)
           if results.index < 0
             results.index = 0
@@ -75,6 +82,7 @@ define ['angular', 'underscore'], (angular, _) ->
           model.push(results.selection)
           input.val("")
           updateCompletions()
+          setWidth()
 
         removeTag = () ->
           model = scope.target
@@ -82,6 +90,7 @@ define ['angular', 'underscore'], (angular, _) ->
             console.log "WARN: No model on removeTag"
             return
           model.pop()
+          setWidth()
 
         updateIndex = (f) ->
           scope.$apply () ->
@@ -107,10 +116,12 @@ define ['angular', 'underscore'], (angular, _) ->
               _.map val, (contact) ->
                 model.push(contact)
               input.val(last)
-              setWidth()
               updateCompletions()
+              setWidth()
           else
-            scope.$apply updateCompletions
+            scope.$apply ->
+              updateCompletions()
+              setWidth()
 
         input.on 'blur', (event) ->
           val = input.val()
@@ -126,8 +137,8 @@ define ['angular', 'underscore'], (angular, _) ->
             _.map val, (contact) ->
               model.push(contact)
             input.val("")
-            setWidth()
             updateCompletions()
+            setWidth()
 
         keys =
             13: (event) -> #enter
