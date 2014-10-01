@@ -29,6 +29,7 @@ Yes, it even has a dark theme:
 
 The Inbox Client Scaffold is intended for developers - to use it, you need an Inbox Developer Program membership or a copy of the open-source [Inbox Sync Engine](http://github.com/inboxapp/inbox). When you download or fork the Inbox Client Scaffold, you'll need to add your Inbox App ID before you can connect your account.
 
+Already have an Inbox App ID? Try out the Inbox Web Client Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-client-scaffold-web/).
 
 ##Getting Started
 
