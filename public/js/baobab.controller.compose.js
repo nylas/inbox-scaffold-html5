@@ -38,6 +38,7 @@ define(["angular", "underscore"], function(angular, _) {
     function clearDraft() {
       $scope.$emit("compose-cleared");
       self.reply = false;
+      $scope.cc = false;
       setDraft($namespaces.current().draft());
     }
 
@@ -45,7 +46,12 @@ define(["angular", "underscore"], function(angular, _) {
       setAttachments(draft.attachments())
       self.draft = draft
       self.draft.to = self.draft.to || []; // Gross
+      self.draft.cc = self.draft.cc || [];
+      self.draft.bcc = self.draft.bcc || [];
       self.draft.fileData = self.draft.fileData || [];
+      if (!_.isEmpty(self.draft.cc) || !_.isEmpty(self.draft.bcc)) {
+        $scope.cc = true;
+      }
       $scope.$emit("compose-active");
     }
 

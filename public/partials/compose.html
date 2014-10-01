@@ -1,13 +1,13 @@
 <div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
+  <span style="position: fixed; top: 0; right: 0; padding: 8px; box-shadow: 0 0 8px grey; background: grey; border-bottom-left-radius: 4px; color:white">
+
+  </span>
   <form ng-show="Compose.draft" autofocus="compose-active" class="centered">
-    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" autocomplete="Compose.completionOptions" results="resultsTo" target="Compose.draft.to"/></span></div>
-    <div class="thread-list" ng-class="{'populated': autocomplete.length > 0}">
-      <a class="thread" ng-class="{active: contact == resultsTo.selection}" ng-repeat="contact in resultsTo.completions"><div><div>
-        <in-participant-bubble email="{{contact.email}}"></in-participant-bubble>
-        <div class="participants">{{contact.name}}</div>
-        <div class="snippet">{{contact.email}}</div>
-      </div></div></a>
-    </div>
+    <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" autocomplete="Compose.completionOptions" target="Compose.draft.to"/></span></div>
+    <span class="cc-bcc-btn" ng-hide="cc"><a ng-click="cc = true">cc/bcc</a></span>
+    <div class="composer-input composer-cc" ng-show="cc"><label for="cc">Cc</label><span for="cc"><input type=text name="cc" autocomplete="Compose.completionOptions" target="Compose.draft.cc"/></span></div>
+    <div class="composer-input composer-bcc" ng-show="cc"><label for="bcc">Bcc</label><span for="bcc"><input type=text name="bcc" autocomplete="Compose.completionOptions" target="Compose.draft.bcc"/></span></div>
+
     <div class="composer-input composer-subject" ng-hide="Compose.reply"><span><input type=text name="subject" placeholder="Subject" class="compose-subject" ng-model="Compose.draft.subject"/></span></div>
     <div class="composer-input composer-body"><span scribe ng-model="Compose.draft.body" placeholder="Write a message..."></span>    <div class="dropzone-previews"></div></div>
     <div class="composer-footer">

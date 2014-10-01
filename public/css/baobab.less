@@ -653,7 +653,7 @@ a {
     overflow: scroll;
   }
 
-  label[for="to"] {
+  label {
     display: block;
     color: #999;
     float: left;
@@ -690,9 +690,20 @@ a {
   position: absolute;
   width: 100%;
   background: #fafafa;
-  border: 1px solid #eee;
   border-radius: 4px;
   border-top: none;
+  z-index: 2;
+}
+
+.composer .cc-bcc-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-top: 12px;
+  a {
+    color: #ccc;
+    font-size: Small;
+  }
 }
 
 .composer-footer {

@@ -1,10 +1,9 @@
 define ['angular', 'underscore'], (angular, _) ->
   angular.module('baobab.directive.autocomplete', [])
 
-  .directive 'autocomplete', ($timeout) ->
+  .directive 'autocomplete', ($timeout, $compile) ->
     restrict: 'A'
     scope:
-      "results": "="
       "autocomplete": "="
       "target": "="
     template: (elem, attr) ->
@@ -16,6 +15,14 @@ define ['angular', 'underscore'], (angular, _) ->
     link: (scope, elem, attr) ->
       elem.addClass('autocomplete')
       input = elem.find('[autocomplete]')
+
+      completions = $compile('<div class="thread-list" ng-class="{\'populated\': autocomplete.length > 0}">' +
+        '<a class="thread" ng-class="{active: contact == results.selection}" ng-repeat="contact in results.completions"><div><div>' +
+          '<in-participant-bubble email="{{contact.email}}"></in-participant-bubble>' +
+          '<div class="participants">{{contact.name}}</div>' +
+          '<div class="snippet">{{contact.email}}</div>' +
+        '</div></div></a>' +
+      '</div>')(scope).insertAfter(elem.parent().parent())
 
       results =
         completions: []
@@ -44,7 +51,6 @@ define ['angular', 'underscore'], (angular, _) ->
         left = input[0].offsetLeft - 2
         width = elem.width() - left - 4
         input.css("width", width + "px")
-      setWidth()
 
       AutocompleteException = (message) ->
         @name = "AutocompleteException"
