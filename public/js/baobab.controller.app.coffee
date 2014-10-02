@@ -1,6 +1,14 @@
 define ['angular'], (angular) ->
   angular.module("baobab.controller.app", [])
-    .controller('AppCtrl', ['$scope', '$namespaces', '$inbox', '$auth', '$location', '$cookieStore', '$sce', ($scope, $namespaces, $inbox, $auth, $location, $cookieStore, $sce) ->
+    .controller('AppCtrl', [
+        '$scope',
+        '$namespaces',
+        '$inbox',
+        '$auth',
+        '$location',
+        '$cookieStore',
+        '$sce',
+    ($scope, $namespaces, $inbox, $auth, $location, $cookieStore, $sce) ->
       window.AppCtrl = @
 
       @inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize')
@@ -10,7 +18,7 @@ define ['angular'], (angular) ->
 
       @clearToken = $auth.clearToken
       @token = () => $auth.token
-      
+
       @namespace = () => $namespaces.current()
 
       @theme = $cookieStore.get('baobab_theme') || 'light'

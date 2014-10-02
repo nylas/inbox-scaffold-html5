@@ -17,7 +17,8 @@ define ['angular', 'underscore'], (angular, _) ->
       input = elem.find('[autocomplete]')
 
       completions = $compile('<div class="thread-list" ng-class="{\'populated\': autocomplete.length > 0}">' +
-        '<a class="thread" ng-class="{active: contact == results.selection}" ng-repeat="contact in results.completions"><div><div>' +
+        '<a class="thread" ng-class="{active: contact == results.selection}"' +
+            'ng-repeat="contact in results.completions"><div><div>' +
           '<in-participant-bubble email="{{contact.email}}"></in-participant-bubble>' +
           '<div class="participants">{{contact.name}}</div>' +
           '<div class="snippet">{{contact.email}}</div>' +

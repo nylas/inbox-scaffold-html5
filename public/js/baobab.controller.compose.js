@@ -43,8 +43,8 @@ define(["angular", "underscore"], function(angular, _) {
     }
 
     function setDraft(draft) {
-      setAttachments(draft.attachments())
-      self.draft = draft
+      setAttachments(draft.attachments());
+      self.draft = draft;
       self.draft.to = self.draft.to || []; // Gross
       self.draft.cc = self.draft.cc || [];
       self.draft.bcc = self.draft.bcc || [];
@@ -87,12 +87,12 @@ define(["angular", "underscore"], function(angular, _) {
     });
 
     $scope.$on("$destroy", function () {
-      if (_.isEmpty(self.draft.to) && _.isEmpty(self.draft.from) && _.isEmpty(self.draft.cc) && _.isEmpty(self.draft.bcc)
-          && _.isEmpty(self.draft.subject) && _.isEmpty(self.draft.body)) {
-        return
+      if (_.isEmpty(self.draft.to) && _.isEmpty(self.draft.from) && _.isEmpty(self.draft.cc) &&
+          _.isEmpty(self.draft.bcc) && _.isEmpty(self.draft.subject) && _.isEmpty(self.draft.body)) {
+        return;
       }
       console.log("Saving...");
-      self.draft.save().then(function () { console.log("Saved.")})
+      self.draft.save().then(function () { console.log("Saved."); });
     });
 
     self.dropzoneConfig = {

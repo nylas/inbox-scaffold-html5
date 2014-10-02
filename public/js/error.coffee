@@ -1,5 +1,5 @@
 define [], () ->
-  _displayErrors = true;
+  _displayErrors = true
   window.onbeforeunload = () ->
     _displayErrors = false
     return
