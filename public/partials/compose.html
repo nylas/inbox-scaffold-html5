@@ -1,7 +1,4 @@
 <div ng-controller="ComposeCtrl as Compose" tabindex="-1" style="display: block;" class="composer">
-  <span style="position: fixed; top: 0; right: 0; padding: 8px; box-shadow: 0 0 8px grey; background: grey; border-bottom-left-radius: 4px; color:white">
-
-  </span>
   <form ng-show="Compose.draft" autofocus="compose-active" class="centered">
     <div class="composer-input composer-to"><label for="to">To</label><span for="to"><input type=text name="to" autocomplete="Compose.completionOptions" target="Compose.draft.to"/></span></div>
     <span class="cc-bcc-btn" ng-hide="cc"><a ng-click="cc = true">cc/bcc</a></span>
