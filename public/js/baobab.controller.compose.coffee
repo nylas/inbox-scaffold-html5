@@ -84,6 +84,18 @@ define ["angular", "underscore"], (angular, _) ->
           'Authorization': 'Basic '+btoa($auth.token+':')
         'addRemoveLinks': true
         'previewsContainer': '.dropzone-previews'
+        'createImageThumbnails': false
+        'dictFallbackText': null
+        'dictRemoveFile': '✘'
+        'previewTemplate': """
+          <div class="dz-preview dz-file-preview">
+            <a class="attachment">
+              <div class="pull-left file-type-icon"><span class="corner"></span><span class="type"></span></div>
+              <div class="pull-left file-name dz-filename"><span data-dz-name></span></div>
+            </a>
+            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+          </div>
+          """
 
       eventHandlers:
         success: (file, response, e) ->

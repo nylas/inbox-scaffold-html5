@@ -672,7 +672,7 @@ a {
     display: inline-block;
   }
 
-  span {
+  > span {
     padding: 2px;
     display: block;
   }
@@ -832,37 +832,11 @@ a {
 /* Attachments */
 .dz-filename {
   color:#979797;
+  padding-left: 0.5em;
 }
 
-.dropzone-previews {
-  .dz-preview {
-    .dz-details {
-      width: auto;
-      height: auto;
-      background: #FCFBFC;
-
-      .dz-filename {
-        left: 26px;
-        position: relative;
-      }
-    }
-
-    &.dz-file-preview {
-      [data-dz-thumbnail] {
-        display: inherit;
-      }
-      img {
-        .file-type-icon;
-        position: absolute;
-        top: 0;
-        border: 0;
-      }
-    }
-
-    &:hover .dz-details img {
-      display: inherit;
-    }
-  }
+.dz-remove {
+  padding-left: 0.5em;
 }
 
 /* Icons */
