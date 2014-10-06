@@ -97,7 +97,7 @@ define([
   .config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
 
     // Replace `false` with your Inbox App ID
-    var inboxAppID = false; 
+    var inboxAppID = false;
 
     // Delete this code once you've added your Inbox App ID
     // ---
@@ -109,8 +109,8 @@ define([
         if (c.indexOf(appIdCookie) != -1)
           inboxAppID = c.substring(appIdCookie.length,c.length);
     }
-    if (inboxAppID == false)
-      window.location = 'set-app-id.html'
+    if (inboxAppID === false)
+      window.location = 'set-app-id.html';
     // ---
 
     $inboxProvider.baseUrl('https://api.inboxapp.com').appId(inboxAppID);

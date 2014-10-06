@@ -1,10 +1,9 @@
 (function() {
   define(['angular', 'underscore'], function(angular, _) {
-    return angular.module('baobab.directive.autocomplete', []).directive('autocomplete', function($compile) {
+    return angular.module('baobab.directive.autocomplete', []).directive('autocomplete', function($timeout, $compile) {
       return {
         restrict: 'A',
         scope: {
-          "results": "=",
           "autocomplete": "=",
           "target": "="
         },
@@ -14,9 +13,10 @@
         transclude: 'element',
         replace: true,
         link: function(scope, elem, attr) {
-          var AutocompleteException, input, results, setWidth, span;
+          var AutocompleteException, completions, input, results, setWidth, span;
           elem.addClass('autocomplete');
           input = elem.find('[autocomplete]');
+          completions = $compile('<div class="thread-list" ng-class="{\'populated\': autocomplete.length > 0}">' + '<a class="thread" ng-class="{active: contact == results.selection}"' + 'ng-repeat="contact in results.completions"><div><div>' + '<in-participant-bubble email="{{contact.email}}"></in-participant-bubble>' + '<div class="participants">{{contact.name}}</div>' + '<div class="snippet">{{contact.email}}</div>' + '</div></div></a>' + '</div>')(scope).insertAfter(elem.parent().parent());
           results = {
             completions: [],
             selection: null,
@@ -25,16 +25,22 @@
           scope.results = results;
           span = document.createElement("span");
           setWidth = function() {
-            var content;
-            content = input.val() || "";
-            span.textContent = content;
-            span.style.visibility = "hidden";
-            span.style.position = "absolute";
-            input.after(span);
-            span.style.left = input[0].offsetLeft + input[0].clientLeft + 1 + "px";
-            span.style.top = input[0].offsetTop + input[0].clientTop + 1 + "px";
-            input.css("width", 20 + span.offsetWidth + "px");
-            return span.remove();
+            return $timeout(function() {
+              return $timeout(function() {
+                var content, left, width;
+                content = input.val() || "";
+                span.textContent = content;
+                span.style.visibility = "hidden";
+                span.style.position = "absolute";
+                input.after(span);
+                span.style.left = input[0].offsetLeft + input[0].clientLeft - 1 + "px";
+                span.style.top = input[0].offsetTop + input[0].clientTop + 1 + "px";
+                input.css("width", 20 + span.offsetWidth + "px");
+                left = input[0].offsetLeft - 2;
+                width = elem.width() - left - 4;
+                return input.css("width", width + "px");
+              });
+            });
           };
           AutocompleteException = function(message) {
             this.name = "AutocompleteException";
@@ -54,8 +60,7 @@
             complete = options.complete;
             parse = options.parse;
             updateCompletions = function() {
-              setWidth();
-              results.completions = complete(input.val());
+              results.completions = _.first(complete(input.val()), 10);
               results.index = results.completions.indexOf(results.selection);
               if (results.index < 0) {
                 results.index = 0;
@@ -74,7 +79,8 @@
               }
               model.push(results.selection);
               input.val("");
-              return updateCompletions();
+              updateCompletions();
+              return setWidth();
             };
             removeTag = function() {
               var model;
@@ -83,7 +89,8 @@
                 console.log("WARN: No model on removeTag");
                 return;
               }
-              return model.pop();
+              model.pop();
+              return setWidth();
             };
             updateIndex = function(f) {
               return scope.$apply(function() {
@@ -115,11 +122,14 @@
                     return model.push(contact);
                   });
                   input.val(last);
-                  setWidth();
-                  return updateCompletions();
+                  updateCompletions();
+                  return setWidth();
                 });
               } else {
-                return scope.$apply(updateCompletions);
+                return scope.$apply(function() {
+                  updateCompletions();
+                  return setWidth();
+                });
               }
             });
             input.on('blur', function(event) {
@@ -140,8 +150,8 @@
                   return model.push(contact);
                 });
                 input.val("");
-                setWidth();
-                return updateCompletions();
+                updateCompletions();
+                return setWidth();
               });
             });
             keys = {
