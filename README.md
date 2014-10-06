@@ -29,7 +29,7 @@ Yes, it even has a dark theme:
 
 The Inbox HTML5 Scaffold is intended for developers - to use it, you need an Inbox Developer Program membership or a copy of the open-source [Inbox Sync Engine](http://github.com/inboxapp/inbox). When you download or fork the Inbox HTML5 Scaffold, you'll need to add your Inbox App ID before you can connect your account.
 
-Already have an Inbox account? Try out the Inbox HTML5 Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-scaffold-html5/).  You'll need to create a new app in the [developer console](https://www.inboxapp.com/console/apps) and add `https://inboxapp.github.io/inbox-scaffold-html5` to the callback URLs.  Once you have an App ID, you're good to go!
+Already have an Inbox account? Try out the Inbox HTML5 Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-scaffold-html5/).  You'll need to create a new app in the [developer console](https://www.inboxapp.com/console/apps) and add `https://inboxapp.github.io/inbox-scaffold-html5/` to the callback URLs.  Once you have an App ID, you're good to go!
 
 ##Getting Started
 
