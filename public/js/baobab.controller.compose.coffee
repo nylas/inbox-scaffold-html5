@@ -30,8 +30,8 @@ define ["angular", "underscore"], (angular, _) ->
         if _.isEmpty(search)
           return []
         $contacts.list().filter (contact) ->
-          contact.email.toLowerCase().indexOf(search.toLowerCase()) == 0 ||
-          !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) == 0
+          !_.isEmpty(contact.email) && (contact.email.toLowerCase().indexOf(search.toLowerCase()) == 0 ||
+          !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) == 0)
       parse: (text) ->
         candidates = $contacts.list().filter (contact) ->
           contact.email.toLowerCase() == text.toLowerCase()
