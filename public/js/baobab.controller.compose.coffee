@@ -34,7 +34,7 @@ define ["angular", "underscore"], (angular, _) ->
           !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) == 0)
       parse: (text) ->
         candidates = $contacts.list().filter (contact) ->
-          contact.email.toLowerCase() == text.toLowerCase()
+          !_.isEmpty(contact.email) && contact.email.toLowerCase() == text.toLowerCase()
 
         if (candidates.length == 1)
           candidates[0]
