@@ -1,5 +1,5 @@
 
-define ["angular", "underscore", "error"], (angular, _, error) ->
+define ["angular", "underscore", "error", "FileSaver"], (angular, _, error, saveAs) ->
   angular.module("baobab.controller.thread", [])
   .controller('ThreadCtrl', ['$scope', '$namespaces', '$threads', '$modal', '$routeParams', '$location', '$scrollState',
     ($scope, $namespaces, $threads, $modal, $routeParams, $location, $scrollState) ->
