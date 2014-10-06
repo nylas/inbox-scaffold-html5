@@ -1,5 +1,5 @@
 (function() {
-  define(["angular", "underscore", "error"], function(angular, _, error) {
+  define(["angular", "underscore", "error", "FileSaver"], function(angular, _, error, saveAs) {
     return angular.module("baobab.controller.thread", []).controller('ThreadCtrl', [
       '$scope', '$namespaces', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespaces, $threads, $modal, $routeParams, $location, $scrollState) {
         var threadReady;

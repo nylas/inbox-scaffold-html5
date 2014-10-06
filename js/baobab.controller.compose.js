@@ -29,7 +29,7 @@
             return [];
           }
           return $contacts.list().filter(function(contact) {
-            return contact.email.toLowerCase().indexOf(search.toLowerCase()) === 0 || !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) === 0;
+            return !_.isEmpty(contact.email) && (contact.email.toLowerCase().indexOf(search.toLowerCase()) === 0 || !_.isEmpty(contact.name) && contact.name.toLowerCase().indexOf(search.toLowerCase()) === 0);
           });
         },
         parse: function(text) {
