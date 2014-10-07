@@ -360,6 +360,7 @@ a {
   font-size: 14px;
   color: #757575;
   text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 .thread-list .thread:hover,
 .thread-list .thread.active {
@@ -377,7 +378,6 @@ a {
 .thread-list .thread > div > div {
   margin-left: 2px;
   margin-right: 6px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   padding: 10px;
 }
 .thread-list .thread:last-child > div > div {

@@ -35,7 +35,7 @@
         parse: function(text) {
           var candidates;
           candidates = $contacts.list().filter(function(contact) {
-            return contact.email.toLowerCase() === text.toLowerCase();
+            return !_.isEmpty(contact.email) && contact.email.toLowerCase() === text.toLowerCase();
           });
           if (candidates.length === 1) {
             return candidates[0];
