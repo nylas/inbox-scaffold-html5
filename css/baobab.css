@@ -54,19 +54,39 @@ a {
 }
 #debug-info {
   position: fixed;
-  right: 0;
+  right: calc(-280px + 4px);
   bottom: 0;
-  width: 280px;
+  width: calc(280px + 1.4em);
   height: 30px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #999;
   color: white;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 4px;
+  padding-left: calc(1.4em + 4px);
   overflow: hidden;
   line-height: 1.0;
   font-size: 0.8em;
+  transition: right 200ms ease-in;
+  border-top-left-radius: 2px;
+}
+#debug-info:before {
+  font-weight: "bold";
+  content: "<";
+  height: 30px;
+  width: 1.4em;
+  text-align: center;
+  line-height: 30px;
+  text-align: middle;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+#debug-info:hover {
+  right: 0;
 }
 #content-sidebar {
   width: 76px;
@@ -548,7 +568,7 @@ a {
   right: 0;
   bottom: 0;
   height: 335px;
-  overflow: hidden;
+  overflow: scroll;
   -webkit-transition: height 250ms ease-out;
   -moz-transition: height 250ms ease-out;
   -ms-transition: height 250ms ease-out;
