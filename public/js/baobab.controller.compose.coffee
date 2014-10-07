@@ -1,12 +1,14 @@
 define ["angular", "underscore"], (angular, _) ->
   angular.module("baobab.controller.compose", [])
-  .controller 'ComposeCtrl', ($scope, $auth, $namespaces, $contacts) ->
+  .controller 'ComposeCtrl', ($scope, $auth, $namespaces, $contacts, $routeParams, $location) ->
     self = this # Controller at creation time. `this` changes to Window later!
 
     clearDraft = ->
       $scope.$emit("compose-cleared")
       self.reply = false
       $scope.cc = false
+      if ($routeParams.draft_id)
+        $location.path("/mail/compose")
       setDraft $namespaces.current().draft()
       return
 
@@ -23,7 +25,12 @@ define ["angular", "underscore"], (angular, _) ->
       return
 
     setAttachments = -> # noop
-    clearDraft()
+
+    if _.isEmpty($routeParams.draft_id)
+      clearDraft()
+    else
+      $namespaces.current().draft($routeParams.draft_id).then (draft) ->
+        setDraft(draft)
 
     @completionOptions =
       complete: (search) ->
@@ -48,9 +55,10 @@ define ["angular", "underscore"], (angular, _) ->
         return
 
     @sendClicked = ->
-      self.draft.save().then ->
+      self.draft.save().then (draft) ->
         $scope.$emit("compose-saved")
-        self.draft.send().then ->
+        self.draft = draft
+        draft.send().then ->
           $scope.$emit("compose-sent")
           clearDraft()
           return

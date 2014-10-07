@@ -86,6 +86,10 @@ define([
       templateUrl: 'partials/compose-zen.html',
       resolve: ['$namespaces-promise']
     });
+    $routeProvider.when('/mail/compose/:draft_id', {
+      templateUrl: 'partials/compose-zen.html',
+      resolve: ['$namespaces-promise']
+    });
     $routeProvider.when('/:tag', {
       templateUrl: 'partials/thread_list.html',
       controller: 'ThreadListCtrl as ThreadListCtrl',
