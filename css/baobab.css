@@ -538,12 +538,6 @@ a {
   vertical-align: top;
 }
 /* Composer */
-.thread-container {
-  -webkit-transition: padding-bottom 250ms ease-out;
-  -moz-transition: padding-bottom 250ms ease-out;
-  -ms-transition: padding-bottom 250ms ease-out;
-  -o-transition: padding-bottom 250ms ease-out;
-}
 .thread-container.replying {
   padding-bottom: 335px;
 }
@@ -569,10 +563,6 @@ a {
   bottom: 0;
   height: 335px;
   overflow: scroll;
-  -webkit-transition: height 250ms ease-out;
-  -moz-transition: height 250ms ease-out;
-  -ms-transition: height 250ms ease-out;
-  -o-transition: height 250ms ease-out;
 }
 .composer-reply.ng-hide-add {
   height: 335px;
@@ -588,7 +578,7 @@ a {
 }
 .composer {
   background-color: white;
-  padding: 15px 20px;
+  padding: 15px 20px 30px 20px;
   display: block;
   outline: none;
 }
@@ -671,7 +661,6 @@ a {
   padding-top: 4px;
   padding-bottom: 4px;
   position: relative;
-  height: 1.5em;
 }
 .composer-footer .discard-btn {
   position: absolute;
@@ -710,6 +699,17 @@ a {
 }
 .composer-zen .leave-btn {
   display: none;
+}
+[resizebar] {
+  width: 100%;
+  height: 8px;
+  position: absolute;
+  border-top: 1px solid white;
+  transition: border-color 150ms ease-in;
+}
+[resizebar]:hover {
+  cursor: ns-resize;
+  border-top: 1px solid grey;
 }
 /* Loading Indicator */
 .loading-indicator {

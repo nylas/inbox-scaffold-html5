@@ -83,6 +83,9 @@ img {
   </div>
 
   <!-- Compose State -->
-  <div class="composer-reply" ng-include="'partials/compose.html'" ng-show="replying"></div>
+  <div class="composer-reply" ng-show="replying">
+    <div resizebar />
+    <div ng-include="'partials/compose.html'"></div>
+  </div>
 
 </div>

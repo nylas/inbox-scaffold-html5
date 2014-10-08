@@ -2,7 +2,7 @@
   define(["angular", "underscore", "error", "FileSaver"], function(angular, _, error, saveAs) {
     return angular.module("baobab.controller.thread", []).controller('ThreadCtrl', [
       '$scope', '$namespaces', '$threads', '$modal', '$routeParams', '$location', '$scrollState', function($scope, $namespaces, $threads, $modal, $routeParams, $location, $scrollState) {
-        var threadReady;
+        var dragging, resizeReply, threadReady;
         this.thread = $threads.item($routeParams['id']);
         this.messages = null;
         this.drafts = null;
@@ -123,6 +123,28 @@
             }, error._handleAPIError);
           };
         })(this);
+        dragging = false;
+        resizeReply = function(event) {
+          var height;
+          if (event.which !== 1 || !dragging) {
+            dragging = false;
+            return;
+          }
+          height = angular.element(window).height() - event.clientY + "px";
+          angular.element(".thread-container.replying").css("padding-bottom", height);
+          angular.element(".composer-reply").css("height", height);
+          return event.preventDefault();
+        };
+        angular.element("#content").on("mouseup", function() {
+          return dragging = false;
+        }).on("mousemove", _.throttle(resizeReply, 1000 / 60, true));
+        angular.element("[resizebar]").on("mousedown", function(event) {
+          if (event.which !== 1) {
+            return;
+          }
+          dragging = true;
+          return event.preventDefault();
+        });
         if (this.thread) {
           threadReady();
         } else {
