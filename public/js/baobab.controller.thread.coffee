@@ -108,6 +108,23 @@ define ["angular", "underscore", "error", "FileSaver"], (angular, _, error, save
           $location.path('/inbox')
         , error._handleAPIError)
 
+      # Make the popup draggable
+      dragging = false
+      resizeReply = (event) ->
+        if (event.which != 1 || !dragging)
+          dragging = false
+          return
+        height = angular.element(window).height() - event.clientY + "px"
+        angular.element(".thread-container.replying").css("padding-bottom", height)
+        angular.element(".composer-reply").css("height", height)
+        event.preventDefault()
+      angular.element("#content")
+        .on "mouseup", -> dragging = false
+        .on "mousemove", _.throttle(resizeReply, 1000/60, true)
+      angular.element("[resizebar]").on "mousedown", (event) ->
+        return if (event.which != 1)
+        dragging = true
+        event.preventDefault()
 
       if (@thread)
         threadReady()
