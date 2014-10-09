@@ -1,12 +1,15 @@
 (function() {
   define(["angular", "underscore"], function(angular, _) {
-    angular.module("baobab.controller.compose", []).controller('ComposeCtrl', function($scope, $auth, $namespaces, $contacts) {
+    angular.module("baobab.controller.compose", []).controller('ComposeCtrl', function($scope, $auth, $namespaces, $contacts, $routeParams, $location, $timeout) {
       var clearDraft, self, setAttachments, setDraft;
       self = this;
       clearDraft = function() {
         $scope.$emit("compose-cleared");
         self.reply = false;
         $scope.cc = false;
+        if ($routeParams.draft_id) {
+          $location.path("/mail/compose");
+        }
         setDraft($namespaces.current().draft());
       };
       setDraft = function(draft) {
@@ -22,7 +25,23 @@
         $scope.$emit("compose-active");
       };
       setAttachments = function() {};
-      clearDraft();
+      if (_.isEmpty($routeParams.draft_id)) {
+        clearDraft();
+      } else {
+        $namespaces.current().draft($routeParams.draft_id).then(function(draft) {
+          return setDraft(draft);
+        });
+      }
+      this.alert = function(message) {
+        $scope.message = message;
+        angular.element("#message-box").show();
+        return $timeout((function() {
+          return $scope.$apply(function() {
+            $scope.message = void 0;
+            return angular.element("#message-box").hide();
+          });
+        }), 2000);
+      };
       this.completionOptions = {
         complete: function(search) {
           if (_.isEmpty(search)) {
@@ -53,9 +72,10 @@
         });
       };
       this.sendClicked = function() {
-        return self.draft.save().then(function() {
+        return self.draft.save().then(function(draft) {
           $scope.$emit("compose-saved");
-          return self.draft.send().then(function() {
+          self.draft = draft;
+          return draft.send().then(function() {
             $scope.$emit("compose-sent");
             clearDraft();
           });
@@ -73,6 +93,16 @@
         self.reply = _.isString(draft.thread);
         $scope.$emit("compose-replying");
       });
+      $scope.$on("compose-sent", (function(_this) {
+        return function() {
+          return _this.alert("Sent");
+        };
+      })(this));
+      $scope.$on("compose-saved", (function(_this) {
+        return function() {
+          return _this.alert("Saved");
+        };
+      })(this));
       $scope.$on("$destroy", function() {
         if (_.isEmpty(self.draft.to) && _.isEmpty(self.draft.from) && _.isEmpty(self.draft.cc) && _.isEmpty(self.draft.bcc) && _.isEmpty(self.draft.subject) && _.isEmpty(self.draft.body)) {
           return;

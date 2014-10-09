@@ -111,6 +111,10 @@
         })(this);
         this.draftClicked = (function(_this) {
           return function(msg) {
+            if (_this.messages.length === 0 && _this.drafts.length === 1) {
+              $location.path("/mail/compose/" + msg.id);
+              return;
+            }
             _this.draft = msg;
             return $scope.$broadcast("compose-set-draft", msg);
           };

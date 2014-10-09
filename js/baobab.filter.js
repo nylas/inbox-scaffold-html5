@@ -72,7 +72,15 @@
           return str;
         };
       }
-    ]).filter('timestamp_ago', function() {
+    ]).filter('not_me', function($namespaces) {
+      return function(participants) {
+        var me;
+        me = $namespaces.current().emailAddress;
+        return participants.filter(function(participant) {
+          return participant.email !== me;
+        });
+      };
+    }).filter('timestamp_ago', function() {
       return function(date) {
         return moment(date).fromNow();
       };
