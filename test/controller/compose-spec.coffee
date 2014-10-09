@@ -62,11 +62,12 @@ define ['angular', 'baobab.controller.compose', 'angularMocks', 'angular-inbox']
         controller = $controller 'ComposeCtrl',
           $scope: $scope,
           $contacts: null,
-          $auth: $auth
+          $auth: $auth,
+          $routeParams: {}
         return
 
       promises =
-        save: Promise.resolve(null)
+        save: Promise.resolve(controller.draft)
         send: Promise.resolve(null)
         dispose: Promise.resolve(null)
 
