@@ -98,6 +98,10 @@ define ["angular", "underscore", "error", "FileSaver"], (angular, _, error, save
 
 
       @draftClicked = (msg) =>
+        if (@messages.length == 0 && @drafts.length == 1)
+          $location.path("/mail/compose/" + msg.id)
+          return
+
         @draft = msg
         $scope.$broadcast("compose-set-draft", msg)
 
