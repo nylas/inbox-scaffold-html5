@@ -74,6 +74,12 @@ define ["angular", "underscore", "moment"], (angular, _, moment) ->
       return str
   ])
 
+  .filter 'not_me', ($namespaces) ->
+    (participants) ->
+      me = $namespaces.current().emailAddress
+      participants.filter (participant) ->
+        participant.email != me
+
   .filter('timestamp_ago', () ->
     (date) ->
       moment(date).fromNow()
