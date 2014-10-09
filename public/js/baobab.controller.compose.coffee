@@ -1,6 +1,6 @@
 define ["angular", "underscore"], (angular, _) ->
   angular.module("baobab.controller.compose", [])
-  .controller 'ComposeCtrl', ($scope, $auth, $namespaces, $contacts, $routeParams, $location) ->
+  .controller 'ComposeCtrl', ($scope, $auth, $namespaces, $contacts, $routeParams, $location, $timeout) ->
     self = this # Controller at creation time. `this` changes to Window later!
 
     clearDraft = ->
@@ -31,6 +31,11 @@ define ["angular", "underscore"], (angular, _) ->
     else
       $namespaces.current().draft($routeParams.draft_id).then (draft) ->
         setDraft(draft)
+
+    @alert = (message) ->
+      $scope.message = message
+      angular.element("#message-box").show()
+      $timeout (-> $scope.$apply -> $scope.message = undefined; angular.element("#message-box").hide()), 2000
 
     @completionOptions =
       complete: (search) ->
@@ -75,6 +80,12 @@ define ["angular", "underscore"], (angular, _) ->
       self.reply = _.isString(draft.thread)
       $scope.$emit("compose-replying")
       return
+
+    $scope.$on "compose-sent", =>
+      @alert("Sent")
+
+    $scope.$on "compose-saved", =>
+      @alert("Saved")
 
     $scope.$on "$destroy", ->
       if (_.isEmpty(self.draft.to) && _.isEmpty(self.draft.from) && _.isEmpty(self.draft.cc) &&
