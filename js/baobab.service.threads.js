@@ -91,9 +91,13 @@
         })(this);
         this.itemArchived = (function(_this) {
           return function(id) {
-            if (_this._filters['tag'] === 'archive') {
-              return;
+            if (_this._filters['tag'] === 'inbox') {
+              return _this.itemRemoved(id);
             }
+          };
+        })(this);
+        this.itemRemoved = (function(_this) {
+          return function(id) {
             return _this.setList(_.filter(_this._list, function(t) {
               return t.id !== id;
             }));

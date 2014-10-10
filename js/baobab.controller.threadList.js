@@ -94,6 +94,19 @@
             return event.stopPropagation();
           };
         })(this);
+        this.deleteClicked = (function(_this) {
+          return function(thread, event) {
+            event.stopPropagation();
+            if (thread.messageIDs.length !== 0 || thread.draftIDs.length !== 1) {
+              return;
+            }
+            return thread.drafts().then(function(drafts) {
+              return drafts[0].dispose().then(function() {
+                return $threads.itemRemoved(thread.id);
+              });
+            });
+          };
+        })(this);
         this.searchClicked = function() {
           var filters, search;
           filters = {};
