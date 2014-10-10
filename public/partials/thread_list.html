@@ -33,7 +33,8 @@
   <div class="thread-list bordered" infinite-scroll="ThreadListCtrl.extendList()" infinite-scroll-distance="1">
     <div class="thread clickable" ng-repeat="thread in ThreadListCtrl.list" ng-click="ThreadListCtrl.threadClicked(thread, $event);" id="{{thread.id}}">
         <div class="actions">
-          <a class="btn" ng-hide="thread.hasTag('archive')" ng-click="ThreadListCtrl.archiveClicked(thread, $event);">Archive</a>
+          <a class="btn" ng-show="thread.hasTag('inbox')" ng-click="ThreadListCtrl.archiveClicked(thread, $event);">Archive</a>
+          <a class="btn" ng-show="thread.draftIDs.length == 1 && thread.messageIDs.length == 0" ng-click="ThreadListCtrl.deleteClicked(thread, $event)">Delete</a>
         </div>
 
         <div class="{{thread.tagData | tag_expand}}"><div>

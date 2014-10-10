@@ -89,6 +89,12 @@ define ["angular", "underscore", "error"], (angular, _, error) ->
 
         event.stopPropagation()
 
+      @deleteClicked = (thread, event) =>
+        event.stopPropagation()
+        return if (thread.messageIDs.length != 0 || thread.draftIDs.length != 1)
+        thread.drafts().then (drafts) ->
+          drafts[0].dispose().then () ->
+            $threads.itemRemoved(thread.id)
 
       @searchClicked = () ->
         filters = {}

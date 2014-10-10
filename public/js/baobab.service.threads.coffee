@@ -90,9 +90,10 @@ define ["angular", "Events", "underscore", "error"], (angular, Events, _, error)
 
 
     @itemArchived = (id) =>
-      return if @_filters['tag'] == 'archive'
-      @setList(_.filter @_list, (t) -> t.id != id)
+      @itemRemoved(id) if @_filters['tag'] == 'inbox'
 
+    @itemRemoved = (id) =>
+      @setList(_.filter @_list, (t) -> t.id != id)
 
     @filters = () =>
       @_filters
