@@ -8,6 +8,11 @@
             return window.location = '/';
           };
         })(this);
+        this.needToken = (function(_this) {
+          return function() {
+            return $inbox.appId() !== "localhost";
+          };
+        })(this);
         this.readTokenFromCookie = (function(_this) {
           return function() {
             var e;

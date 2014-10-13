@@ -8,7 +8,7 @@
             return _this._namespaces[0];
           };
         })(this);
-        if ($auth.token) {
+        if ($auth.token || !$auth.needToken()) {
           this.promise = $inbox.namespaces().then((function(_this) {
             return function(namespaces) {
               return _this._namespaces = namespaces;

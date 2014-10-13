@@ -16,7 +16,7 @@
   </head>
 
   <body bind-keys>
-    <div ng-controller="AppCtrl as App" ng-switch="!!App.token()" class="theme-{{App.theme}}">
+    <div ng-controller="AppCtrl as App" ng-switch="!!App.token() || !App.needToken()" class="theme-{{App.theme}}">
 
       <link rel="stylesheet" type="text/css" ng-href="./css/baobab-{{App.theme}}.css">
 

@@ -13,6 +13,11 @@
             return $auth.token;
           };
         })(this);
+        this.needToken = (function(_this) {
+          return function() {
+            return $auth.needToken();
+          };
+        })(this);
         this.namespace = (function(_this) {
           return function() {
             return $namespaces.current();
