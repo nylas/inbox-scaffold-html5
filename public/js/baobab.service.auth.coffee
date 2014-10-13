@@ -2,11 +2,13 @@
 require ["angular"], (angular) ->
   angular.module('baobab.service.auth', [])
   .service('$auth', ['$cookieStore', '$location', '$inbox', ($cookieStore, $location, $inbox) ->
-    
+
     @clearToken = () =>
       $cookieStore.remove('inbox_auth_token')
       window.location = '/'
 
+    @needToken = () =>
+      $inbox.appId() != "localhost"
 
     @readTokenFromCookie = () =>
       try

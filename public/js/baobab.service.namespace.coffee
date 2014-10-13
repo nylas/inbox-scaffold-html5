@@ -6,7 +6,7 @@ define ["angular"], (angular, events) ->
 
     @current = () => @_namespaces[0]
 
-    if $auth.token
+    if $auth.token || !$auth.needToken()
       @promise = $inbox.namespaces().then (namespaces) =>
         @_namespaces = namespaces
       ,

@@ -18,6 +18,7 @@ define ['angular'], (angular) ->
 
       @clearToken = $auth.clearToken
       @token = () => $auth.token
+      @needToken = () => $auth.needToken()
 
       @namespace = () => $namespaces.current()
 

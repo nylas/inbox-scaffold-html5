@@ -117,7 +117,13 @@ define([
       window.location = 'set-app-id.html';
     // ---
 
-    $inboxProvider.baseUrl('https://api.inboxapp.com').appId(inboxAppID);
+    var url = 'https://api.inboxapp.com';
+
+    if (inboxAppID == "localhost") {
+      url = 'http://localhost:5555';
+    }
+
+    $inboxProvider.baseUrl(url).appId(inboxAppID);
 
     $sceDelegateProvider.resourceUrlWhitelist([
       'self', $inboxProvider.baseUrl() + "/**"]);
