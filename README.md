@@ -1,7 +1,7 @@
 Inbox App Scaffold - HTML5
 ========
 
-The Inbox HTML5 Scaffold is a full-featured mail client built on top of the Inbox API. It is a client-side AngularJS application that leverages the [Inbox Javascript SDK](https://github.com/inboxapp/inbox.js), and is intended to be a foundation for you to build your own mail client or add features that you've always wanted! 
+The Inbox HTML5 Scaffold is a full-featured mail client built on top of the Inbox API. It is a client-side AngularJS application that leverages the [Inbox Javascript SDK](https://github.com/inboxapp/inbox.js), and is intended to be a foundation for you to build your own mail client or add features that you've always wanted!
 
 The Inbox HTML5 App Scaffold includes support for:
 
@@ -29,12 +29,20 @@ Yes, it even has a dark theme:
 
 The Inbox HTML5 Scaffold is intended for developers - to use it, you need an Inbox Developer Program membership or a copy of the open-source [Inbox Sync Engine](http://github.com/inboxapp/inbox). When you download or fork the Inbox HTML5 Scaffold, you'll need to add your Inbox App ID before you can connect your account.
 
-Already have an Inbox account? Try out the Inbox HTML5 Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-scaffold-html5/).  You'll need to create a new app in the [developer console](https://www.inboxapp.com/console/apps) and add `https://inboxapp.github.io/inbox-scaffold-html5/` to the callback URLs.  Once you have an App ID, you're good to go!
+## Try it online
 
-##Getting Started
+Try out the Inbox HTML5 Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-scaffold-html5/).
+
+### Using your Inbox account
+
+Already have an Inbox account? You'll need to create a new app in the [developer console](https://www.inboxapp.com/console/apps) and add `https://inboxapp.github.io/inbox-scaffold-html5/` to the callback URLs.  Then, [set your App ID](http://inboxapp.github.io/inbox-scaffold-html5/set-app-id.html) to try it out.
+
+### Using your local Inbox instance
+
+Already running the sync engine and API server on your local machine?  [Set your App ID](http://inboxapp.github.io/inbox-scaffold-html5/set-app-id.html) to `localhost` and the Inbox HTML5 Scaffold will connect to `http://localhost:5555` instead of our API endpoint.
 
 
-
+## Getting Started
 
 ```bash
 
@@ -55,8 +63,9 @@ npm run-script postinstall
 bower install
 
 foreman start --port 6000
-
 ```
+
+Then, follow the instructions under "Try it online" to set up your App ID.  You can connect to our servers or to your own local endpoint.
 
 ## Roadmap
 
