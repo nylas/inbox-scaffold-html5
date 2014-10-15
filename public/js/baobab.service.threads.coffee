@@ -1,7 +1,7 @@
 
 define ["angular", "Events", "underscore", "error"], (angular, Events, _, error) ->
   angular.module("baobab.service.threads", [])
-  .service('$threads', ['$namespaces', ($namespaces) ->
+  .service('$threads', ['$namespaces', '$cache', ($namespaces, $cache) ->
     events = Events # Lint thinks this is a constructor (rightly so)
     events(@)
 
@@ -70,6 +70,8 @@ define ["angular", "Events", "underscore", "error"], (angular, Events, _, error)
           b.lastMessageDate.getTime() - a.lastMessageDate.getTime()
 
       @_list = list
+
+      $cache.store(@_filters, @_list)
       @emit('update', @)
 
 

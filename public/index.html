@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="./css/angular-animation.css"/>
     <style>.clickable { cursor: pointer; }</style>
 
+    <script>
+    window.requireNode = window.require;
+    delete window['require'];
+    </script>
     <script src="./components/requirejs/require.js" data-main="./js/main.js"></script>
 
     <link rel="icon" type="image/png" href="./img/favicon.png">

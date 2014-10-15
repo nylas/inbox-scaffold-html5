@@ -1,7 +1,6 @@
 
-define ["angular", "blueimp-md5", "jQuery"], (angular, md5) ->
+define ["angular", "blueimp-md5", "jQuery"], (angular, md5, jQuery) ->
   angular.module('baobab.directive.inParticipantBubble', [])
-
   .directive 'inParticipantBubble', () ->
     restrict: "E"
     template: '<div class="participant-bubble"></div>'

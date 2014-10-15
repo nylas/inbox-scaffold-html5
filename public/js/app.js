@@ -15,6 +15,7 @@ define([
   'baobab.controller.compose',
   'baobab.service.namespace',
   'baobab.service.contacts',
+  'baobab.service.cache',
   'baobab.service.tags',
   'baobab.service.scrollstate',
   'baobab.service.auth',
@@ -42,6 +43,7 @@ define([
   angular.module('baobab.services', [
     'baobab.service.contacts',
     'baobab.service.namespace',
+    'baobab.service.cache',
     'baobab.service.tags',
     'baobab.service.scrollstate',
     'baobab.service.auth',
