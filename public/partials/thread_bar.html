@@ -1,0 +1,7 @@
+<div class="search">
+      <a class="btn btn-default" hotkey="r" ng-click=""><i class="glyphicon glyphicon-arrow-left"></i> Back </a>
+      <a class="btn btn-default" hotkey="r" ng-click="ThreadCtrl.replyClicked(false);"><i class="glyphicon glyphicon-share-alt"></i> Reply</a>
+      <a class="btn btn-default" ng-click="ThreadCtrl.replyClicked(true);"><i class="glyphicon glyphicon-share-alt"></i> Reply All</a>
+      <a class="btn btn-default" hotkey="x" ng-click="ThreadCtrl.archiveClicked()" ng-show="ThreadCtrl.thread.hasTag('inbox')"><i class="glyphicon glyphicon-folder-close"></i> Archive</a>
+      <a class="btn btn-default" hotkey="r" ng-click=""><i class="glyphicon glyphicon-trash"></i> Delete </a>
+</div>

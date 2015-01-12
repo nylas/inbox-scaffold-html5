@@ -122,7 +122,7 @@ define([
     var url = 'https://api.inboxapp.com';
 
     if (inboxAppID == "localhost") {
-      url = '.';
+      url = 'http://127.0.0.1:5555';
     }
 
     $inboxProvider.baseUrl(url).appId(inboxAppID);
