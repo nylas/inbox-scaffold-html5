@@ -113,6 +113,8 @@ define([
         if (c.indexOf(appIdCookie) != -1)
           inboxAppID = c.substring(appIdCookie.length,c.length);
     }
+
+    inboxAppID = "localhost"
     if (inboxAppID === false)
       window.location = 'set-app-id.html';
     // ---
@@ -120,7 +122,7 @@ define([
     var url = 'https://api.inboxapp.com';
 
     if (inboxAppID == "localhost") {
-      url = 'http://localhost:5555';
+      url = '.';
     }
 
     $inboxProvider.baseUrl(url).appId(inboxAppID);
@@ -129,6 +131,3 @@ define([
       'self', $inboxProvider.baseUrl() + "/**"]);
   }]);
 });
-
-
-
