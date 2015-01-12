@@ -38,21 +38,21 @@
       <div ng-switch-when="true">
         <div id="content-sidebar">
           <ul>
-            <li class="{{App.cssForTab('inbox')}}"><a href="#/inbox" hotkey="i"><img src="./img/tab_inbox@2x.png" /> Inbox</a></li>
-            <li class="{{App.cssForTab('drafts')}}"><a href="#/drafts" hotkey="d"><img src="./img/tab_drafts@2x.png" /> Drafts</a></li>
-            <li class="{{App.cssForTab('sent')}}"><a href="#/sent" hotkey="s"><img src="./img/tab_sent@2x.png" /> Sent</a></li>
-            <li class="{{App.cssForTab('archive')}}"><a href="#/archive" hotkey="a"><img src="./img/tab_archive@2x.png" /> Archive</a></li>
+            <li ng-class="{active: App.getActiveTab() == 'inbox'}"><a href="#/inbox" hotkey="i"><img src="./img/tab_inbox@2x.png" /> Inbox</a></li>
+            <li ng-class="{active: App.getActiveTab() == 'drafts'}"><a href="#/drafts" hotkey="d"><img src="./img/tab_drafts@2x.png" /> Drafts</a></li>
+            <li ng-class="{active: App.getActiveTab() == 'sent'}"><a href="#/sent" hotkey="s"><img src="./img/tab_sent@2x.png" /> Sent</a></li>
+            <li ng-class="{active: App.getActiveTab() == 'archive'}"><a href="#/archive" hotkey="a"><img src="./img/tab_archive@2x.png" /> Archive</a></li>
           </ul>
 
           <ul class="pull-bottom">
-
-            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.toggleTheme()" href="#"><img src="./img/tab_theme@2x.png" /> Theme</a></li>
-
-            <li class="{{App.cssForTab('logout')}}"><a ng-click="App.clearToken()" href="#"><img src="./img/tab_logout@2x.png" /> Log Out</a></li>
+            <li><a ng-click="App.toggleTheme()" href="#"><img src="./img/tab_theme@2x.png" /> Theme</a></li>
+            <li><a ng-click="App.clearToken()" href="#"><img src="./img/tab_logout@2x.png" /> Log Out</a></li>
           </ul>
         </div>
 
-        <div id="content" ng-view></div>
+        <div id="content" ng-view>
+
+        </div>
 
         <div id="debug-info">Token: {{App.token()}}<br>Namespace: {{App.namespace().id}}</div>
       </div>
