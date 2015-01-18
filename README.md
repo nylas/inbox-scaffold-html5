@@ -1,7 +1,7 @@
 Inbox App Scaffold - HTML5
 ========
 
-## **NOTE**: This framework is currently not actively maintained. Please feel free to use it and send us a pull request if you fix anything or add a feature, though. :)
+## **NOTE**: This scaffold is currently not actively maintained, and may need some TLC. Please feel free to use it and send us a pull request if you fix anything or add a feature, though. :)
 
 The Inbox HTML5 Scaffold is a full-featured mail client built on top of the Inbox API. It is a client-side AngularJS application that leverages the [Inbox Javascript SDK](https://github.com/inboxapp/inbox.js), and is intended to be a foundation for you to build your own mail client or add features that you've always wanted!
 
