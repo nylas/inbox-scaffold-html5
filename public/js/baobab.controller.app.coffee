@@ -13,8 +13,7 @@ define ['angular'], (angular) ->
 
       @inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize')
       @inboxClientID = $inbox.appId()
-      @inboxRedirectURL = "https://rocky-sands-9698.herokuapp.com/index.html"
-      #@inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '')
+      @inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '')
       @loginHint = ''
 
       @clearToken = $auth.clearToken

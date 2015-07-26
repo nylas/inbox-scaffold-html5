@@ -101,9 +101,21 @@ define([
   .config(['$inboxProvider', '$sceDelegateProvider', function($inboxProvider, $sceDelegateProvider) {
 
     // Replace `false` with your Inbox App ID
-    var inboxAppID = "9hhoijuuyz4lo63hnl2hsx4tb";
+    var inboxAppID = false;
 
     // Delete this code once you've added your Inbox App ID
+    // ---
+    var appIdCookie = 'baobab-app-id=';
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(appIdCookie) != -1)
+              inboxAppID = c.substring(appIdCookie.length,c.length);
+    }
+    if (inboxAppID === false)
+    window.location = 'set-app-id.html';
+    // ---
 
     var url = 'https://api.nylas.com';
 
