@@ -117,7 +117,7 @@ define([
       window.location = 'set-app-id.html';
     // ---
 
-    var url = 'https://api.inboxapp.com';
+    var url = 'https://api.nylas.com';
 
     if (inboxAppID == "localhost") {
       url = 'http://localhost:5555';
