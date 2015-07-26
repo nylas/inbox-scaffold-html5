@@ -2164,7 +2164,7 @@ function apiRequest(inbox, method, url, data, responseType, callback) {
   var cb = {cb: callback};
   var xhr = xhrForMethod(method);
 
-
+  xhr.withCredentials = inbox.withCredentials();
   var failed = rejectXHR(cb, xhr, 'json');
   addListeners(xhr, {
     'load': function(event) {
@@ -2205,7 +2205,7 @@ function apiRequest(inbox, method, url, data, responseType, callback) {
   xhr._responseType = responseType;
 
   xhr.open(method, url);
-  xhr.withCredentials = inbox.withCredentials();
+
   inbox.forEachRequestHeader(xhr.setRequestHeader, xhr);
 
   xhr.send(data);

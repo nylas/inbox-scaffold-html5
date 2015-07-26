@@ -28,7 +28,7 @@ require ["angular"], (angular) ->
       tokenEnd = search.indexOf('&', tokenStart)
       tokenEnd = search.length - tokenStart if tokenEnd == -1
 
-      token = search.substr(tokenStart, tokenEnd)
+      token = search.substr(tokenStart, tokenEnd-tokenStart)
       $cookieStore.put('inbox_auth_token', token)
       window.location.href = window.location.href.split('?')[0]
 
