@@ -11,7 +11,7 @@ define ['angular'], (angular) ->
     ($scope, $namespaces, $inbox, $auth, $location, $cookieStore, $sce) ->
       window.AppCtrl = @
 
-      @inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize')
+      @inboxAuthURL = $sce.trustAsResourceUrl('https://api.nylas.com/oauth/authorize')
       @inboxClientID = $inbox.appId()
       @inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '')
       @loginHint = ''
