@@ -3,7 +3,7 @@
     return angular.module("baobab.controller.app", []).controller('AppCtrl', [
       '$scope', '$namespaces', '$inbox', '$auth', '$location', '$cookieStore', '$sce', function($scope, $namespaces, $inbox, $auth, $location, $cookieStore, $sce) {
         window.AppCtrl = this;
-        this.inboxAuthURL = $sce.trustAsResourceUrl('https://www.inboxapp.com/oauth/authorize');
+        this.inboxAuthURL = $sce.trustAsResourceUrl('https://api.nylas.com/oauth/authorize');
         this.inboxClientID = $inbox.appId();
         this.inboxRedirectURL = window.location.href.split('/#')[0].replace('index.html', '');
         this.loginHint = '';
